@@ -101,6 +101,28 @@ export default function Home() {
   const v1 = "https://res.cloudinary.com/dk92v0fkk/video/upload/w_1870,h_947,c_fill/v1773870636/production/inrthpxt4vwiblfpko8j.mp4#t=0.1";
   const v2 = "https://res.cloudinary.com/dk92v0fkk/video/upload/w_1870,h_947,c_fill/v1724088268/staging/yv4bjz9n4wggkcgxvgqt.mp4#t=0.1";
 
+  const SectionBottomNav = () => (
+    <div className="absolute bottom-0 w-full z-50 px-6 py-8 lg:px-12 lg:py-12 flex justify-between items-center text-[9px] lg:text-[10px] font-sans tracking-[0.3em] text-white font-bold uppercase">
+      <div className="flex items-center space-x-8 lg:space-x-12">
+        <button 
+          onClick={() => setIsSearchOpen(true)}
+          className="hover:text-white/60 transition-colors"
+        >
+          <Search size={18} />
+        </button>
+        <Link href="#" className="hover:text-white/60 transition-colors hidden sm:block">BUY</Link>
+        <Link href="#" className="hover:text-white/60 transition-colors hidden sm:block">RENT</Link>
+        <Link href="#" className="hover:text-white/60 transition-colors hidden sm:block">SELL</Link>
+        <Link href="#" className="hover:text-white/60 transition-colors hidden sm:block">AGENTS</Link>
+      </div>
+
+      <div className="hidden lg:flex items-center space-x-12">
+        <Link href="#" className="hover:text-white/60 transition-colors">NEW DEVELOPMENT</Link>
+        <Link href="#" className="hover:text-white/60 transition-colors text-[#E5E5E5]">WORLD OF KAARA</Link>
+      </div>
+    </div>
+  );
+
   return (
     <main className="min-h-screen bg-[#100B28]">
       {/* Custom Toast Notification */}
@@ -236,64 +258,35 @@ export default function Home() {
         </video>
         <div className="absolute inset-0 bg-[#100B28]/30 z-10" />
 
-        {/* Logo and Nav Overlay */}
-        <nav className="absolute top-0 w-full z-50 px-6 py-8 lg:px-12 lg:py-10 flex justify-between lg:justify-center items-center">
-          <button onClick={() => setIsMenuOpen(true)} className="text-white lg:hidden">
-            <Menu size={24} />
-          </button>
-          <Link href="/" className="text-xl lg:text-[1.75rem] font-serif tracking-[0.3em] lg:tracking-[0.4em] text-white text-center whitespace-nowrap uppercase">
+        {/* Logo - Top Centre */}
+        <nav className="absolute top-0 w-full z-50 px-6 py-8 lg:px-12 lg:py-12 flex justify-center items-center">
+          <Link href="/" className="text-lg lg:text-[1.75rem] font-serif tracking-[0.4em] text-white text-center whitespace-nowrap uppercase">
             KAARA REALTY GROUP
           </Link>
-          <div className="w-6 lg:hidden" /> {/* Spacer for centering on mobile */}
         </nav>
-        
-        {/* Center Content */}
-        <div className="relative z-20 mt-12 max-w-5xl px-6">
-          <h1 className="text-3xl lg:text-[3.5rem] font-serif text-white tracking-[0.1em] lg:tracking-[0.15em] mb-6 uppercase leading-tight">
+
+        {/* Section Text - Top Right, Left Aligned */}
+        <div className="absolute top-24 lg:top-32 right-6 lg:right-16 z-20 text-left max-w-xl">
+          <h1 className="text-xl lg:text-[1.75rem] font-serif text-white tracking-[0.15em] uppercase leading-tight mb-2">
             WHERE DO YOU WANT TO GO?
           </h1>
-          <p className="text-xs lg:text-[1rem] font-sans tracking-[0.15em] lg:tracking-[0.2em] text-white/90 mb-10 lg:mb-12 font-light uppercase">
+          <p className="text-[8px] lg:text-[0.6rem] font-sans tracking-[0.2em] text-white/70 font-light uppercase">
             Leaders in Luxury Vertical Living • Nairobi
           </p>
-          
+        </div>
+        
+        {/* Center Content - Search Button */}
+        <div className="relative z-20 flex flex-col items-center justify-center">
           <button 
             onClick={() => setIsSearchOpen(true)}
-            className="group flex items-center gap-4 mx-auto bg-transparent border border-white/50 px-8 py-4 lg:px-12 lg:py-5 text-[10px] lg:text-[11px] font-sans tracking-[0.2em] lg:tracking-[0.3em] font-bold hover:bg-white hover:text-[#100B28] transition-all duration-500 text-white rounded-full uppercase"
+            className="group flex items-center gap-4 bg-transparent border border-white/50 px-10 py-4 lg:px-12 lg:py-5 text-[10px] lg:text-[11px] font-sans tracking-[0.3em] font-bold hover:bg-white hover:text-[#100B28] transition-all duration-500 text-white rounded-full uppercase shadow-2xl backdrop-blur-sm"
           >
             START YOUR SEARCH
             <ChevronDown className="group-hover:translate-y-1 transition-transform duration-500" size={14} />
           </button>
         </div>
 
-        {/* Bottom Nav inside Hero */}
-        <div className="absolute bottom-0 w-full z-50 px-6 py-8 lg:px-12 lg:py-12 flex justify-center lg:justify-between items-center text-[9px] lg:text-[10px] font-sans tracking-[0.3em] text-white font-bold uppercase">
-          <div className="hidden lg:flex items-center space-x-12">
-            <button 
-              onClick={() => setIsSearchOpen(true)}
-              className="hover:text-white/60 transition-colors"
-            >
-              <Search size={18} />
-            </button>
-            <Link href="#" className="hover:text-white/60 transition-colors">BUY</Link>
-            <Link href="#" className="hover:text-white/60 transition-colors">RENT</Link>
-            <Link href="#" className="hover:text-white/60 transition-colors">SELL</Link>
-            <Link href="#" className="hover:text-white/60 transition-colors">AGENTS</Link>
-          </div>
-
-          {/* Mobile Bottom Search Bar */}
-          <button 
-            onClick={() => setIsSearchOpen(true)}
-            className="flex lg:hidden items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 px-8 py-3 rounded-full text-white/80"
-          >
-            <Search size={16} />
-            SEARCH NAIROBI
-          </button>
-
-          <div className="hidden lg:flex items-center space-x-12">
-            <Link href="#" className="hover:text-white/60 transition-colors">NEW DEVELOPMENT</Link>
-            <Link href="#" className="hover:text-white/60 transition-colors text-[#E5E5E5]">WORLD OF KAARA</Link>
-          </div>
-        </div>
+        <SectionBottomNav />
       </section>
 
       {/* Video Section 2 */}
@@ -304,11 +297,15 @@ export default function Home() {
           <source src={v2} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-[#100B28]/40 z-10" />
-        <div className="relative z-20 max-w-4xl">
-           <h2 className="text-3xl lg:text-[4rem] font-serif text-white tracking-[0.1em] lg:tracking-[0.2em] mb-8 uppercase leading-snug">
+        
+        {/* Section Text - Top Right, Left Aligned */}
+        <div className="absolute top-12 lg:top-24 right-6 lg:right-16 z-20 text-left">
+           <h2 className="text-xl lg:text-[2.5rem] font-serif text-white tracking-[0.1em] lg:tracking-[0.2em] uppercase leading-tight">
              UNRIVALED EXCLUSIVITY
            </h2>
         </div>
+
+        <SectionBottomNav />
       </section>
 
       {/* Property Showcase (Dark Mode) */}
@@ -368,11 +365,15 @@ export default function Home() {
           <source src={v1} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-[#100B28]/40 z-10" />
-        <div className="relative z-20 max-w-4xl">
-           <h2 className="text-3xl lg:text-[4rem] font-serif text-white tracking-[0.1em] lg:tracking-[0.2em] mb-8 uppercase leading-snug">
+        
+        {/* Section Text - Top Right, Left Aligned */}
+        <div className="absolute top-12 lg:top-24 right-6 lg:right-16 z-20 text-left">
+           <h2 className="text-xl lg:text-[2.5rem] font-serif text-white tracking-[0.1em] lg:tracking-[0.2em] uppercase leading-tight">
              LIVE THE EXTRAORDINARY
            </h2>
         </div>
+
+        <SectionBottomNav />
       </section>
 
       {/* Spotlight Section (Dark Mode) */}
@@ -435,12 +436,16 @@ export default function Home() {
           <source src={v2} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-[#100B28]/40 z-10" />
-        <div className="relative z-20 max-w-4xl">
-           <h2 className="text-3xl lg:text-[4rem] font-serif text-white tracking-[0.1em] lg:tracking-[0.2em] mb-8 uppercase leading-snug">
+        
+        {/* Section Text - Top Right, Left Aligned */}
+        <div className="absolute top-12 lg:top-24 right-6 lg:right-16 z-20 text-left">
+           <h2 className="text-xl lg:text-[2.5rem] font-serif text-white tracking-[0.1em] lg:tracking-[0.2em] mb-4 lg:mb-8 uppercase leading-tight">
              88 NAIROBI CONDOMINIUM
            </h2>
-           <p className="text-xs lg:text-sm tracking-[0.2em] lg:tracking-[0.3em] text-white/80 uppercase font-light">The Apex of Upper Hill • Handover May 2026</p>
+           <p className="text-[8px] lg:text-sm tracking-[0.2em] lg:tracking-[0.3em] text-white/80 uppercase font-light">The Apex of Upper Hill • Handover May 2026</p>
         </div>
+
+        <SectionBottomNav />
       </section>
 
       {/* Newsletter Section (Dark Mode) */}
