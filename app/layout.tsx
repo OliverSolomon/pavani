@@ -27,10 +27,12 @@ export const metadata: Metadata = {
     siteName: 'Kaara Realty Group',
     images: [
       {
-        url: '/og-image.png',
+        url: 'https://kaararealtygroup.com/og-image.png',
+        secureUrl: 'https://kaararealtygroup.com/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Kaara Realty Group Luxury Real Estate',
+        type: 'image/png',
       },
     ],
     locale: 'en_KE',
@@ -40,7 +42,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Kaara Realty Group | Luxury Real Estate',
     description: 'The premier luxury real estate brokerage in Kenya, specializing in vertical luxury.',
-    images: ['/og-image.png'],
+    images: ['https://kaararealtygroup.com/og-image.png'],
   },
   robots: {
     index: true,
