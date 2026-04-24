@@ -15,7 +15,49 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: "Kaara Realty Group | Luxury Real Estate & Homes for Sale",
-  description: "Kaara Realty Group is the premier luxury real estate brokerage.",
+  description: "Kaara Realty Group is the premier luxury real estate brokerage in Kenya, specializing in vertical luxury and exclusive estates.",
+  metadataBase: new URL('https://kaararealtygroup.com'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'Kaara Realty Group | Luxury Real Estate & Homes for Sale',
+    description: 'The premier luxury real estate brokerage in Kenya, specializing in vertical luxury and exclusive estates.',
+    url: 'https://kaararealtygroup.com',
+    siteName: 'Kaara Realty Group',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Kaara Realty Group Luxury Real Estate',
+      },
+    ],
+    locale: 'en_KE',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Kaara Realty Group | Luxury Real Estate',
+    description: 'The premier luxury real estate brokerage in Kenya, specializing in vertical luxury.',
+    images: ['/og-image.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Kaara Realty Group",
+  "url": "https://kaararealtygroup.com",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://kaararealtygroup.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
 };
 
 export default function RootLayout({
@@ -26,6 +68,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${playfair.variable} ${montserrat.variable} font-sans bg-[#000B1D] text-white antialiased`} suppressHydrationWarning>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <ServiceWorkerRegistration />
         {children}
       </body>
