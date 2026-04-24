@@ -1,0 +1,480 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Search, ChevronDown, User, Heart, Settings, Menu, ArrowRight, Play, Pause, X as CloseIcon, ChevronRight } from "lucide-react";
+import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+
+const SEARCH_REGIONS = [
+  {
+    name: "NAIROBI",
+    districts: ["MUTHAIGA", "KAREN", "RUNDA", "WESTLANDS", "GIGIRI", "LAVINGTON", "KILELESHWA", "VIEW ALL NAIROBI"],
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    name: "MOMBASA",
+    districts: ["NYALI", "BAMBURI", "SHANZU", "DIANI BEACH", "VIPINGO RIDGE", "VIEW ALL MOMBASA"],
+    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    name: "KIAMBU",
+    districts: ["TIGONI", "THIKA GREENS", "TATU CITY", "FOURWAYS JUNCTION", "KIAMBU ROAD", "VIEW ALL KIAMBU"],
+    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    name: "NAIVASHA",
+    districts: ["GREAT RIFT VALLEY", "LAKE NAIVASHA", "KEDONG RANCH", "MOUNT LONGONOT", "VIEW ALL NAIVASHA"],
+    image: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    name: "LAIKIPIA",
+    districts: ["NANYUKI", "MOUNT KENYA WILDLIFE ESTATE", "LOISABA", "OL PEJETA", "VIEW ALL LAIKIPIA"],
+    image: "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    name: "KAJIADO",
+    districts: ["NGONG HILLS", "KISAJU", "KITENGELA", "AMBOSELI", "VIEW ALL KAJIADO"],
+    image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=800&q=80"
+  }
+];
+
+export default function Home() {
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [activeRegionIdx, setActiveRegionIdx] = useState(0);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying);
+    videoRefs.current.forEach((video) => {
+      if (video) {
+        if (isPlaying) {
+          video.pause();
+        } else {
+          video.play();
+        }
+      }
+    });
+  };
+
+  const vAmethyst = "/videos/amethyst.mp4";
+  const v1 = "https://res.cloudinary.com/dk92v0fkk/video/upload/w_1870,h_947,c_fill/v1773870636/production/inrthpxt4vwiblfpko8j.mp4#t=0.1";
+  const v2 = "https://res.cloudinary.com/dk92v0fkk/video/upload/w_1870,h_947,c_fill/v1724088268/staging/yv4bjz9n4wggkcgxvgqt.mp4#t=0.1";
+
+  return (
+    <main className="min-h-screen bg-[#100B28]">
+      {/* Fixed Play/Pause Toggle */}
+      <div className="fixed top-8 right-8 z-[120]">
+        <button onClick={togglePlay} className="text-white hover:text-gray-300 transition-all border border-white/40 rounded-full p-2.5 flex items-center justify-center w-12 h-12 bg-[#100B28]/40 backdrop-blur-md shadow-lg group">
+          {isPlaying ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" className="ml-1" />}
+        </button>
+      </div>
+
+      {/* Search Overlay */}
+      {isSearchOpen && (
+        <div className="fixed inset-0 z-[200] flex flex-col items-center justify-center p-4 lg:p-8">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-[#100B28]/95 backdrop-blur-2xl cursor-pointer" 
+            onClick={() => setIsSearchOpen(false)}
+          />
+          
+          {/* Top Controls in Modal */}
+          <div className="absolute top-0 w-full px-8 py-8 flex justify-center items-start z-[210]">
+            <button 
+              onClick={() => setIsSearchOpen(false)}
+              className="group flex items-center gap-3 bg-white/10 border border-white/30 px-8 py-3.5 text-[10px] font-sans tracking-[0.3em] font-bold hover:bg-white hover:text-[#100B28] transition-all duration-500 text-white rounded-full uppercase"
+            >
+              START YOUR SEARCH
+              <ChevronDown className="rotate-180 transition-transform duration-500" size={14} />
+            </button>
+          </div>
+
+          {/* Modal Content */}
+          <div className="relative z-[210] w-full max-w-5xl bg-[#100B28]/80 border border-white/10 rounded-2xl overflow-hidden flex flex-col lg:flex-row h-[600px] shadow-2xl">
+            {/* Regions List */}
+            <div className="w-full lg:w-1/3 border-b lg:border-b-0 lg:border-r border-white/10 overflow-y-auto py-12">
+              {SEARCH_REGIONS.map((region, idx) => (
+                <button
+                  key={region.name}
+                  onMouseEnter={() => setActiveRegionIdx(idx)}
+                  className={`w-full px-12 py-5 flex justify-between items-center text-[11px] tracking-[0.3em] font-sans transition-all duration-300 uppercase ${activeRegionIdx === idx ? 'text-white bg-white/10' : 'text-white/40 hover:text-white/70'}`}
+                >
+                  {region.name}
+                  <ChevronRight size={14} className={`transition-transform duration-300 ${activeRegionIdx === idx ? 'translate-x-2 opacity-100' : 'opacity-0'}`} />
+                </button>
+              ))}
+            </div>
+
+            {/* Districts List */}
+            <div className="w-full lg:w-1/3 border-b lg:border-b-0 lg:border-r border-white/10 overflow-y-auto py-12 px-12">
+              <div className="grid grid-cols-1 gap-8">
+                {SEARCH_REGIONS[activeRegionIdx].districts.map((district) => (
+                  <Link 
+                    key={district} 
+                    href="#" 
+                    className="text-[11px] tracking-[0.25em] font-sans text-white/50 hover:text-white transition-all duration-300 uppercase font-light"
+                  >
+                    {district}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Featured Image */}
+            <div className="hidden lg:block lg:w-1/3 relative">
+              <Image 
+                src={SEARCH_REGIONS[activeRegionIdx].image}
+                alt={SEARCH_REGIONS[activeRegionIdx].name}
+                fill
+                className="object-cover transition-transform duration-[2s] hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#100B28]/80 via-transparent to-transparent" />
+              <div className="absolute bottom-10 left-10">
+                <p className="text-[9px] tracking-[0.4em] text-white/60 uppercase mb-3 font-bold">Featured Area</p>
+                <h4 className="text-2xl font-serif text-white tracking-[0.1em] uppercase">{SEARCH_REGIONS[activeRegionIdx].name}</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hero Section (Section 1) - Now using Amethyst Video */}
+      <section className="relative h-screen w-full flex flex-col justify-center items-center text-center overflow-hidden">
+        <video 
+          ref={(el) => { videoRefs.current[0] = el; }}
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        >
+          <source src={vAmethyst} type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-[#100B28]/30 z-10" />
+
+        {/* Logo and Nav Overlay */}
+        <nav className="absolute top-0 w-full z-50 px-12 py-10 flex justify-center items-center">
+          <Link href="/" className="text-2xl lg:text-[1.75rem] font-serif tracking-[0.4em] text-white text-center whitespace-nowrap uppercase">
+            KAARA REALTY GROUP
+          </Link>
+        </nav>
+        
+        {/* Center Content */}
+        <div className="relative z-20 mt-12 max-w-5xl px-6">
+          <h1 className="text-4xl lg:text-[3.5rem] font-serif text-white tracking-[0.15em] mb-6 uppercase leading-tight">
+            WHERE DO YOU WANT TO GO?
+          </h1>
+          <p className="text-sm lg:text-[1rem] font-sans tracking-[0.2em] text-white/90 mb-12 font-light uppercase">
+            Leaders in Luxury Vertical Living • Nairobi
+          </p>
+          
+          <button 
+            onClick={() => setIsSearchOpen(true)}
+            className="group flex items-center gap-4 mx-auto bg-transparent border border-white/50 px-12 py-5 text-[11px] font-sans tracking-[0.3em] font-bold hover:bg-white hover:text-[#100B28] transition-all duration-500 text-white rounded-full uppercase"
+          >
+            START YOUR SEARCH
+            <ChevronDown className="group-hover:translate-y-1 transition-transform duration-500" size={14} />
+          </button>
+        </div>
+
+        {/* Bottom Nav inside Hero */}
+        <div className="absolute bottom-0 w-full z-50 px-12 py-12 flex justify-between items-center text-[10px] font-sans tracking-[0.3em] text-white font-bold uppercase">
+          <div className="flex items-center space-x-12">
+            <button 
+              onClick={() => setIsSearchOpen(true)}
+              className="hover:text-white/60 transition-colors"
+            >
+              <Search size={18} />
+            </button>
+            <Link href="#" className="hover:text-white/60 transition-colors hidden md:block">BUY</Link>
+            <Link href="#" className="hover:text-white/60 transition-colors hidden md:block">RENT</Link>
+            <Link href="#" className="hover:text-white/60 transition-colors hidden md:block">SELL</Link>
+            <Link href="#" className="hover:text-white/60 transition-colors hidden md:block">AGENTS</Link>
+          </div>
+
+          <div className="flex items-center space-x-12">
+            <Link href="#" className="hover:text-white/60 transition-colors hidden md:block">NEW DEVELOPMENT</Link>
+            <Link href="#" className="hover:text-white/60 transition-colors hidden md:block text-[#E5E5E5]">WORLD OF KAARA</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Video Section 2 */}
+      <section className="relative h-screen w-full flex flex-col justify-center items-center text-center px-6 overflow-hidden">
+        <video 
+          ref={(el) => { videoRefs.current[1] = el; }}
+          autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0">
+          <source src={v2} type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-[#100B28]/40 z-10" />
+        <div className="relative z-20 max-w-4xl">
+           <h2 className="text-3xl lg:text-[4rem] font-serif text-white tracking-[0.2em] mb-8 uppercase leading-snug">
+             UNRIVALED EXCLUSIVITY
+           </h2>
+        </div>
+      </section>
+
+      {/* Property Showcase (Dark Mode) */}
+      <section className="pt-40 pb-32 px-6 bg-[#100B28] text-white">
+        <div className="max-w-[1400px] mx-auto flex flex-col items-center mb-24 text-center">
+          <p className="font-sans text-[10px] lg:text-[11px] tracking-[0.4em] text-white/60 uppercase mb-6 font-bold">Local Experts, Global Reach</p>
+          <h2 className="text-3xl lg:text-[2.75rem] font-serif tracking-[0.2em] uppercase text-white mb-12">The Next Move Is Yours</h2>
+          
+          <div className="w-[1px] h-20 bg-white/20 mb-12"></div>
+          
+          <div className="flex flex-wrap justify-center gap-12 lg:gap-16 text-[10px] lg:text-[11px] font-sans tracking-[0.3em] uppercase text-white/50 font-bold mb-16">
+            <button className="text-white border-b-[1.5px] border-white pb-1.5">CITY SKYLINES</button>
+            <button className="hover:text-white transition-all duration-300">WATER VIEWS</button>
+            <button className="hover:text-white transition-all duration-300">FARM & RANCH</button>
+            <button className="hover:text-white transition-all duration-300">JUST LISTED</button>
+            <button className="hover:text-white transition-all duration-300">UNDER $20 MILLION</button>
+          </div>
+        </div>
+
+        <div className="max-w-[1800px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[2px] lg:gap-1">
+          {/* Nairobi Premium Listings - Now including The Amethyst */}
+          {[
+            { id: 1, image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", title: "The Amethyst", details: "Westlands • Exclusive Penthouse", price: "KSh 520,000,000" },
+            { id: 2, image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80", title: "Symphony Residence", details: "3 BR | 4 BA, 1 HALF BA", price: "KSh 135,000,000" },
+            { id: 3, image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80", title: "37byINEZA", details: "3 BR | 2 BA, 1 HALF BA", price: "KSh 85,000,000" },
+            { id: 4, image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80", title: "The Diplomat", details: "9 BR | 7 BA, 4 HALF BA", price: "KSh 320,000,000" },
+          ].map((property) => (
+            <div key={property.id} className="group relative h-[650px] w-full cursor-pointer overflow-hidden bg-[#100B28]">
+              <Image 
+                src={property.image}
+                alt={property.title}
+                fill
+                className="object-cover transition-transform duration-[2s] group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#100B28]/95 via-[#100B28]/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="absolute bottom-0 left-0 right-0 p-12 text-center flex flex-col items-center z-10 transition-transform duration-700">
+                <h3 className="font-serif text-3xl mb-4 text-white tracking-[0.05em] uppercase">{property.title}</h3>
+                <p className="font-sans text-[9px] tracking-[0.4em] text-white/70 mb-3 uppercase font-bold">{property.details}</p>
+                <p className="font-serif text-[15px] text-white italic">{property.price}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-20 flex justify-center">
+           <button className="bg-transparent border border-white/40 px-12 py-4 text-[10px] tracking-[0.4em] font-sans font-bold hover:bg-white hover:text-[#100B28] transition-all duration-500 rounded-full uppercase">
+             VIEW ALL LISTINGS
+           </button>
+        </div>
+      </section>
+
+      {/* Video Section 3 */}
+      <section className="relative h-screen w-full flex flex-col justify-center items-center text-center px-6 overflow-hidden">
+        <video 
+          ref={(el) => { videoRefs.current[2] = el; }}
+          autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0">
+          <source src={v1} type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-[#100B28]/40 z-10" />
+        <div className="relative z-20 max-w-4xl">
+           <h2 className="text-3xl lg:text-[4rem] font-serif text-white tracking-[0.2em] mb-8 uppercase leading-snug">
+             LIVE THE EXTRAORDINARY
+           </h2>
+        </div>
+      </section>
+
+      {/* Spotlight Section (Dark Mode) */}
+      <section className="py-32 px-6 lg:px-16 bg-[#100B28] text-white">
+        <div className="max-w-[1500px] mx-auto">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-16 gap-8">
+            <h2 className="text-2xl lg:text-[2rem] font-serif tracking-[0.15em] uppercase leading-tight">
+              ON THE MOVE WITH <span className="italic border-b border-white pb-1.5 font-light text-white/70">@kaararealtygroup</span>
+            </h2>
+            <div className="flex gap-6">
+              <button className="w-14 h-14 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-[#100B28] transition-all duration-500 group shadow-sm">
+                <ChevronDown className="rotate-90 group-hover:scale-110 transition-transform" size={18} />
+              </button>
+              <button className="w-14 h-14 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-[#100B28] transition-all duration-500 group shadow-sm">
+                <ChevronDown className="-rotate-90 group-hover:scale-110 transition-transform" size={18} />
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="relative h-[650px] group overflow-hidden bg-[#100B28]">
+              <Image 
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" 
+                alt="88 Nairobi" 
+                fill 
+                className="object-cover transition-transform duration-[2.5s] group-hover:scale-110 filter desaturate-[0.2]" 
+              />
+            </div>
+            <div className="relative h-[650px] group overflow-hidden bg-[#100B28]">
+              <Image 
+                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" 
+                alt="37byINEZA" 
+                fill 
+                className="object-cover transition-transform duration-[2.5s] group-hover:scale-110 filter desaturate-[0.2]" 
+              />
+            </div>
+            <div className="bg-[#0b0b14] p-16 flex flex-col justify-between h-[650px] shadow-xl relative overflow-hidden group border border-white/5">
+              <div className="relative z-10">
+                <h3 className="text-3xl font-serif mb-8 leading-[1.3] text-white tracking-[0.02em] uppercase italic">
+                  Spotlight on Vertical Cities: The Symphony & 88 Nairobi
+                </h3>
+                <div className="w-16 h-[1.5px] bg-white/20 mb-10 group-hover:w-32 transition-all duration-1000"></div>
+                <p className="text-[10px] tracking-[0.5em] text-white/50 uppercase mb-3 font-bold">Innovation Summit 2026</p>
+                <p className="text-[11px] tracking-[0.3em] text-white uppercase font-bold">Upper Hill | June 15TH</p>
+              </div>
+              <div className="flex items-center gap-4 relative z-10">
+                 <div className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-[11px] font-serif text-white uppercase">K</div>
+                 <span className="text-[11px] tracking-[0.4em] font-serif uppercase text-white font-bold">KAARA REALTY GROUP</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Video Section 4 */}
+      <section className="relative h-screen w-full flex flex-col justify-center items-center text-center px-6 overflow-hidden">
+        <video 
+          ref={(el) => { videoRefs.current[3] = el; }}
+          autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0">
+          <source src={v2} type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-[#100B28]/40 z-10" />
+        <div className="relative z-20 max-w-4xl">
+           <h2 className="text-3xl lg:text-[4rem] font-serif text-white tracking-[0.2em] mb-8 uppercase leading-snug">
+             88 NAIROBI CONDOMINIUM
+           </h2>
+           <p className="text-xs lg:text-sm tracking-[0.3em] text-white/80 uppercase font-light">The Apex of Upper Hill • Handover May 2026</p>
+        </div>
+      </section>
+
+      {/* Newsletter Section (Dark Mode) */}
+      <section className="py-40 px-6 lg:px-16 bg-[#100B28] text-white border-t border-white/5">
+        <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row justify-between items-center gap-16">
+          <div className="lg:w-3/5">
+            <h2 className="text-4xl lg:text-[3.25rem] font-serif italic leading-[1.2] text-white tracking-tight">
+              The latest in luxury property, vertical living & culture, curated just for you.
+            </h2>
+          </div>
+          <div className="lg:w-2/5 w-full">
+            <div className="relative border-b border-white/20 pb-4 flex items-center group transition-all duration-500 hover:border-white">
+              <input 
+                type="email" 
+                placeholder="ENTER YOUR EMAIL" 
+                className="bg-transparent border-none outline-none flex-grow text-[11px] tracking-[0.4em] font-sans placeholder:text-white/20 text-white font-bold uppercase"
+              />
+              <ArrowRight size={20} className="text-white/40 group-hover:text-white group-hover:translate-x-2 transition-all duration-500 cursor-pointer" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* World of Kaara (Nairobi Context) */}
+      <section className="relative py-48 flex flex-col justify-center items-center text-center px-6 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-[#100B28]/85 z-10" />
+          <Image 
+            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80"
+            alt="Vertical Nairobi"
+            fill
+            className="object-cover filter grayscale"
+          />
+        </div>
+        
+        <div className="relative z-20 max-w-3xl">
+          <h2 className="text-4xl lg:text-[3.5rem] font-serif text-white mb-10 uppercase tracking-[0.2em] font-light">The World of KAARA</h2>
+          <p className="text-lg font-sans font-light text-white/70 mb-14 leading-relaxed uppercase tracking-[0.25em] text-sm">
+            Immersive market insights, architectural narratives, and the lifestyle of the Nairobi elite. 
+          </p>
+          
+          <button className="bg-white text-[#100B28] px-14 py-5 text-[11px] font-sans tracking-[0.4em] font-bold hover:bg-transparent hover:text-white border border-white transition-all duration-500 uppercase rounded-full">
+            EXPLORE THE EDITORIAL
+          </button>
+        </div>
+      </section>
+
+      {/* Master Footer (Premium Dark Palette) */}
+      <footer className="bg-[#100B28] text-white pt-40 pb-16 px-6 lg:px-20 border-t border-white/5">
+        <div className="max-w-[1700px] mx-auto">
+          {/* Logo Bar */}
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-32 group cursor-pointer">
+            <div className="text-center">
+              <span className="text-2xl lg:text-[2rem] tracking-[0.6em] font-serif uppercase text-white inline-block mb-3">KAARA REALTY GROUP</span>
+              <div className="h-[1px] w-0 bg-white/20 mx-auto transition-all duration-1000 group-hover:w-full"></div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-16 mb-32 font-sans text-[10px] tracking-[0.4em] uppercase font-bold">
+            <div className="space-y-8">
+              <h4 className="text-white/40 mb-12 font-bold tracking-[0.5em]">The Agency</h4>
+              <ul className="space-y-6 text-white/70">
+                <li><Link href="#" className="hover:text-white transition-all duration-300">About Us</Link></li>
+                <li><Link href="#" className="hover:text-white transition-all duration-300">Leadership</Link></li>
+                <li><Link href="#" className="hover:text-white transition-all duration-300">Vertical Experts</Link></li>
+                <li><Link href="#" className="hover:text-white transition-all duration-300">Press Center</Link></li>
+                <li><Link href="#" className="hover:text-white transition-all duration-300">Careers</Link></li>
+              </ul>
+            </div>
+            <div className="space-y-8">
+              <h4 className="text-white/40 mb-12 font-bold tracking-[0.5em]">Intelligence</h4>
+              <ul className="space-y-6 text-white/70">
+                <li><Link href="#" className="hover:text-white transition-all duration-300">Market Reports</Link></li>
+                <li><Link href="#" className="hover:text-white transition-all duration-300">Vertical Insights</Link></li>
+                <li><Link href="#" className="hover:text-white transition-all duration-300">The Journal</Link></li>
+                <li><Link href="#" className="hover:text-white transition-all duration-300">Global Search</Link></li>
+                <li><Link href="#" className="hover:text-white transition-all duration-300">Client Login</Link></li>
+              </ul>
+            </div>
+            <div className="space-y-8">
+              <h4 className="text-white/40 mb-12 font-bold tracking-[0.5em]">Districts</h4>
+              <ul className="space-y-6 text-white/70">
+                <li><Link href="#" className="hover:text-white transition-all duration-300">Upper Hill</Link></li>
+                <li><Link href="#" className="hover:text-white transition-all duration-300">Westlands</Link></li>
+                <li><Link href="#" className="hover:text-white transition-all duration-300">Kilimani</Link></li>
+                <li><Link href="#" className="hover:text-white transition-all duration-300">Karen</Link></li>
+                <li><Link href="#" className="hover:text-white transition-all duration-300">Muthaiga</Link></li>
+              </ul>
+            </div>
+            <div className="space-y-10 md:col-span-2 lg:col-span-2">
+              <h4 className="text-white/40 mb-12 font-bold tracking-[0.5em]">The Collective</h4>
+              <p className="text-white/30 normal-case tracking-normal mb-10 leading-relaxed max-w-sm text-xs font-light uppercase">
+                Join our exclusive network for curated updates on vertical developments and luxury estates across Nairobi.
+              </p>
+              <div className="flex max-w-md border-b border-white/10 pb-3 group">
+                <input 
+                  type="email" 
+                  placeholder="SUBSCRIBE" 
+                  className="bg-transparent border-none outline-none flex-grow text-[11px] tracking-[0.5em] font-sans placeholder:text-white/10 text-white font-bold"
+                />
+                <button className="text-white/20 group-hover:text-white transition-all duration-500 group-hover:translate-x-1">
+                  <ArrowRight size={20} />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-16 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-16 text-[9px] tracking-[0.5em] text-white/30 uppercase">
+             <div className="flex flex-wrap justify-center gap-10">
+                <Link href="#" className="hover:text-white transition-colors">Digital Site Map</Link>
+                <Link href="#" className="hover:text-white transition-colors">Legal Terms</Link>
+                <Link href="#" className="hover:text-white transition-colors">Privacy Charter</Link>
+                <Link href="#" className="hover:text-white transition-colors">Cookie Policy</Link>
+             </div>
+             <div className="flex gap-12">
+                <Link href="#" className="hover:text-white transition-all duration-500 hover:scale-110"><FaFacebookF size={18} /></Link>
+                <Link href="#" className="hover:text-white transition-all duration-500 hover:scale-110"><FaXTwitter size={18} /></Link>
+                <Link href="#" className="hover:text-all duration-500 hover:scale-110"><FaInstagram size={18} /></Link>
+                <Link href="#" className="hover:text-all duration-500 hover:scale-110"><FaLinkedinIn size={18} /></Link>
+             </div>
+          </div>
+
+          <div className="mt-24 text-[8px] leading-[2] text-white/20 text-center max-w-5xl mx-auto tracking-[0.2em] uppercase font-light">
+             <p className="mb-4">KAARA REALTY GROUP IS THE PREMIER BROKERAGE FOR VERTICAL LUXURY IN KENYA. ALL MATERIAL PRESENTED HEREIN IS INTENDED FOR INFORMATION PURPOSES ONLY. WHILE THIS INFORMATION IS BELIEVED TO BE CORRECT, IT IS REPRESENTED SUBJECT TO ERRORS, OMISSIONS, CHANGES, OR WITHDRAWAL WITHOUT NOTICE.</p>
+             <p>© 2026 KAARA REALTY GROUP. THE PINNACLE OF KENYAN REAL ESTATE. EQUAL HOUSING OPPORTUNITY.</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+  );
+}
