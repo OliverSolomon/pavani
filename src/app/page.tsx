@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Search, ChevronDown, User, Heart, Settings, Menu, ArrowRight, Play, Pause, X as CloseIcon, ChevronRight } from "lucide-react";
+import { Search, ChevronDown, User, Heart, Settings, Menu, ArrowRight, Play, Pause, X as CloseIcon, ChevronRight, CheckCircle2, AlertCircle } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
@@ -45,6 +45,13 @@ export default function Home() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeRegionIdx, setActiveRegionIdx] = useState(0);
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({ 
+    show: false, 
+    message: "", 
+    type: 'success' 
+  });
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   const togglePlay = () => {
@@ -60,12 +67,54 @@ export default function Home() {
     });
   };
 
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail || isSubmitting) return;
+
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: newsletterEmail }),
+      });
+
+      if (response.ok) {
+        setToast({ show: true, message: "Welcome to the Collective", type: 'success' });
+        setNewsletterEmail("");
+      } else {
+        const errorData = await response.json();
+        setToast({ show: true, message: errorData.error || "Submission failed", type: 'error' });
+      }
+      
+      setTimeout(() => setToast(prev => ({ ...prev, show: false })), 5000);
+    } catch (error) {
+      setToast({ show: true, message: "Network error. Please try again.", type: 'error' });
+      setTimeout(() => setToast(prev => ({ ...prev, show: false })), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const vAmethyst = "/videos/amethyst.mp4";
   const v1 = "https://res.cloudinary.com/dk92v0fkk/video/upload/w_1870,h_947,c_fill/v1773870636/production/inrthpxt4vwiblfpko8j.mp4#t=0.1";
   const v2 = "https://res.cloudinary.com/dk92v0fkk/video/upload/w_1870,h_947,c_fill/v1724088268/staging/yv4bjz9n4wggkcgxvgqt.mp4#t=0.1";
 
   return (
     <main className="min-h-screen bg-[#100B28]">
+      {/* Custom Toast Notification */}
+      <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-[500] transition-all duration-700 ${toast.show ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0 pointer-events-none'}`}>
+        <div className="bg-white text-[#100B28] px-8 py-4 rounded-full shadow-2xl flex items-center gap-4 border border-white/20 backdrop-blur-xl">
+          {toast.type === 'success' ? (
+            <CheckCircle2 size={20} className="text-green-600" />
+          ) : (
+            <AlertCircle size={20} className="text-red-600" />
+          )}
+          <span className="text-[11px] font-sans tracking-[0.2em] font-bold uppercase">{toast.message}</span>
+        </div>
+      </div>
+
       {/* Fixed Play/Pause Toggle */}
       <div className="fixed top-6 right-6 lg:top-8 lg:right-8 z-[120]">
         <button onClick={togglePlay} className="text-white hover:text-gray-300 transition-all border border-white/40 rounded-full p-2 lg:p-2.5 flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 bg-[#100B28]/40 backdrop-blur-md shadow-lg group">
@@ -403,14 +452,19 @@ export default function Home() {
             </h2>
           </div>
           <div className="lg:w-2/5 w-full">
-            <div className="relative border-b border-white/20 pb-4 flex items-center group transition-all duration-500 hover:border-white">
+            <form onSubmit={handleNewsletterSubmit} className="relative border-b border-white/20 pb-4 flex items-center group transition-all duration-500 hover:border-white">
               <input 
                 type="email" 
-                placeholder="ENTER YOUR EMAIL" 
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
+                placeholder={isSubmitting ? "SENDING..." : "ENTER YOUR EMAIL"} 
+                disabled={isSubmitting}
                 className="bg-transparent border-none outline-none flex-grow text-[10px] lg:text-[11px] tracking-[0.3em] lg:tracking-[0.4em] font-sans placeholder:text-white/20 text-white font-bold uppercase"
               />
-              <ArrowRight size={20} className="text-white/40 group-hover:text-white group-hover:translate-x-2 transition-all duration-500 cursor-pointer" />
-            </div>
+              <button type="submit" disabled={isSubmitting}>
+                <ArrowRight size={20} className={`text-white/40 group-hover:text-white transition-all duration-500 cursor-pointer ${isSubmitting ? 'opacity-0' : 'group-hover:translate-x-2'}`} />
+              </button>
+            </form>
           </div>
         </div>
       </section>
@@ -447,6 +501,7 @@ export default function Home() {
             <div className="text-center">
               <span className="text-xl lg:text-[2rem] tracking-[0.4em] lg:tracking-[0.6em] font-serif uppercase text-white inline-block mb-3">KAARA REALTY GROUP</span>
               <div className="h-[1px] w-0 bg-white/20 mx-auto transition-all duration-1000 group-hover:w-full"></div>
+              <p className="text-[10px] tracking-[0.3em] text-white/40 mt-4 uppercase font-bold">info@kaararealtygroup.com</p>
             </div>
           </div>
 
@@ -486,16 +541,19 @@ export default function Home() {
               <p className="text-white/30 normal-case tracking-normal mb-8 lg:mb-10 leading-relaxed max-w-sm mx-auto sm:mx-0 text-xs font-light uppercase">
                 Join our exclusive network for curated updates on vertical developments and luxury estates across Nairobi.
               </p>
-              <div className="flex max-w-md border-b border-white/10 pb-3 group mx-auto sm:mx-0">
+              <form onSubmit={handleNewsletterSubmit} className="flex max-w-md border-b border-white/10 pb-3 group mx-auto sm:mx-0">
                 <input 
                   type="email" 
-                  placeholder="SUBSCRIBE" 
-                  className="bg-transparent border-none outline-none flex-grow text-[10px] lg:text-[11px] tracking-[0.4em] lg:tracking-[0.5em] font-sans placeholder:text-white/10 text-white font-bold"
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
+                  placeholder={isSubmitting ? "SUBMITTING..." : "SUBSCRIBE"} 
+                  disabled={isSubmitting}
+                  className="bg-transparent border-none outline-none flex-grow text-[10px] lg:text-[11px] tracking-[0.4em] lg:tracking-[0.5em] font-sans placeholder:text-white/10 text-white font-bold uppercase"
                 />
-                <button className="text-white/20 group-hover:text-white transition-all duration-500 group-hover:translate-x-1">
+                <button type="submit" disabled={isSubmitting} className="text-white/20 group-hover:text-white transition-all duration-500 group-hover:translate-x-1">
                   <ArrowRight size={20} />
                 </button>
-              </div>
+              </form>
             </div>
           </div>
 
