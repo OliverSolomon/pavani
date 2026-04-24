@@ -232,6 +232,7 @@ export default function Home() {
                 src={SEARCH_REGIONS[activeRegionIdx].image}
                 alt={SEARCH_REGIONS[activeRegionIdx].name}
                 fill
+                sizes="(max-width: 768px) 100vw, 33vw"
                 className="object-cover transition-transform duration-[2s] hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#100B28]/80 via-transparent to-transparent" />
@@ -265,8 +266,8 @@ export default function Home() {
           </Link>
         </nav>
 
-        {/* Section Text - Top Right, Left Aligned */}
-        <div className="absolute top-24 lg:top-32 right-6 lg:right-16 z-20 text-left max-w-xl">
+        {/* Section Text - Top Left, Left Aligned */}
+        <div className="absolute top-24 lg:top-32 left-6 lg:left-16 z-20 text-left max-w-xl">
           <h1 className="text-xl lg:text-[1.75rem] font-serif text-white tracking-[0.15em] uppercase leading-tight mb-2">
             WHERE DO YOU WANT TO GO?
           </h1>
@@ -298,8 +299,8 @@ export default function Home() {
         </video>
         <div className="absolute inset-0 bg-[#100B28]/40 z-10" />
         
-        {/* Section Text - Top Right, Left Aligned */}
-        <div className="absolute top-12 lg:top-24 right-6 lg:right-16 z-20 text-left">
+        {/* Section Text - Top Left, Left Aligned */}
+        <div className="absolute top-12 lg:top-24 left-6 lg:left-16 z-20 text-left">
            <h2 className="text-xl lg:text-[2.5rem] font-serif text-white tracking-[0.1em] lg:tracking-[0.2em] uppercase leading-tight">
              UNRIVALED EXCLUSIVITY
            </h2>
@@ -338,6 +339,7 @@ export default function Home() {
                 src={property.image}
                 alt={property.title}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                 className="object-cover transition-transform duration-[2s] group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#100B28]/95 via-[#100B28]/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-700" />
@@ -366,8 +368,8 @@ export default function Home() {
         </video>
         <div className="absolute inset-0 bg-[#100B28]/40 z-10" />
         
-        {/* Section Text - Top Right, Left Aligned */}
-        <div className="absolute top-12 lg:top-24 right-6 lg:right-16 z-20 text-left">
+        {/* Section Text - Top Left, Left Aligned */}
+        <div className="absolute top-12 lg:top-24 left-6 lg:left-16 z-20 text-left">
            <h2 className="text-xl lg:text-[2.5rem] font-serif text-white tracking-[0.1em] lg:tracking-[0.2em] uppercase leading-tight">
              LIVE THE EXTRAORDINARY
            </h2>
@@ -399,6 +401,7 @@ export default function Home() {
                 src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" 
                 alt="88 Nairobi" 
                 fill 
+                sizes="(max-width: 768px) 100vw, 33vw"
                 className="object-cover transition-transform duration-[2.5s] group-hover:scale-110 filter desaturate-[0.2]" 
               />
             </div>
@@ -407,6 +410,7 @@ export default function Home() {
                 src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" 
                 alt="37byINEZA" 
                 fill 
+                sizes="(max-width: 768px) 100vw, 33vw"
                 className="object-cover transition-transform duration-[2.5s] group-hover:scale-110 filter desaturate-[0.2]" 
               />
             </div>
@@ -437,8 +441,8 @@ export default function Home() {
         </video>
         <div className="absolute inset-0 bg-[#100B28]/40 z-10" />
         
-        {/* Section Text - Top Right, Left Aligned */}
-        <div className="absolute top-12 lg:top-24 right-6 lg:right-16 z-20 text-left">
+        {/* Section Text - Top Left, Left Aligned */}
+        <div className="absolute top-12 lg:top-24 left-6 lg:left-16 z-20 text-left">
            <h2 className="text-xl lg:text-[2.5rem] font-serif text-white tracking-[0.1em] lg:tracking-[0.2em] mb-4 lg:mb-8 uppercase leading-tight">
              88 NAIROBI CONDOMINIUM
            </h2>
@@ -482,6 +486,7 @@ export default function Home() {
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80"
             alt="Vertical Nairobi"
             fill
+            sizes="100vw"
             className="object-cover filter grayscale"
           />
         </div>
