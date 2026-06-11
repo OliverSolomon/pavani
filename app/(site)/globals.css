@@ -1,0 +1,221 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Pavani Warm Espresso Palette */
+  --color-rich:    #0D0501;
+  --color-surface: #180900;
+  --color-card:    #1E0D02;
+  --color-elevated:#2A1508;
+  --color-gold:    #C9A96E;
+  --color-gold-lt: #E8C97C;
+  --color-gold-dk: #9E7A42;
+  --color-cream:   #EDE0C8;
+  --color-muted:   #9A8570;
+
+  --color-pavani-deep:  #0D0501;
+  --color-pavani-gold:  #C9A96E;
+  --color-pavani-cream: #EDE0C8;
+
+  --font-serif: var(--font-cormorant);
+  --font-sans:  var(--font-montserrat);
+}
+
+/* ── Emil Kowalski easing system ── */
+:root {
+  --ease-out:    cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+html, body {
+  scroll-behavior: smooth;
+  background-color: #0D0501;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── Warm gold scrollbar ── */
+::-webkit-scrollbar        { width: 3px; }
+::-webkit-scrollbar-track  { background: #0D0501; }
+::-webkit-scrollbar-thumb  { background: #C9A96E40; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #C9A96E; }
+
+/* ── Global tactile press (Emil: scale(0.97) on :active) ── */
+button:active { transform: scale(0.97); }
+.cta-link {
+  transition: all 300ms var(--ease-out);
+}
+.cta-link:active {
+  transform: scale(0.97);
+  transition: transform 100ms var(--ease-out);
+}
+
+/* ══════════════════════════════════════════════════
+   CONTRAST SYSTEM — minimum readability standards
+   Dark bg (#0D0501) requires minimum 70% opacity for
+   body text to pass WCAG AA (4.5:1).
+   ══════════════════════════════════════════════════ */
+
+/* Eyebrow — gold, clear */
+.eyebrow {
+  font-size: 0.5625rem;        /* 9px */
+  font-weight: 700;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: #C9A96E;
+  opacity: 1;
+}
+
+/* Body text — 78% minimum on dark bg */
+.body-text {
+  color: rgba(237, 224, 200, 0.78);
+  font-size: 0.9375rem;
+  font-weight: 300;
+  line-height: 1.78;
+}
+
+/* Muted text — 60% minimum, use sparingly */
+.muted-text {
+  color: rgba(237, 224, 200, 0.60);
+}
+
+/* Caption / meta — 50% minimum */
+.caption-text {
+  color: rgba(237, 224, 200, 0.50);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+/* ── Gold shimmer ── */
+@keyframes gold-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+.gold-shimmer {
+  background: linear-gradient(90deg, #C9A96E, #E8C97C, #C9A96E, #9E7A42, #C9A96E);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gold-shimmer 4s linear infinite;
+}
+
+/* ── Hero staggered @starting-style entries (with blur bridge) ── */
+.hero-line {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0px);
+  transition:
+    opacity   900ms var(--ease-out),
+    transform 900ms var(--ease-out),
+    filter    700ms var(--ease-out);
+  @starting-style {
+    opacity: 0;
+    transform: translateY(32px);
+    filter: blur(8px);
+  }
+}
+.hero-line-1 { transition-delay: 100ms; }
+.hero-line-2 { transition-delay: 240ms; }
+.hero-line-3 { transition-delay: 360ms; }
+.hero-sub    { transition-delay: 500ms; }
+.hero-cta    { transition-delay: 640ms; }
+
+/* Gold divider line expand */
+@keyframes line-expand {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.gold-line-animate {
+  transform-origin: left;
+  animation: line-expand 600ms var(--ease-out) 850ms both;
+}
+
+/* Page hero entry */
+.page-hero-enter {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0px);
+  transition:
+    opacity   750ms var(--ease-out) 60ms,
+    transform 750ms var(--ease-out) 60ms,
+    filter    600ms var(--ease-out) 60ms;
+  @starting-style {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(6px);
+  }
+}
+
+/* Fade in up utility */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up { animation: fade-in-up 0.7s var(--ease-out) forwards; }
+
+/* ── Nav link underline — clip-path reveal (Emil clip-path technique) ── */
+.nav-link-underline {
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #C9A96E;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 280ms var(--ease-out);
+}
+.nav-link:hover .nav-link-underline,
+.nav-link[data-active="true"] .nav-link-underline {
+  clip-path: inset(0 0% 0 0);
+}
+
+/* ── Property card hover border — clip-path reveal ── */
+.card-border-reveal {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(201, 169, 110, 0);
+  transition: border-color 350ms var(--ease-out);
+  pointer-events: none;
+  z-index: 2;
+}
+.group:hover .card-border-reveal {
+  border-color: rgba(201, 169, 110, 0.40);
+}
+
+/* Form input */
+.pavani-input {
+  width: 100%;
+  background: #180900;
+  border: 1px solid rgba(201, 169, 110, 0.18);
+  color: #EDE0C8;
+  padding: 0.875rem 1rem;
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  outline: none;
+  transition: border-color 200ms var(--ease-out);
+}
+.pavani-input::placeholder { color: rgba(237, 224, 200, 0.32); }
+.pavani-input:focus { border-color: rgba(201, 169, 110, 0.60); }
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .hero-line, .page-hero-enter {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}
+
+@media print { .print\:hidden { display: none !important; } }
