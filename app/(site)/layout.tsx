@@ -76,7 +76,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
-      <body className={`${cormorant.variable} ${montserrat.variable} font-sans bg-[#0D0501] text-[#EDE0C8] antialiased`} suppressHydrationWarning>
+      <body className={`${cormorant.variable} ${montserrat.variable} font-sans bg-[#0D0501] text-[#E8DCBF] antialiased`} suppressHydrationWarning>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

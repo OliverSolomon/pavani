@@ -104,7 +104,7 @@ const PropertyCard = ({
   return (
     <div 
       className={cn(
-        "bg-[#1E0D02] group cursor-pointer border-b border-[#C9A96E]/8 transition-colors duration-300 relative",
+        "bg-[#1E0D02] group cursor-pointer border-b border-[#C6A75E]/8 transition-colors duration-300 relative",
         isActive ? "bg-[#2A1508]" : "hover:bg-[#2A1508]/60"
       )}
       onMouseEnter={onMouseEnter}
@@ -116,7 +116,7 @@ const PropertyCard = ({
         >
            <div className={cn(
              "w-6 h-6 border-2 flex items-center justify-center transition-all",
-             isSelected ? "bg-[#C9A96E] border-[#C9A96E]" : "bg-white/20 border-white backdrop-blur-md hover:bg-white/40"
+             isSelected ? "bg-[#C6A75E] border-[#C6A75E]" : "bg-white/20 border-white backdrop-blur-md hover:bg-white/40"
            )}>
               <div className={cn("w-2.5 h-2.5 bg-white transition-all", isSelected ? "scale-100" : "scale-0")} />
            </div>
@@ -133,7 +133,7 @@ const PropertyCard = ({
             className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute top-4 right-4 z-10">
-            <button className="p-2 bg-[#0D0501]/40 backdrop-blur-md text-[#EDE0C8] hover:bg-[#C9A96E] hover:text-[#0D0501] transition-all">
+            <button className="p-2 bg-[#0D0501]/40 backdrop-blur-md text-[#E8DCBF] hover:bg-[#C6A75E] hover:text-[#0D0501] transition-all">
               <Heart size={16} />
             </button>
           </div>
@@ -151,18 +151,18 @@ const PropertyCard = ({
             />
           </h3>
           <h4 className="text-xs lg:text-sm font-bold uppercase tracking-[0.1em] mb-1 line-clamp-1">{property.title}</h4>
-          <p className="text-[10px] text-[#EDE0C8]/40 uppercase tracking-widest font-medium mb-4">
+          <p className="text-[10px] text-[#E8DCBF]/40 uppercase tracking-widest font-medium mb-4">
             {typeof property.district === 'object' ? property.district.name : property.district}
           </p>
           
-          <div className="flex items-center gap-4 text-[10px] font-bold tracking-widest text-[#EDE0C8]/30 border-t border-[#C9A96E]/8 pt-4">
+          <div className="flex items-center gap-4 text-[10px] font-bold tracking-widest text-[#E8DCBF]/30 border-t border-[#C6A75E]/8 pt-4">
             {property.details?.split('|').map((detail, idx) => (
               <span key={idx}>{detail.trim()}</span>
             ))}
           </div>
           
-          <div className="mt-6 flex items-center gap-2 text-[9px] font-bold tracking-[0.2em] text-[#C9A96E] uppercase">
-            <div className="w-4 h-4 bg-[#0A0A0F] flex items-center justify-center text-[6px] text-[#C9A96E]">P</div>
+          <div className="mt-6 flex items-center gap-2 text-[9px] font-bold tracking-[0.2em] text-[#C6A75E] uppercase">
+            <div className="w-4 h-4 bg-[#0A0A0F] flex items-center justify-center text-[6px] text-[#C6A75E]">P</div>
             PAVANI {t('exclusive')}
           </div>
         </div>
@@ -225,20 +225,20 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
   const mapCenter: [number, number] = useMemo(() => activeProperty?.coords ? [activeProperty.coords.lat, activeProperty.coords.lng] : [-1.2921, 36.8219], [activeProperty]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0D0501] text-[#EDE0C8]">
+    <div className="flex flex-col min-h-screen bg-[#0D0501] text-[#E8DCBF]">
       <Navbar settings={settings} />
 
       <div className="flex flex-col pt-20">
         
         {/* Filter Bar */}
-        <div className="h-16 lg:h-14 border-b border-[#C9A96E]/10 flex items-center justify-between px-4 lg:px-8 shrink-0 bg-[#180900] z-40">
+        <div className="h-16 lg:h-14 border-b border-[#C6A75E]/10 flex items-center justify-between px-4 lg:px-8 shrink-0 bg-[#180900] z-40">
           <div className="flex items-center gap-4 lg:gap-8 overflow-x-auto no-scrollbar flex-grow mr-4">
             <div className="relative min-w-[150px] lg:min-w-[300px]">
-              <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-[#EDE0C8]/30" size={14} />
+              <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-[#E8DCBF]/30" size={14} />
               <input
                 type="text"
                 placeholder="Search by District or Building..."
-                className="w-full bg-transparent border-none text-[10px] font-bold tracking-widest uppercase pl-6 focus:ring-0 text-[#EDE0C8] placeholder:text-[#EDE0C8]/25"
+                className="w-full bg-transparent border-none text-[10px] font-bold tracking-widest uppercase pl-6 focus:ring-0 text-[#E8DCBF] placeholder:text-[#E8DCBF]/25"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -246,7 +246,7 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
 
             <div className="hidden sm:flex items-center gap-4 lg:gap-6">
               {['Price', 'Bed / Bath', 'Type'].map((filter) => (
-                <button key={filter} className="flex items-center gap-2 text-[10px] font-bold tracking-widest uppercase text-[#EDE0C8]/40 hover:text-[#C9A96E] transition-colors whitespace-nowrap">
+                <button key={filter} className="flex items-center gap-2 text-[10px] font-bold tracking-widest uppercase text-[#E8DCBF]/40 hover:text-[#C6A75E] transition-colors whitespace-nowrap">
                   {filter} <ChevronDown size={14} />
                 </button>
               ))}
@@ -257,18 +257,18 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
             <Button
               variant="outline"
               size="sm"
-              className="border-[#C9A96E]/20 text-[#EDE0C8]/70 h-9 text-[10px] font-bold tracking-widest uppercase hover:border-[#C9A96E] hover:text-[#C9A96E] bg-transparent"
+              className="border-[#C6A75E]/20 text-[#E8DCBF]/70 h-9 text-[10px] font-bold tracking-widest uppercase hover:border-[#C6A75E] hover:text-[#C6A75E] bg-transparent"
               onClick={() => setIsFilterModalOpen(true)}
             >
               <span className="hidden sm:inline mr-2">ALL FILTERS</span>
               <SlidersHorizontal size={14} />
             </Button>
 
-            <div className="h-8 w-px bg-[#C9A96E]/10 hidden lg:block mx-2" />
+            <div className="h-8 w-px bg-[#C6A75E]/10 hidden lg:block mx-2" />
 
             <button
               onClick={() => setViewMode(viewMode === "list" ? "map" : "list")}
-              className="lg:hidden w-9 h-9 border border-[#C9A96E]/15 flex items-center justify-center text-[#EDE0C8]/50"
+              className="lg:hidden w-9 h-9 border border-[#C6A75E]/15 flex items-center justify-center text-[#E8DCBF]/50"
             >
               {viewMode === "list" ? <MapIcon size={18} /> : <ListIcon size={18} />}
             </button>
@@ -285,18 +285,18 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
           )}>
             <div className="px-6 py-8 lg:px-10 space-y-6">
                <div className="space-y-1">
-                  <h1 className="text-2xl lg:text-4xl font-serif tracking-tight text-[#EDE0C8] uppercase">Luxury Listings</h1>
-                  <p className="text-[9px] font-bold tracking-widest text-[#EDE0C8]/35 uppercase">
+                  <h1 className="text-2xl lg:text-4xl font-serif tracking-tight text-[#E8DCBF] uppercase">Luxury Listings</h1>
+                  <p className="text-[9px] font-bold tracking-widest text-[#E8DCBF]/35 uppercase">
                     {filteredProperties.length} Homes for sale
                   </p>
                </div>
 
-               <div className="flex items-center justify-between pt-4 border-t border-[#C9A96E]/8">
+               <div className="flex items-center justify-between pt-4 border-t border-[#C6A75E]/8">
                   <div className="flex items-center gap-3">
-                     <span className="text-[9px] font-bold tracking-widest text-[#EDE0C8]/40 uppercase">{t('compare')}</span>
+                     <span className="text-[9px] font-bold tracking-widest text-[#E8DCBF]/40 uppercase">{t('compare')}</span>
                      <button 
                         onClick={() => setIsCompareEnabled(!isCompareEnabled)}
-                        className={cn("w-9 h-4.5 rounded-full relative transition-all duration-500", isCompareEnabled ? "bg-[#C9A96E]" : "bg-gray-200")}
+                        className={cn("w-9 h-4.5 rounded-full relative transition-all duration-500", isCompareEnabled ? "bg-[#C6A75E]" : "bg-gray-200")}
                      >
                         <div className={cn("absolute top-0.5 w-3.5 h-3.5 bg-white rounded-full transition-all", isCompareEnabled ? "left-5" : "left-0.5")} />
                      </button>
@@ -305,7 +305,7 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
             </div>
 
             <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#C9A96E]/8 border-t border-[#C9A96E]/8"
+              className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#C6A75E]/8 border-t border-[#C6A75E]/8"
               initial="hidden"
               animate="show"
               variants={{ hidden: {}, show: { transition: { staggerChildren: 0.07 } } }}
@@ -384,7 +384,7 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
                 disabled={selectedProperties.length < 2}
                 className={cn(
                   "w-full sm:w-auto px-8 py-3 text-[10px] font-bold tracking-[0.3em] uppercase transition-all",
-                  selectedProperties.length < 2 ? "bg-gray-800 text-gray-500 cursor-not-allowed" : "bg-[#C9A96E] text-white hover:bg-white hover:text-[#000B1D]"
+                  selectedProperties.length < 2 ? "bg-gray-800 text-gray-500 cursor-not-allowed" : "bg-[#C6A75E] text-white hover:bg-white hover:text-[#000B1D]"
                 )}
               >
                 COMPARE {selectedProperties.length > 0 ? `(${selectedProperties.length}/4)` : ""}
@@ -476,7 +476,7 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
                               {p.amenities?.slice(0, 3).map(a => (
                                  <span key={a} className="text-[9px] font-bold uppercase tracking-widest text-gray-400 px-2 py-1 border border-gray-100">{a}</span>
                               ))}
-                              {p.amenities && p.amenities.length > 3 && <span className="text-[9px] font-bold text-[#C9A96E]">+{p.amenities.length - 3}</span>}
+                              {p.amenities && p.amenities.length > 3 && <span className="text-[9px] font-bold text-[#C6A75E]">+{p.amenities.length - 3}</span>}
                            </div>
                         </div>
 
@@ -488,13 +488,13 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
 
                         {/* STATUS */}
                         <div className="md:hidden flex justify-between py-6 border-b text-[10px] uppercase tracking-widest text-gray-400"><span>Status</span><span className="text-gray-900 font-bold">AVAILABLE</span></div>
-                        <div className="hidden md:block h-20 flex items-center border-b border-gray-100 text-[11px] font-bold tracking-widest uppercase text-[#C9A96E]">
+                        <div className="hidden md:block h-20 flex items-center border-b border-gray-100 text-[11px] font-bold tracking-widest uppercase text-[#C6A75E]">
                           AVAILABLE FOR VIEWING
                         </div>
                       </div>
 
                       <div className="pt-8">
-                         <Link href={`/properties/${p.slug}`} className="block w-full py-5 bg-[#0A0A0F] text-white text-center text-[10px] font-bold tracking-[0.4em] uppercase hover:bg-[#C9A96E] transition-all">
+                         <Link href={`/properties/${p.slug}`} className="block w-full py-5 bg-[#0A0A0F] text-white text-center text-[10px] font-bold tracking-[0.4em] uppercase hover:bg-[#C6A75E] transition-all">
                             {t('view_details')}
                          </Link>
                       </div>
@@ -507,7 +507,7 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
 
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #C9A96E40; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #C6A75E40; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         * { border-radius: 0 !important; }
       `}</style>

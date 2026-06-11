@@ -149,7 +149,7 @@ export default function PropertyGallery({ media, title }: PropertyGalleryProps) 
               onClick={() => openLightbox(i)}
               className={cn(
                 "relative shrink-0 w-16 h-16 cursor-pointer overflow-hidden",
-                activeIdx === i && "ring-2 ring-[#C9A96E]"
+                activeIdx === i && "ring-2 ring-[#C6A75E]"
               )}
             >
               {item.type === "image" ? (
@@ -229,7 +229,7 @@ export default function PropertyGallery({ media, title }: PropertyGalleryProps) 
                 onClick={() => setLightboxIdx(i)}
                 className={cn(
                   "relative shrink-0 w-14 h-14 cursor-pointer overflow-hidden border-2 transition-all",
-                  lightboxIdx === i ? "border-[#C9A96E] opacity-100" : "border-transparent opacity-40 hover:opacity-70"
+                  lightboxIdx === i ? "border-[#C6A75E] opacity-100" : "border-transparent opacity-40 hover:opacity-70"
                 )}
               >
                 {item.type === "image" ? (

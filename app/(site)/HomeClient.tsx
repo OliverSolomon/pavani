@@ -81,7 +81,7 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
   const mp = <T extends object>(props: T) => (reduce ? {} : props);
 
   return (
-    <main className="min-h-screen bg-[#0D0501] text-[#EDE0C8]">
+    <main className="min-h-screen bg-[#0D0501] text-[#E8DCBF]">
       <Navbar settings={settings} />
 
       {/* ── HERO ── */}
@@ -100,24 +100,24 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
         {/* Hero text — bottom left, CSS @starting-style stagger + blur bridge */}
         <div className="absolute bottom-0 left-0 right-0 px-8 lg:px-16 pb-28 lg:pb-32 z-20 max-w-4xl">
           <h1 className="text-5xl lg:text-[5.5rem] xl:text-[6rem] leading-[0.92] tracking-tight mb-8">
-            <span className="hero-line hero-line-1 block font-serif font-light text-[#EDE0C8]">Nairobi's</span>
-            <span className="hero-line hero-line-2 block font-serif italic text-[#C9A96E] pb-1">Finest</span>
-            <span className="hero-line hero-line-3 block font-serif font-light text-[#EDE0C8]">Addresses</span>
+            <span className="hero-line hero-line-1 block font-serif font-light text-[#E8DCBF]">Nairobi's</span>
+            <span className="hero-line hero-line-2 block font-serif italic text-[#C6A75E] pb-1">Finest</span>
+            <span className="hero-line hero-line-3 block font-serif font-light text-[#E8DCBF]">Addresses</span>
           </h1>
-          <div className="hero-line hero-sub w-12 h-px bg-[#C9A96E]/60 mb-6 gold-line-animate" />
-          <p className="hero-line hero-sub text-[0.9375rem] font-light text-[#EDE0C8]/78 max-w-md leading-[1.75] tracking-wide mb-10">
+          <div className="hero-line hero-sub w-12 h-px bg-[#C6A75E]/60 mb-6 gold-line-animate" />
+          <p className="hero-line hero-sub text-[0.9375rem] font-light text-[#E8DCBF]/78 max-w-md leading-[1.75] tracking-wide mb-10">
             Exceptional apartments and villas across Kenya's most prestigious neighbourhoods.
           </p>
           <div className="hero-line hero-cta flex items-center gap-4">
             <Link
               href="/properties"
-              className="cta-link inline-flex items-center gap-3 bg-[#C9A96E] px-8 py-4 text-[10px] font-bold tracking-[0.4em] uppercase text-[#0D0501] hover:bg-[#E8C97C] transition-colors duration-300"
+              className="btn-crimson inline-flex items-center gap-3 px-8 py-4 text-[10px] font-bold tracking-[0.4em] uppercase"
             >
               BROWSE PROPERTIES
             </Link>
             <Link
               href="/contact"
-              className="cta-link inline-flex items-center gap-3 border border-[#EDE0C8]/35 px-8 py-4 text-[10px] font-bold tracking-[0.4em] uppercase text-[#EDE0C8]/85 hover:border-[#C9A96E] hover:text-[#C9A96E] transition-all duration-300"
+              className="cta-link inline-flex items-center gap-3 border border-[#E8DCBF]/40 px-8 py-4 text-[10px] font-bold tracking-[0.4em] uppercase text-[#E8DCBF]/88 hover:border-[#C6A75E] hover:text-[#C6A75E] transition-all duration-300"
             >
               CONTACT US
             </Link>
@@ -126,7 +126,7 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
 
         {/* Scroll indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
-          <ChevronDown size={18} className="text-[#EDE0C8]/40 animate-bounce" />
+          <ChevronDown size={18} className="text-[#E8DCBF]/40 animate-bounce" />
         </div>
       </section>
 
@@ -138,9 +138,9 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
             {...mp(fadeUp(0))}
           >
             <p className="eyebrow mb-4">Featured</p>
-            <h2 className="text-4xl lg:text-6xl font-serif font-light text-[#EDE0C8] leading-tight">
+            <h2 className="text-4xl lg:text-6xl font-serif font-light text-[#E8DCBF] leading-tight">
               Exceptional<br />
-              <em className="italic text-[#C9A96E]">Residences</em>
+              <em className="italic text-[#C6A75E]">Residences</em>
             </h2>
           </motion.div>
 
@@ -166,18 +166,18 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
                     </div>
                     <div className="space-y-2">
                       {district && (
-                        <p className="text-[8px] font-bold tracking-[0.5em] uppercase text-[#C9A96E]">{district}</p>
+                        <p className="text-[8px] font-bold tracking-[0.5em] uppercase text-[#C6A75E]">{district}</p>
                       )}
-                      <h3 className="text-xl lg:text-2xl font-serif font-light text-[#EDE0C8] group-hover:text-[#C9A96E] transition-colors duration-300">
+                      <h3 className="text-xl lg:text-2xl font-serif font-light text-[#E8DCBF] group-hover:text-[#C6A75E] transition-colors duration-300">
                         {p.title}
                       </h3>
                       {amt && (
-                        <p className="text-base font-serif text-[#EDE0C8]/80">
+                        <p className="text-base font-serif text-[#E8DCBF]/80">
                           {formatPrice(amt, cur)}
                         </p>
                       )}
                       {p.details && (
-                        <p className="text-[9px] tracking-widest text-[#EDE0C8]/50 font-medium">{p.details}</p>
+                        <p className="text-[9px] tracking-widest text-[#E8DCBF]/50 font-medium">{p.details}</p>
                       )}
                     </div>
                   </Link>
@@ -192,7 +192,7 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
           >
             <Link
               href="/properties"
-              className="cta-link inline-flex items-center gap-3 border border-[#C9A96E]/40 px-10 py-4 text-[10px] font-bold tracking-[0.4em] uppercase text-[#C9A96E] hover:bg-[#C9A96E] hover:text-[#0D0501] transition-all duration-300"
+              className="cta-link inline-flex items-center gap-3 border border-[#C6A75E]/40 px-10 py-4 text-[10px] font-bold tracking-[0.4em] uppercase text-[#C6A75E] hover:bg-[#C6A75E] hover:text-[#0D0501] transition-all duration-300"
             >
               VIEW ALL PROPERTIES <ArrowRight size={13} />
             </Link>
@@ -215,13 +215,13 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
           >
             <div>
               <p className="eyebrow mb-5">Our Story</p>
-              <h2 className="text-3xl lg:text-5xl font-serif font-light text-[#EDE0C8] leading-snug">
+              <h2 className="text-3xl lg:text-5xl font-serif font-light text-[#E8DCBF] leading-snug">
                 Nairobi's Most{" "}
-                <em className="italic text-[#C9A96E]">Trusted<br />Authority</em>
+                <em className="italic text-[#C6A75E]">Trusted<br />Authority</em>
               </h2>
             </div>
-            <div className="w-8 h-px bg-[#C9A96E]/50" />
-            <p className="text-[0.9375rem] font-light text-[#EDE0C8]/78 leading-[1.78] max-w-lg">
+            <div className="w-8 h-px bg-[#C6A75E]/50" />
+            <p className="text-[0.9375rem] font-light text-[#E8DCBF]/78 leading-[1.78] max-w-lg">
               Since 2009, Pavani Realty Co has been the definitive name in luxury real estate across Nairobi's most prestigious addresses. We've built our reputation on a foundation of excellence, discretion, and unwavering commitment to our clients' success.
             </p>
 
@@ -241,13 +241,13 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
                     transition: { type: "spring" as const, duration: 0.6, bounce: 0.25, delay: 0.15 + i * 0.09 },
                   })}
                 >
-                  <p className="text-3xl lg:text-4xl font-serif font-light text-[#C9A96E]">{stat}</p>
-                  <p className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#EDE0C8]/55 mt-1.5">{label}</p>
+                  <p className="text-3xl lg:text-4xl font-serif font-light text-[#C6A75E]">{stat}</p>
+                  <p className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#E8DCBF]/55 mt-1.5">{label}</p>
                 </motion.div>
               ))}
             </div>
 
-            <Link href="/about" className="cta-link inline-flex items-center gap-3 text-[9px] font-bold tracking-[0.35em] uppercase text-[#C9A96E] border-b border-[#C9A96E]/35 pb-1 hover:border-[#C9A96E] transition-all">
+            <Link href="/about" className="cta-link inline-flex items-center gap-3 text-[9px] font-bold tracking-[0.35em] uppercase text-[#C6A75E] border-b border-[#C6A75E]/35 pb-1 hover:border-[#C6A75E] transition-all">
               MEET OUR TEAM <ArrowRight size={12} />
             </Link>
           </motion.div>
@@ -293,9 +293,9 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
           >
             <div>
               <p className="eyebrow mb-4">Discover</p>
-              <h2 className="text-3xl lg:text-5xl font-serif font-light text-[#EDE0C8]">Prime Neighborhoods</h2>
+              <h2 className="text-3xl lg:text-5xl font-serif font-light text-[#E8DCBF]">Prime Neighborhoods</h2>
             </div>
-            <Link href="/neighborhoods" className="cta-link flex items-center gap-2 text-[9px] font-bold tracking-[0.3em] uppercase text-[#EDE0C8]/58 hover:text-[#C9A96E] transition-colors">
+            <Link href="/neighborhoods" className="cta-link flex items-center gap-2 text-[9px] font-bold tracking-[0.3em] uppercase text-[#E8DCBF]/58 hover:text-[#C6A75E] transition-colors">
               ALL NEIGHBORHOODS <ArrowRight size={12} />
             </Link>
           </motion.div>
@@ -318,10 +318,10 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0D0501]/85 via-[#0D0501]/20 to-transparent" />
                   <div className="absolute bottom-5 left-5">
-                    <p className="font-serif text-[1.1rem] text-[#EDE0C8] group-hover:text-[#C9A96E] transition-colors duration-300">
+                    <p className="font-serif text-[1.1rem] text-[#E8DCBF] group-hover:text-[#C6A75E] transition-colors duration-300">
                       {name}
                     </p>
-                    <p className="text-[8px] font-bold tracking-[0.35em] uppercase text-[#EDE0C8]/55 mt-0.5">{count}</p>
+                    <p className="text-[8px] font-bold tracking-[0.35em] uppercase text-[#E8DCBF]/55 mt-0.5">{count}</p>
                   </div>
                 </Link>
               </motion.div>
@@ -335,9 +335,9 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
         <div className="max-w-[1400px] mx-auto">
           <motion.div className="mb-14" {...mp(fadeUpNoBlur(0))}>
             <p className="eyebrow mb-4">Testimonials</p>
-            <h2 className="text-4xl lg:text-6xl font-serif font-light text-[#EDE0C8]">
+            <h2 className="text-4xl lg:text-6xl font-serif font-light text-[#E8DCBF]">
               What Our{" "}
-              <em className="italic text-[#C9A96E]">Clients Say</em>
+              <em className="italic text-[#C6A75E]">Clients Say</em>
             </h2>
           </motion.div>
 
@@ -346,19 +346,19 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
               <motion.div
                 key={name}
                 {...mp(fadeUp(i * 0.1))}
-                className="bg-[#1E0D02] border border-[#C9A96E]/12 p-8 lg:p-10 space-y-6"
+                className="bg-[#1E0D02] border border-[#C6A75E]/12 p-8 lg:p-10 space-y-6"
               >
                 <div className="flex gap-1">
                   {Array.from({ length: stars }).map((_, j) => (
-                    <span key={j} className="text-[#C9A96E] text-base">★</span>
+                    <span key={j} className="text-[#C6A75E] text-base">★</span>
                   ))}
                 </div>
-                <p className="text-[0.9rem] font-light text-[#EDE0C8]/80 leading-[1.8] italic font-serif">
+                <p className="text-[0.9rem] font-light text-[#E8DCBF]/80 leading-[1.8] italic font-serif">
                   &ldquo;{quote}&rdquo;
                 </p>
-                <div className="pt-4 border-t border-[#C9A96E]/10">
-                  <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#EDE0C8]/88">{name}</p>
-                  <p className="text-[9px] tracking-widest text-[#EDE0C8]/50 font-medium mt-1">{role}</p>
+                <div className="pt-4 border-t border-[#C6A75E]/10">
+                  <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#E8DCBF]/88">{name}</p>
+                  <p className="text-[9px] tracking-widest text-[#E8DCBF]/50 font-medium mt-1">{role}</p>
                 </div>
               </motion.div>
             ))}
@@ -385,18 +385,18 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
             transition: { duration: 0.95, ease },
           })}
         >
-          <div className="w-px h-14 bg-[#C9A96E]/30 mx-auto" />
-          <h2 className="text-5xl lg:text-7xl font-serif font-light text-[#EDE0C8] leading-tight">
+          <div className="w-px h-14 bg-[#C6A75E]/30 mx-auto" />
+          <h2 className="text-5xl lg:text-7xl font-serif font-light text-[#E8DCBF] leading-tight">
             Ready to Begin Your{" "}
-            <em className="italic text-[#C9A96E]">Journey?</em>
+            <em className="italic text-[#C6A75E]">Journey?</em>
           </h2>
-          <div className="w-8 h-px bg-[#C9A96E]/50 mx-auto" />
-          <p className="text-[0.9375rem] font-light text-[#EDE0C8]/72 leading-relaxed max-w-md mx-auto">
+          <div className="w-8 h-px bg-[#C6A75E]/50 mx-auto" />
+          <p className="text-[0.9375rem] font-light text-[#E8DCBF]/72 leading-relaxed max-w-md mx-auto">
             Let our team guide you through every step of finding your perfect property in Nairobi's most prestigious neighbourhoods.
           </p>
           <Link
             href="/contact"
-            className="cta-link inline-flex items-center gap-3 bg-[#C9A96E] px-10 py-4 text-[10px] font-bold tracking-[0.4em] uppercase text-[#0D0501] hover:bg-[#E8C97C] transition-colors duration-300"
+            className="btn-crimson inline-flex items-center gap-3 px-10 py-4 text-[10px] font-bold tracking-[0.4em] uppercase"
           >
             GET IN TOUCH
           </Link>
@@ -404,37 +404,37 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-[#0D0501] border-t border-[#C9A96E]/10 pt-20 pb-10 px-6 lg:px-16 print:hidden">
+      <footer className="bg-[#0D0501] border-t border-[#C6A75E]/10 pt-20 pb-10 px-6 lg:px-16 print:hidden">
         <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-16 mb-16 pb-16 border-b border-[#C9A96E]/10">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-16 mb-16 pb-16 border-b border-[#C6A75E]/10">
             {/* Brand */}
             <div className="space-y-6">
               <Link href="/" className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#C9A96E] flex items-center justify-center">
+                <div className="w-10 h-10 bg-[#C6A75E] flex items-center justify-center">
                   <span className="font-serif text-[#0D0501] text-xl font-semibold">P</span>
                 </div>
                 <div>
-                  <p className="text-[11px] font-bold tracking-[0.35em] uppercase text-[#EDE0C8]">{siteName}</p>
-                  <p className="text-[8px] tracking-[0.3em] uppercase text-[#C9A96E]/60">REALTY CO</p>
+                  <p className="text-[11px] font-bold tracking-[0.35em] uppercase text-[#E8DCBF]">{siteName}</p>
+                  <p className="text-[8px] tracking-[0.3em] uppercase text-[#C6A75E]/60">REALTY CO</p>
                 </div>
               </Link>
               <div className="flex gap-5">
-                {socials?.instagram && <Link href={socials.instagram} target="_blank" className="text-[#EDE0C8]/40 hover:text-[#C9A96E] transition-colors"><FaInstagram size={16} /></Link>}
-                {socials?.linkedin  && <Link href={socials.linkedin}  target="_blank" className="text-[#EDE0C8]/40 hover:text-[#C9A96E] transition-colors"><FaLinkedinIn size={16} /></Link>}
-                {socials?.facebook  && <Link href={socials.facebook}  target="_blank" className="text-[#EDE0C8]/40 hover:text-[#C9A96E] transition-colors"><FaFacebookF size={16} /></Link>}
-                {socials?.twitter   && <Link href={socials.twitter}   target="_blank" className="text-[#EDE0C8]/40 hover:text-[#C9A96E] transition-colors"><FaXTwitter size={16} /></Link>}
+                {socials?.instagram && <Link href={socials.instagram} target="_blank" className="text-[#E8DCBF]/40 hover:text-[#C6A75E] transition-colors"><FaInstagram size={16} /></Link>}
+                {socials?.linkedin  && <Link href={socials.linkedin}  target="_blank" className="text-[#E8DCBF]/40 hover:text-[#C6A75E] transition-colors"><FaLinkedinIn size={16} /></Link>}
+                {socials?.facebook  && <Link href={socials.facebook}  target="_blank" className="text-[#E8DCBF]/40 hover:text-[#C6A75E] transition-colors"><FaFacebookF size={16} /></Link>}
+                {socials?.twitter   && <Link href={socials.twitter}   target="_blank" className="text-[#E8DCBF]/40 hover:text-[#C6A75E] transition-colors"><FaXTwitter size={16} /></Link>}
                 {!socials && <>
-                  <span className="text-[#EDE0C8]/25"><FaInstagram size={16} /></span>
-                  <span className="text-[#EDE0C8]/25"><FaLinkedinIn size={16} /></span>
-                  <span className="text-[#EDE0C8]/25"><FaFacebookF size={16} /></span>
+                  <span className="text-[#E8DCBF]/25"><FaInstagram size={16} /></span>
+                  <span className="text-[#E8DCBF]/25"><FaLinkedinIn size={16} /></span>
+                  <span className="text-[#E8DCBF]/25"><FaFacebookF size={16} /></span>
                 </>}
               </div>
             </div>
 
             {/* Get in Touch */}
             <div className="space-y-5">
-              <h4 className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C9A96E]/80">Get in Touch</h4>
-              <div className="space-y-3 text-[0.875rem] font-light text-[#EDE0C8]/65">
+              <h4 className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C6A75E]/80">Get in Touch</h4>
+              <div className="space-y-3 text-[0.875rem] font-light text-[#E8DCBF]/65">
                 <p>{agencyAddress}</p>
                 <p>{agencyPhone}</p>
                 <p>{agencyEmail}</p>
@@ -443,8 +443,8 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
 
             {/* Navigation */}
             <div className="space-y-5">
-              <h4 className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C9A96E]/80">Navigation</h4>
-              <ul className="space-y-3 text-[0.6875rem] font-medium tracking-widest text-[#EDE0C8]/60">
+              <h4 className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C6A75E]/80">Navigation</h4>
+              <ul className="space-y-3 text-[0.6875rem] font-medium tracking-widest text-[#E8DCBF]/60">
                 {[
                   { label: "Home",       href: "/" },
                   { label: "Properties", href: "/properties" },
@@ -453,7 +453,7 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
                   { label: "Contact",    href: "/contact" },
                 ].map(item => (
                   <li key={item.label}>
-                    <Link href={item.href} className="hover:text-[#C9A96E] transition-colors duration-200">
+                    <Link href={item.href} className="hover:text-[#C6A75E] transition-colors duration-200">
                       {item.label}
                     </Link>
                   </li>
@@ -463,20 +463,20 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
 
             {/* Most Viewed */}
             <div className="space-y-5">
-              <h4 className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C9A96E]/80">Most Viewed</h4>
-              <ul className="space-y-3 text-[0.6875rem] font-medium tracking-widest text-[#EDE0C8]/60">
+              <h4 className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C6A75E]/80">Most Viewed</h4>
+              <ul className="space-y-3 text-[0.6875rem] font-medium tracking-widest text-[#E8DCBF]/60">
                 {["Villa Serene, Runda", "Karen Estate Villa", "Muthaiga Modern Apartment"].map(item => (
                   <li key={item}>
-                    <Link href="/properties" className="hover:text-[#C9A96E] transition-colors duration-200">{item}</Link>
+                    <Link href="/properties" className="hover:text-[#C6A75E] transition-colors duration-200">{item}</Link>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-[8px] tracking-[0.3em] uppercase text-[#EDE0C8]/38">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-[8px] tracking-[0.3em] uppercase text-[#E8DCBF]/38">
             <p>© {new Date().getFullYear()} {siteName} Realty Co. All rights reserved.</p>
-            <Link href="#" className="hover:text-[#C9A96E] transition-colors">Privacy Policy</Link>
+            <Link href="#" className="hover:text-[#C6A75E] transition-colors">Privacy Policy</Link>
           </div>
         </div>
       </footer>

@@ -1,20 +1,27 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Pavani Warm Espresso Palette */
-  --color-rich:    #0D0501;
-  --color-surface: #180900;
-  --color-card:    #1E0D02;
-  --color-elevated:#2A1508;
-  --color-gold:    #C9A96E;
-  --color-gold-lt: #E8C97C;
-  --color-gold-dk: #9E7A42;
-  --color-cream:   #EDE0C8;
-  --color-muted:   #9A8570;
+  /* ══ Pavani Official Brand Palette (source: Brand Identity PDF) ══
+     Gold:    #C6A75E  — Primary Logo Gold
+     Cream:   #E8DCBF  — Primary Logo Light
+     Crimson: #84262B  — Monogram mark primary
+     Dark bg: #0D0501  — warmer than brand #1A1A1A, pairs better with gold on screen
+  */
+  --color-rich:     #0D0501;
+  --color-surface:  #180900;
+  --color-card:     #1E0D02;
+  --color-elevated: #2A1508;
+  --color-gold:     #C6A75E;
+  --color-gold-lt:  #EDCF7A;
+  --color-gold-dk:  #9B7D3D;
+  --color-cream:    #E8DCBF;
+  --color-crimson:  #84262B;
+  --color-muted:    #9A8570;
 
-  --color-pavani-deep:  #0D0501;
-  --color-pavani-gold:  #C9A96E;
-  --color-pavani-cream: #EDE0C8;
+  --color-pavani-deep:    #0D0501;
+  --color-pavani-gold:    #C6A75E;
+  --color-pavani-cream:   #E8DCBF;
+  --color-pavani-crimson: #84262B;
 
   --font-serif: var(--font-cormorant);
   --font-sans:  var(--font-montserrat);
@@ -40,8 +47,8 @@ html, body {
 /* ── Warm gold scrollbar ── */
 ::-webkit-scrollbar        { width: 3px; }
 ::-webkit-scrollbar-track  { background: #0D0501; }
-::-webkit-scrollbar-thumb  { background: #C9A96E40; border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: #C9A96E; }
+::-webkit-scrollbar-thumb  { background: #C6A75E40; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #C6A75E; }
 
 /* ── Global tactile press (Emil: scale(0.97) on :active) ── */
 button:active { transform: scale(0.97); }
@@ -59,15 +66,24 @@ button:active { transform: scale(0.97); }
    body text to pass WCAG AA (4.5:1).
    ══════════════════════════════════════════════════ */
 
-/* Eyebrow — gold, clear */
+/* Eyebrow — brand gold (#C6A75E exact) */
 .eyebrow {
-  font-size: 0.5625rem;        /* 9px */
+  font-size: 0.5625rem;
   font-weight: 700;
   letter-spacing: 0.45em;
   text-transform: uppercase;
-  color: #C9A96E;
+  color: #C6A75E;
   opacity: 1;
 }
+
+/* Brand crimson — primary mark color, used for strong CTA moments */
+.btn-crimson {
+  background-color: #84262B;
+  color: #E8DCBF;
+  transition: background-color 280ms var(--ease-out), transform 120ms var(--ease-out);
+}
+.btn-crimson:hover  { background-color: #9E2F35; }
+.btn-crimson:active { transform: scale(0.97); }
 
 /* Body text — 78% minimum on dark bg */
 .body-text {
@@ -97,7 +113,7 @@ button:active { transform: scale(0.97); }
   100% { background-position:  200% center; }
 }
 .gold-shimmer {
-  background: linear-gradient(90deg, #C9A96E, #E8C97C, #C9A96E, #9E7A42, #C9A96E);
+  background: linear-gradient(90deg, #C6A75E, #EDCF7A, #C6A75E, #9E7A42, #C6A75E);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -166,7 +182,7 @@ button:active { transform: scale(0.97); }
   left: 0;
   right: 0;
   height: 1px;
-  background: #C9A96E;
+  background: #C6A75E;
   clip-path: inset(0 100% 0 0);
   transition: clip-path 280ms var(--ease-out);
 }
@@ -193,7 +209,7 @@ button:active { transform: scale(0.97); }
   width: 100%;
   background: #180900;
   border: 1px solid rgba(201, 169, 110, 0.18);
-  color: #EDE0C8;
+  color: #E8DCBF;
   padding: 0.875rem 1rem;
   font-size: 0.8125rem;
   letter-spacing: 0.02em;

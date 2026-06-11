@@ -53,7 +53,7 @@ export default function CurrencyBadge({
 
       {isOpen && (
         <div
-          className="absolute top-full left-0 mt-1.5 w-28 bg-[#1E0D02] shadow-2xl border border-[#C9A96E]/15 py-1 z-[500]"
+          className="absolute top-full left-0 mt-1.5 w-28 bg-[#1E0D02] shadow-2xl border border-[#C6A75E]/15 py-1 z-[500]"
           onClick={e => e.stopPropagation()}
         >
           {CURRENCIES.map(c => (
@@ -62,7 +62,7 @@ export default function CurrencyBadge({
               onClick={() => { setCurrency(c.code as any); setIsOpen(false); }}
               className={cn(
                 "w-full text-left px-3 py-2 text-[9px] font-bold tracking-widest uppercase hover:bg-[#2A1508] transition-colors",
-                currency === c.code ? "text-[#C9A96E]" : "text-[#EDE0C8]/50"
+                currency === c.code ? "text-[#C6A75E]" : "text-[#E8DCBF]/50"
               )}
             >
               {c.symbol} {c.label}

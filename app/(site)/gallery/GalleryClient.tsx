@@ -81,7 +81,7 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
     setLightboxIdx(i => (i === null ? null : (i + 1) % filteredPhotos.length));
 
   return (
-    <main className="min-h-screen bg-[#0D0501] text-[#EDE0C8]">
+    <main className="min-h-screen bg-[#0D0501] text-[#E8DCBF]">
       <Navbar settings={settings} />
 
       {/* ── PAGE HERO ── */}
@@ -90,24 +90,24 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
           className="absolute inset-0 opacity-[0.025] pointer-events-none"
           style={{
             backgroundImage:
-              "repeating-linear-gradient(0deg,#C9A96E,#C9A96E 1px,transparent 1px,transparent 72px),repeating-linear-gradient(90deg,#C9A96E,#C9A96E 1px,transparent 1px,transparent 72px)",
+              "repeating-linear-gradient(0deg,#C6A75E,#C6A75E 1px,transparent 1px,transparent 72px),repeating-linear-gradient(90deg,#C6A75E,#C6A75E 1px,transparent 1px,transparent 72px)",
           }}
         />
         <div className="relative max-w-[1400px] mx-auto page-hero-enter">
-          <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#C9A96E] mb-4">Gallery</p>
-          <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-serif font-light text-[#EDE0C8] leading-tight mb-5">
+          <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#C6A75E] mb-4">Gallery</p>
+          <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-serif font-light text-[#E8DCBF] leading-tight mb-5">
             Visual Showcase
           </h1>
-          <div className="w-10 h-px bg-[#C9A96E]/60" />
+          <div className="w-10 h-px bg-[#C6A75E]/60" />
         </div>
       </section>
 
       {/* ── VIDEO TOURS ── */}
-      <section className="py-14 lg:py-20 px-6 lg:px-16 border-t border-[#C9A96E]/10">
+      <section className="py-14 lg:py-20 px-6 lg:px-16 border-t border-[#C6A75E]/10">
         <div className="max-w-[1400px] mx-auto">
           <motion.div {...fadeUp(0)} className="mb-10">
-            <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#C9A96E]/70 mb-3">Featured Videos</p>
-            <h2 className="text-2xl lg:text-3xl font-serif font-light text-[#EDE0C8]">
+            <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#C6A75E]/70 mb-3">Featured Videos</p>
+            <h2 className="text-2xl lg:text-3xl font-serif font-light text-[#E8DCBF]">
               Video Tours &amp; Insights
             </h2>
           </motion.div>
@@ -147,13 +147,13 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
                   <div className="absolute inset-0 bg-[#0D0501]/45 group-hover:bg-[#0D0501]/25 transition-colors duration-300" />
                   {/* Play button */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-12 h-12 rounded-full border-2 border-[#C9A96E] bg-[#0D0501]/40 flex items-center justify-center group-hover:bg-[#C9A96E] group-hover:border-[#C9A96E] transition-all duration-300">
-                      <Play size={16} className="text-[#C9A96E] group-hover:text-[#0D0501] transition-colors ml-0.5" fill="currentColor" />
+                    <div className="w-12 h-12 rounded-full border-2 border-[#C6A75E] bg-[#0D0501]/40 flex items-center justify-center group-hover:bg-[#C6A75E] group-hover:border-[#C6A75E] transition-all duration-300">
+                      <Play size={16} className="text-[#C6A75E] group-hover:text-[#0D0501] transition-colors ml-0.5" fill="currentColor" />
                     </div>
                   </div>
                   {/* Title overlay at bottom */}
                   <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-[#0D0501]/90 to-transparent">
-                    <p className="text-[8px] font-bold tracking-[0.25em] uppercase text-[#EDE0C8]/80 leading-tight">
+                    <p className="text-[8px] font-bold tracking-[0.25em] uppercase text-[#E8DCBF]/80 leading-tight">
                       {title}
                     </p>
                   </div>
@@ -168,7 +168,7 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
               href="https://youtube.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="cta-link inline-flex items-center gap-3 border border-[#C9A96E]/35 px-10 py-4 text-[10px] font-bold tracking-[0.45em] uppercase text-[#C9A96E] hover:bg-[#C9A96E] hover:text-[#0D0501] transition-all duration-300"
+              className="cta-link inline-flex items-center gap-3 border border-[#C6A75E]/35 px-10 py-4 text-[10px] font-bold tracking-[0.45em] uppercase text-[#C6A75E] hover:bg-[#C6A75E] hover:text-[#0D0501] transition-all duration-300"
             >
               SUBSCRIBE ON YOUTUBE <ArrowRight size={12} />
             </a>
@@ -180,8 +180,8 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
       <section className="py-14 lg:py-20 px-6 lg:px-16 bg-[#180900]">
         <div className="max-w-[1400px] mx-auto">
           <motion.div {...fadeUp(0)} className="mb-10">
-            <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#C9A96E]/70 mb-3">Property Showcase</p>
-            <h2 className="text-2xl lg:text-3xl font-serif font-light text-[#EDE0C8]">
+            <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#C6A75E]/70 mb-3">Property Showcase</p>
+            <h2 className="text-2xl lg:text-3xl font-serif font-light text-[#E8DCBF]">
               Featured Properties
             </h2>
           </motion.div>
@@ -195,8 +195,8 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
                 className={cn(
                   "px-4 py-2 text-[9px] font-bold tracking-[0.3em] uppercase border transition-all duration-200",
                   activeFilter === value
-                    ? "bg-[#C9A96E] text-[#0D0501] border-[#C9A96E]"
-                    : "border-[#C9A96E]/20 text-[#EDE0C8]/55 hover:border-[#C9A96E]/40 hover:text-[#EDE0C8]/80"
+                    ? "bg-[#C6A75E] text-[#0D0501] border-[#C6A75E]"
+                    : "border-[#C6A75E]/20 text-[#E8DCBF]/55 hover:border-[#C6A75E]/40 hover:text-[#E8DCBF]/80"
                 )}
               >
                 {label}
@@ -233,12 +233,12 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0D0501]/80 via-[#0D0501]/10 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300" />
                     <div className="absolute top-3 left-3">
-                      <span className="text-[7px] font-bold tracking-[0.4em] uppercase bg-[#0D0501]/70 text-[#C9A96E] px-2.5 py-1.5">
+                      <span className="text-[7px] font-bold tracking-[0.4em] uppercase bg-[#0D0501]/70 text-[#C6A75E] px-2.5 py-1.5">
                         {photo.category}
                       </span>
                     </div>
                     <div className="absolute bottom-4 left-4 right-4">
-                      <p className="text-[13px] font-serif text-[#EDE0C8] leading-snug">{photo.name}</p>
+                      <p className="text-[13px] font-serif text-[#E8DCBF] leading-snug">{photo.name}</p>
                     </div>
                   </button>
                 </motion.div>
@@ -250,7 +250,7 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
           <motion.div {...fadeUp(0.15)} className="mt-12 flex justify-center">
             <Link
               href="/properties"
-              className="cta-link inline-flex items-center gap-3 border border-[#C9A96E]/35 px-10 py-4 text-[10px] font-bold tracking-[0.45em] uppercase text-[#C9A96E] hover:bg-[#C9A96E] hover:text-[#0D0501] transition-all duration-300"
+              className="cta-link inline-flex items-center gap-3 border border-[#C6A75E]/35 px-10 py-4 text-[10px] font-bold tracking-[0.45em] uppercase text-[#C6A75E] hover:bg-[#C6A75E] hover:text-[#0D0501] transition-all duration-300"
             >
               VIEW ALL PROPERTIES <ArrowRight size={12} />
             </Link>
@@ -286,37 +286,37 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
               />
               {/* Title bar */}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#0D0501]/90 to-transparent p-6">
-                <p className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C9A96E] mb-1">
+                <p className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C6A75E] mb-1">
                   {filteredPhotos[lightboxIdx].category}
                 </p>
-                <p className="font-serif text-lg text-[#EDE0C8]">
+                <p className="font-serif text-lg text-[#E8DCBF]">
                   {filteredPhotos[lightboxIdx].name}
                 </p>
               </div>
               {/* Close */}
               <button
-                className="absolute top-4 right-4 w-10 h-10 bg-[#0D0501]/70 flex items-center justify-center text-[#EDE0C8]/70 hover:text-[#C9A96E] transition-colors"
+                className="absolute top-4 right-4 w-10 h-10 bg-[#0D0501]/70 flex items-center justify-center text-[#E8DCBF]/70 hover:text-[#C6A75E] transition-colors"
                 onClick={closeLightbox}
               >
                 <X size={18} />
               </button>
               {/* Prev */}
               <button
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#0D0501]/70 flex items-center justify-center text-[#EDE0C8]/70 hover:text-[#C9A96E] transition-colors text-lg"
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#0D0501]/70 flex items-center justify-center text-[#E8DCBF]/70 hover:text-[#C6A75E] transition-colors text-lg"
                 onClick={prevPhoto}
               >
                 &#8592;
               </button>
               {/* Next */}
               <button
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#0D0501]/70 flex items-center justify-center text-[#EDE0C8]/70 hover:text-[#C9A96E] transition-colors text-lg"
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#0D0501]/70 flex items-center justify-center text-[#E8DCBF]/70 hover:text-[#C6A75E] transition-colors text-lg"
                 onClick={nextPhoto}
               >
                 &#8594;
               </button>
             </motion.div>
             {/* Counter */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-bold tracking-[0.3em] uppercase text-[#EDE0C8]/40">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-bold tracking-[0.3em] uppercase text-[#E8DCBF]/40">
               {lightboxIdx + 1} / {filteredPhotos.length}
             </div>
           </motion.div>
