@@ -21,11 +21,11 @@ const CURRENCIES = [
 ];
 
 const NAV_LINKS = [
-  { label: "Properties", href: "/properties" },
-  { label: "Gallery",    href: "/gallery" },
-  { label: "Insights",   href: "/properties" },
-  { label: "About",      href: "/about" },
-  { label: "Contact",    href: "/contact" },
+  { label: "Properties",    href: "/properties" },
+  { label: "Neighbourhoods", href: "/neighborhoods" },
+  { label: "Gallery",       href: "/gallery" },
+  { label: "About",         href: "/about" },
+  { label: "Contact",       href: "/contact" },
 ];
 
 const ease = [0.23, 1, 0.32, 1] as const;
@@ -76,18 +76,10 @@ export default function Navbar({ settings }: NavbarProps) {
 
           {/* Logo — real brand SVG assets */}
           <Link href="/" className="flex items-center gap-3 shrink-0 group" aria-label="Pavani Realty Co">
-            {/* Monogram mark — always visible */}
-            <img
-              src="/logo-mark.svg"
-              alt=""
-              aria-hidden="true"
-              className="h-9 w-9 transition-transform duration-300 group-hover:scale-[1.04]"
-            />
-            {/* Full wordmark — desktop only */}
             <img
               src="/logo-light.svg"
               alt="Pavani Realty Co"
-              className="hidden sm:block h-7 w-auto"
+              className="hidden sm:block h-34 w-auto"
             />
           </Link>
 

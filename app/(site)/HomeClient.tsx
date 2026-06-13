@@ -302,13 +302,13 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {[
-              { name: "Westlands", count: "24 Listings", img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" },
-              { name: "Muthaiga",  count: "12 Listings", img: "https://images.unsplash.com/photo-1600607687940-c52af096999c?auto=format&fit=crop&w=800&q=80" },
-              { name: "Karen",     count: "18 Listings", img: "https://images.unsplash.com/photo-1600607687644-c7f34b5063c7?auto=format&fit=crop&w=800&q=80" },
-              { name: "Kilimani",  count: "31 Listings", img: "https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=800&q=80" },
-            ].map(({ name, count, img }, i) => (
+              { name: "Westlands", slug: "westlands", count: "City living",   img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" },
+              { name: "Muthaiga",  slug: "muthaiga",  count: "Diplomatic",    img: "https://images.unsplash.com/photo-1600607687940-c52af096999c?auto=format&fit=crop&w=800&q=80" },
+              { name: "Karen",     slug: "karen",     count: "Green belt",    img: "https://images.unsplash.com/photo-1600607687644-c7f34b5063c7?auto=format&fit=crop&w=800&q=80" },
+              { name: "Kilimani",  slug: "kilimani",  count: "Cosmopolitan",  img: "https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=800&q=80" },
+            ].map(({ name, slug, count, img }, i) => (
               <motion.div key={name} {...mp(fadeUpNoBlur(i * 0.08))}>
-                <Link href="/neighborhoods" className="group relative h-52 lg:h-80 overflow-hidden block">
+                <Link href={`/neighborhoods/${slug}`} className="group relative h-52 lg:h-80 overflow-hidden block">
                   <Image
                     src={img}
                     alt={name}
@@ -446,11 +446,12 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
               <h4 className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C6A75E]/80">Navigation</h4>
               <ul className="space-y-3 text-[0.6875rem] font-medium tracking-widest text-[#E8DCBF]/60">
                 {[
-                  { label: "Home",       href: "/" },
-                  { label: "Properties", href: "/properties" },
-                  { label: "Gallery",    href: "/gallery" },
-                  { label: "About Us",   href: "/about" },
-                  { label: "Contact",    href: "/contact" },
+                  { label: "Home",          href: "/" },
+                  { label: "Properties",    href: "/properties" },
+                  { label: "Neighbourhoods", href: "/neighborhoods" },
+                  { label: "Gallery",       href: "/gallery" },
+                  { label: "About Us",      href: "/about" },
+                  { label: "Contact",       href: "/contact" },
                 ].map(item => (
                   <li key={item.label}>
                     <Link href={item.href} className="hover:text-[#C6A75E] transition-colors duration-200">
