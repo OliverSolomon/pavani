@@ -190,8 +190,7 @@ export default function Navbar({ settings }: NavbarProps) {
             {/* Header */}
             <div className="flex items-center justify-between px-8 h-[72px] border-b border-[#C6A75E]/10">
               <Link href="/" className="flex items-center gap-3" aria-label="Pavani Realty Co">
-                <img src="/logo-mark.svg" alt="" aria-hidden="true" className="h-8 w-8" />
-                <img src="/logo-light.svg" alt="Pavani Realty Co" className="h-6 w-auto" />
+                <img src="/logo-light.svg" alt="Pavani Realty Co" className="h-34 w-auto" />
               </Link>
               <button
                 onClick={() => setMobile(false)}

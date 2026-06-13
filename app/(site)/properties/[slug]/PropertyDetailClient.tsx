@@ -26,9 +26,11 @@ import PropertyGallery from "@/components/PropertyGallery";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import CurrencyBadge from "@/components/CurrencyBadge";
 
-const PropertyMap = dynamic(() => import("@/components/PropertyMap"), {
+import { findDistrict } from "@/lib/neighborhoods";
+
+const DistrictMap = dynamic(() => import("@/components/DistrictMap"), {
   ssr: false,
-  loading: () => <div className="w-full h-full bg-[#1E0D02] animate-pulse flex items-center justify-center text-gray-300 uppercase tracking-widest text-[10px]">LOADING MAP...</div>
+  loading: () => <div className="w-full h-full bg-[#180900] animate-pulse flex items-center justify-center text-[#C6A75E]/50 uppercase tracking-[0.3em] text-[10px]">Tracing district…</div>
 });
 
 interface PropertyDetailClientProps {
@@ -102,6 +104,8 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
   const priceAmount = typeof property.price === 'object' ? property.price?.amount : property.price;
   const priceCurrency = typeof property.price === 'object' ? property.price?.currency : "USD";
 
+  const guideDistrict = useMemo(() => findDistrict(property.district?.name), [property.district]);
+
   const mapProperties = useMemo(() => {
     if (!coords) return [];
     return [{
@@ -109,10 +113,9 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
       title: property.title,
       price: globalFormatPrice(priceAmount, priceCurrency),
       coords,
-      imageUrl: property.imageUrl,
-      district: property.district?.name
+      districtSlug: guideDistrict?.slug || "_",
     }];
-  }, [property, coords, globalFormatPrice, priceAmount, priceCurrency]);
+  }, [property, coords, guideDistrict, globalFormatPrice, priceAmount, priceCurrency]);
 
   const handleInquiry = (e: React.FormEvent) => {
     e.preventDefault();
@@ -204,10 +207,10 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
                 <div className="h-px w-10 bg-[#C6A75E]" />
                 <h2 className="text-[10px] font-bold tracking-[0.5em] uppercase text-[#C6A75E]">The Property</h2>
               </div>
-              <p className="text-xl lg:text-2xl font-light font-serif italic text-gray-600 leading-relaxed">
+              <p className="text-xl lg:text-2xl font-light font-serif italic text-[#C6A75E] leading-relaxed">
                 {property.shortDescription || "A residence of unparalleled distinction and architectural purity."}
               </p>
-              <div className="prose prose-lg max-w-none text-[#E8DCBF]/50 font-light leading-relaxed">
+              <div className="prose prose-lg max-w-none text-[#E8DCBF]/75 font-light leading-relaxed">
                 {property.longDescription ? <PortableText value={property.longDescription} /> : (
                   <p>Detailed architectural specifications and floor plans are available upon request. Contact our advisors for a private presentation.</p>
                 )}
@@ -239,14 +242,14 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
                   <h3 className="text-xl font-serif uppercase tracking-tight mb-1">Compliance & Verification</h3>
                   <p className="text-[10px] font-bold tracking-widest text-[#E8DCBF]/40 uppercase">Verified Asset Dossier</p>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-gray-200 border border-[#C6A75E]/15">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#C6A75E]/15 border border-[#C6A75E]/15">
                   {property.verificationDocuments.map((doc: any, i: number) => (
                     <div key={i} className="bg-[#180900] p-6 flex items-center justify-between group hover:bg-[#1E0D02] transition-all cursor-pointer">
                       <div className="flex items-center gap-4">
                         <FileText className="text-[#C6A75E]" size={20} />
                         <span className="text-[9px] font-bold tracking-widest uppercase">{doc.originalFilename}</span>
                       </div>
-                      <Download size={16} className="text-gray-300 group-hover:text-[#E8DCBF] transition-all" />
+                      <Download size={16} className="text-[#E8DCBF]/40 group-hover:text-[#C6A75E] transition-all" />
                     </div>
                   ))}
                 </div>
@@ -261,7 +264,16 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
                   <h2 className="text-[10px] font-bold tracking-[0.5em] uppercase text-[#C6A75E]">Location</h2>
                 </div>
                 <div className="h-[400px] border border-[#C6A75E]/10">
-                  <PropertyMap properties={mapProperties} activePropertyId={property._id} center={[coords.lat, coords.lng]} zoom={15} />
+                  {guideDistrict ? (
+                    <DistrictMap
+                      districts={[guideDistrict]}
+                      properties={mapProperties}
+                      activeSlug={guideDistrict.slug}
+                      activePropertyId={property._id}
+                    />
+                  ) : (
+                    <DistrictMap districts={[]} properties={mapProperties} fitTo="properties" />
+                  )}
                 </div>
               </div>
             )}
@@ -333,8 +345,8 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
                           className={cn(
                             "px-4 py-2 text-[9px] font-bold tracking-widest uppercase border transition-all",
                             inquiryForm.type === type
-                              ? "bg-[#0D0501] text-white border-[#0A0A0F]"
-                              : "border-[#C6A75E]/15 text-[#E8DCBF]/40 hover:border-gray-400"
+                              ? "bg-[#C6A75E] text-[#0D0501] border-[#C6A75E]"
+                              : "border-[#C6A75E]/15 text-[#E8DCBF]/50 hover:border-[#C6A75E]/50"
                           )}
                         >
                           {type}
@@ -354,7 +366,7 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
                   </div>
                   <button
                     type="submit"
-                    className="w-full h-14 bg-[#0D0501] text-white text-[10px] font-bold tracking-[0.4em] uppercase hover:bg-[#C6A75E] transition-all duration-300"
+                    className="btn-crimson w-full h-14 text-[10px] font-bold tracking-[0.4em] uppercase"
                   >
                     SEND INQUIRY
                   </button>
@@ -377,13 +389,13 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
               <div className="space-y-3">
                 <a
                   href={`mailto:${agencyEmail}?subject=Inquiry: ${property.title}`}
-                  className="flex items-center gap-3 w-full h-12 bg-[#C6A75E] text-white text-[10px] font-bold tracking-[0.3em] uppercase px-5 hover:bg-[#b8935a] transition-all"
+                  className="flex items-center gap-3 w-full h-12 bg-[#C6A75E] text-[#0D0501] text-[10px] font-bold tracking-[0.3em] uppercase px-5 hover:bg-[#EDCF7A] transition-all"
                 >
                   <Mail size={14} /> EMAIL AN ADVISOR
                 </a>
                 <a
                   href={`tel:${contactPhone}`}
-                  className="flex items-center gap-3 w-full h-12 border border-[#0A0A0F] text-[#E8DCBF] text-[10px] font-bold tracking-[0.3em] uppercase px-5 hover:bg-[#0D0501] hover:text-white transition-all"
+                  className="flex items-center gap-3 w-full h-12 border border-[#C6A75E]/30 text-[#E8DCBF] text-[10px] font-bold tracking-[0.3em] uppercase px-5 hover:bg-[#C6A75E] hover:text-[#0D0501] transition-all"
                 >
                   <Phone size={14} /> {contactPhone}
                 </a>

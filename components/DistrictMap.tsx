@@ -18,6 +18,10 @@ interface DistrictMapProps {
   districts: DistrictGuide[];
   properties?: DistrictMapProperty[];
   activeSlug?: string | null;
+  /** Highlight a single pin (e.g. hovered listing) without filtering others. */
+  activePropertyId?: string | null;
+  /** Frame the view to the property pins rather than the district rings. */
+  fitTo?: "districts" | "properties";
   onSelect?: (slug: string) => void;
 }
 
@@ -25,7 +29,7 @@ const GOLD = "#C6A75E";
 const CRIMSON = "#84262B";
 const CREAM = "#E8DCBF";
 
-function Layers({ districts, properties = [], activeSlug, onSelect }: DistrictMapProps) {
+function Layers({ districts, properties = [], activeSlug, activePropertyId, fitTo = "districts", onSelect }: DistrictMapProps) {
   const map = useMap();
   const [ready, setReady] = useState(false);
 
@@ -49,14 +53,19 @@ function Layers({ districts, properties = [], activeSlug, onSelect }: DistrictMa
     return () => clearTimeout(t);
   }, [map]);
 
-  /* Fit to all districts, or zoom to the active one. */
+  /* Frame the view: active district → that ring; property mode → the pins;
+     otherwise → all district rings. */
   useEffect(() => {
     if (!ready || !map) return;
     const active = activeSlug ? districts.find((d) => d.slug === activeSlug) : null;
-    const rings = active
-      ? [active.boundary]
-      : districts.map((d) => d.boundary);
-    const pts = rings.flat().map((p) => [p.lat, p.lng] as [number, number]);
+    let pts: [number, number][] = [];
+    if (active) {
+      pts = active.boundary.map((p) => [p.lat, p.lng]);
+    } else if (fitTo === "properties" && properties.some((p) => p.coords)) {
+      pts = properties.filter((p) => p.coords).map((p) => [p.coords!.lat, p.coords!.lng]);
+    } else {
+      pts = districts.flatMap((d) => d.boundary.map((p) => [p.lat, p.lng] as [number, number]));
+    }
     if (pts.length) {
       map.flyToBounds(L.latLngBounds(pts), {
         padding: [60, 60],
@@ -64,7 +73,7 @@ function Layers({ districts, properties = [], activeSlug, onSelect }: DistrictMa
         maxZoom: active ? 14 : 13,
       });
     }
-  }, [ready, activeSlug, districts, map]);
+  }, [ready, activeSlug, districts, properties, fitTo, map]);
 
   const pin = (active: boolean) =>
     L.divIcon({
@@ -116,8 +125,9 @@ function Layers({ districts, properties = [], activeSlug, onSelect }: DistrictMa
 
       {properties.map((p) => {
         if (!p.coords) return null;
-        const active = activeSlug === p.districtSlug;
-        if (activeSlug && !active) return null;
+        const inActiveDistrict = activeSlug === p.districtSlug;
+        if (activeSlug && !inActiveDistrict) return null;
+        const active = inActiveDistrict || activePropertyId === p._id;
         return (
           <Marker key={p._id} position={[p.coords.lat, p.coords.lng]} icon={pin(active)}>
             <Popup>

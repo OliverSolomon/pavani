@@ -5,48 +5,39 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { motion } from "framer-motion";
-import { 
-  Search, 
-  Map as MapIcon, 
-  List as ListIcon, 
-  SlidersHorizontal, 
-  ChevronDown, 
-  X, 
-  Heart,
-  Maximize2,
-  ChevronLeft,
-  ChevronRight
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Search, Map as MapIcon, List as ListIcon, SlidersHorizontal,
+  ChevronDown, X, Heart, ArrowRight,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { cn } from "@/lib/utils";
 import { extractCoordsFromGoogleMapsUrl, getCoordsBySearch } from "@/lib/geocoding";
 import { useCurrency } from "@/context/CurrencyContext";
-import { useLanguage } from "@/context/LanguageContext";
-import CurrencyBadge from "@/components/CurrencyBadge";
+import { DISTRICTS, findDistrict } from "@/lib/neighborhoods";
+import type { DistrictMapProperty } from "@/components/DistrictMap";
 
-const PropertyMap = dynamic(() => import("@/components/PropertyMap"), {
+const DistrictMap = dynamic(() => import("@/components/DistrictMap"), {
   ssr: false,
-  loading: () => <div className="w-full h-full bg-[#0A0A0F]/5 animate-pulse flex items-center justify-center text-white/20 uppercase tracking-widest text-[10px]">LOADING MAP...</div>
+  loading: () => (
+    <div className="w-full h-full bg-[#180900] flex items-center justify-center text-[#C6A75E]/50 uppercase tracking-[0.3em] text-[10px]">
+      Tracing districts…
+    </div>
+  ),
 });
+
+const ease = [0.23, 1, 0.32, 1] as const;
 
 interface Property {
   _id: string;
   title: string;
   slug: string;
   buildingName?: string;
-  price: {
-    amount: string;
-    currency: string;
-  } | string;
+  price: { amount: string; currency: string } | string;
   imageUrl: string;
   county: string;
-  district: {
-    name: string;
-    boundary?: { lat: number; lng: number }[];
-  } | string;
+  district: { name: string; boundary?: { lat: number; lng: number }[] } | string;
   details?: string;
   propertyType?: string[];
   shortDescription?: string;
@@ -59,458 +50,397 @@ interface Property {
 
 interface PropertiesClientProps {
   initialProperties: Property[];
-  settings?: {
-    general?: any;
-    brand?: any;
-    contact?: any;
-    socials?: any;
-  };
+  settings?: { general?: any; brand?: any; contact?: any; socials?: any };
 }
 
-const PropertyCard = ({ 
-  property, 
-  isActive, 
-  onMouseEnter, 
-  isCompareEnabled,
-  isSelected,
-  onToggleSelection 
-}: { 
-  property: Property, 
-  isActive: boolean, 
-  onMouseEnter: () => void, 
-  isCompareEnabled: boolean,
-  isSelected: boolean,
-  onToggleSelection: () => void
-}) => {
-  const { t } = useLanguage();
-  const { formatPrice: globalFormatPrice } = useCurrency();
-  const [currentMediaIdx, setCurrentMediaIdx] = useState(0);
-  
-  const images = useMemo(() => {
-    const mediaImages = property.media?.filter(m => m.url).map(m => m.url) || [];
-    if (property.imageUrl && !mediaImages.includes(property.imageUrl)) {
-      return [property.imageUrl, ...mediaImages];
-    }
-    return mediaImages.length > 0 ? mediaImages : [property.imageUrl];
-  }, [property.media, property.imageUrl]);
-
-  const formatPrice = (price: any) => {
-    if (!price) return "Price on Request";
-    const amount = typeof price === 'object' ? price.amount : price;
-    const currency = typeof price === 'object' ? price.currency : "USD";
-    return globalFormatPrice(amount, currency);
-  };
+/* ── Listing card — echoes the neighbourhoods design language ── */
+function PropertyCard({
+  property, isActive, onMouseEnter, isCompareEnabled, isSelected, onToggleSelection,
+}: {
+  property: Property & { coords?: any };
+  isActive: boolean;
+  onMouseEnter: () => void;
+  isCompareEnabled: boolean;
+  isSelected: boolean;
+  onToggleSelection: () => void;
+}) {
+  const { formatPrice } = useCurrency();
+  const amount = typeof property.price === "object" ? property.price.amount : property.price;
+  const currency = typeof property.price === "object" ? property.price.currency : "USD";
+  const districtName = typeof property.district === "object" ? property.district.name : property.district;
+  const details = property.details?.split("|").map((d) => d.trim()).filter(Boolean) || [];
 
   return (
-    <div 
-      className={cn(
-        "bg-[#1E0D02] group cursor-pointer border-b border-[#C6A75E]/8 transition-colors duration-300 relative",
-        isActive ? "bg-[#2A1508]" : "hover:bg-[#2A1508]/60"
-      )}
+    <div
       onMouseEnter={onMouseEnter}
+      className={cn(
+        "group relative transition-colors duration-300",
+        isActive ? "bg-[#180900]" : "bg-[#0D0501] hover:bg-[#180900]"
+      )}
     >
       {isCompareEnabled && (
-        <button 
+        <button
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleSelection(); }}
-          className="absolute top-4 left-4 z-40"
+          aria-label={isSelected ? "Remove from compare" : "Add to compare"}
+          className="absolute top-4 left-4 z-30"
         >
-           <div className={cn(
-             "w-6 h-6 border-2 flex items-center justify-center transition-all",
-             isSelected ? "bg-[#C6A75E] border-[#C6A75E]" : "bg-white/20 border-white backdrop-blur-md hover:bg-white/40"
-           )}>
-              <div className={cn("w-2.5 h-2.5 bg-white transition-all", isSelected ? "scale-100" : "scale-0")} />
-           </div>
+          <span className={cn(
+            "w-6 h-6 flex items-center justify-center border transition-all duration-200",
+            isSelected ? "bg-[#C6A75E] border-[#C6A75E]" : "border-[#E8DCBF]/60 bg-[#0D0501]/50 backdrop-blur-md hover:border-[#C6A75E]"
+          )}>
+            <span className={cn("w-2 h-2 bg-[#0D0501] transition-transform duration-200", isSelected ? "scale-100" : "scale-0")} />
+          </span>
         </button>
       )}
 
-      <Link href={`/properties/${property.slug}`} className="block">
-        <div className="relative aspect-[4/3] lg:aspect-video overflow-hidden">
-          <Image 
-            src={images[currentMediaIdx]} 
-            alt={property.title} 
-            fill 
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+      <Link href={`/properties/${property.slug}`} className="block p-3 lg:p-4">
+        <div className="relative aspect-[4/3] overflow-hidden">
+          <Image
+            src={property.imageUrl}
+            alt={property.title}
+            fill
+            sizes="(max-width:768px) 100vw, 40vw"
+            className="object-cover transition-transform duration-[1.6s] ease-out group-hover:scale-105"
           />
-          <div className="absolute top-4 right-4 z-10">
-            <button className="p-2 bg-[#0D0501]/40 backdrop-blur-md text-[#E8DCBF] hover:bg-[#C6A75E] hover:text-[#0D0501] transition-all">
-              <Heart size={16} />
-            </button>
-          </div>
-          <div className="absolute top-0 left-0 bg-[#0A0A0F] text-white px-3 py-1.5 text-[8px] font-bold tracking-[0.2em] uppercase">
-            {property.propertyType?.[0] || 'Exclusive'}
-          </div>
+          <span className="absolute top-3 left-3 bg-[#84262B] text-[#E8DCBF] px-2.5 py-1 text-[8px] font-bold tracking-[0.25em] uppercase">
+            {property.propertyType?.[0] || "For Sale"}
+          </span>
+          <button
+            onClick={(e) => e.preventDefault()}
+            aria-label="Save"
+            className="absolute top-3 right-3 p-2 bg-[#0D0501]/45 backdrop-blur-md text-[#E8DCBF] hover:bg-[#C6A75E] hover:text-[#0D0501] transition-colors duration-200"
+          >
+            <Heart size={14} />
+          </button>
+          <div className="card-border-reveal" />
         </div>
 
-        <div className="p-6 lg:p-8">
-          <h3 className="text-xl lg:text-2xl font-serif tracking-tight mb-2">
-            <CurrencyBadge
-              amount={typeof property.price === 'object' ? property.price.amount : property.price}
-              baseCurrency={typeof property.price === 'object' ? property.price.currency : "USD"}
-              showSwitcher={false}
-            />
+        <div className="pt-4 space-y-1.5">
+          {districtName && (
+            <p className="text-[8px] font-bold tracking-[0.45em] uppercase text-[#C6A75E]">{districtName}</p>
+          )}
+          <h3 className="font-serif text-xl lg:text-[1.4rem] font-light leading-tight text-[#E8DCBF] group-hover:text-[#C6A75E] transition-colors duration-300 line-clamp-1">
+            {property.title}
           </h3>
-          <h4 className="text-xs lg:text-sm font-bold uppercase tracking-[0.1em] mb-1 line-clamp-1">{property.title}</h4>
-          <p className="text-[10px] text-[#E8DCBF]/40 uppercase tracking-widest font-medium mb-4">
-            {typeof property.district === 'object' ? property.district.name : property.district}
-          </p>
-          
-          <div className="flex items-center gap-4 text-[10px] font-bold tracking-widest text-[#E8DCBF]/30 border-t border-[#C6A75E]/8 pt-4">
-            {property.details?.split('|').map((detail, idx) => (
-              <span key={idx}>{detail.trim()}</span>
-            ))}
-          </div>
-          
-          <div className="mt-6 flex items-center gap-2 text-[9px] font-bold tracking-[0.2em] text-[#C6A75E] uppercase">
-            <div className="w-4 h-4 bg-[#0A0A0F] flex items-center justify-center text-[6px] text-[#C6A75E]">P</div>
-            PAVANI {t('exclusive')}
-          </div>
+          <p className="font-serif text-base text-[#E8DCBF]/80">{formatPrice(amount, currency)}</p>
+          {details.length > 0 && (
+            <div className="flex items-center gap-3 pt-2 text-[9px] font-medium tracking-[0.15em] uppercase text-[#E8DCBF]/45">
+              {details.map((d, i) => (
+                <span key={i} className="flex items-center gap-3">
+                  {i > 0 && <span className="w-1 h-1 bg-[#C6A75E]/40 rounded-full" />}
+                  {d}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </Link>
     </div>
   );
-};
+}
+
+/* ── Compact filter pill ── */
+function FilterPill({ label }: { label: string }) {
+  return (
+    <button className="flex items-center gap-1.5 text-[9px] font-bold tracking-[0.2em] uppercase text-[#E8DCBF]/55 hover:text-[#C6A75E] transition-colors whitespace-nowrap">
+      {label} <ChevronDown size={12} className="opacity-60" />
+    </button>
+  );
+}
 
 export default function PropertiesClient({ initialProperties, settings }: PropertiesClientProps) {
-  const { t } = useLanguage();
-  const { formatPrice: globalFormatPrice } = useCurrency();
-  const [viewMode, setViewMode] = useState<"map-list" | "list" | "map">("map-list");
+  const { formatPrice } = useCurrency();
+  const [viewMode, setViewMode] = useState<"split" | "list" | "map">("split");
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
   const [activePropertyId, setActivePropertyId] = useState<string | null>(null);
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isCompareEnabled, setIsCompareEnabled] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState<Property[]>([]);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
 
-  // Auto-switch viewMode based on screen size
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 1024) {
-        if (viewMode === "map-list") setViewMode("list");
-      }
+    const onResize = () => {
+      if (window.innerWidth < 1024 && viewMode === "split") setViewMode("list");
     };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, [viewMode]);
 
-  const togglePropertySelection = (property: Property) => {
-    setSelectedProperties(prev => 
-      prev.some(p => p._id === property._id)
-        ? prev.filter(p => p._id !== property._id)
+  const togglePropertySelection = (property: Property) =>
+    setSelectedProperties((prev) =>
+      prev.some((p) => p._id === property._id)
+        ? prev.filter((p) => p._id !== property._id)
         : prev.length < 4 ? [...prev, property] : prev
     );
-  };
 
-  const processedProperties = useMemo(() => {
-    return (initialProperties || []).map(p => {
+  const processedProperties = useMemo(() =>
+    (initialProperties || []).map((p) => {
+      const districtName = typeof p.district === "object" ? p.district.name : p.district;
       let coords = p.googleMapsUrl ? extractCoordsFromGoogleMapsUrl(p.googleMapsUrl) : null;
-      const districtName = typeof p.district === 'object' ? p.district.name : p.district;
       if (!coords) coords = getCoordsBySearch(p.title, districtName, p.county);
-      return { ...p, coords };
-    });
-  }, [initialProperties]);
+      return { ...p, coords, districtName };
+    }), [initialProperties]);
 
-  const filteredProperties = useMemo(() => {
-    return processedProperties.filter(p => {
-      const districtName = typeof p.district === 'object' ? p.district.name : p.district;
-      const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                           districtName?.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesSearch;
-    });
-  }, [processedProperties, searchQuery]);
+  const filteredProperties = useMemo(() =>
+    processedProperties.filter((p) => {
+      const q = searchQuery.toLowerCase();
+      return p.title.toLowerCase().includes(q) || p.districtName?.toLowerCase().includes(q);
+    }), [processedProperties, searchQuery]);
 
-  const activeProperty = useMemo(() => filteredProperties.find(p => p._id === activePropertyId) || null, [filteredProperties, activePropertyId]);
-  const mapCenter: [number, number] = useMemo(() => activeProperty?.coords ? [activeProperty.coords.lat, activeProperty.coords.lng] : [-1.2921, 36.8219], [activeProperty]);
+  /* Map data: registry boundaries for districts that have listings + pins. */
+  const { mapDistricts, mapProperties } = useMemo(() => {
+    const pins: DistrictMapProperty[] = [];
+    const slugs = new Set<string>();
+    filteredProperties.forEach((p) => {
+      const d = findDistrict(p.districtName);
+      if (!d || !p.coords) return;
+      slugs.add(d.slug);
+      pins.push({
+        _id: p._id,
+        title: p.title,
+        price: formatPrice(typeof p.price === "object" ? p.price.amount : p.price, typeof p.price === "object" ? p.price.currency : "USD"),
+        coords: p.coords,
+        districtSlug: d.slug,
+      });
+    });
+    const districts = DISTRICTS.filter((d) => slugs.has(d.slug));
+    return { mapDistricts: districts.length ? districts : DISTRICTS, mapProperties: pins };
+  }, [filteredProperties, formatPrice]);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#0D0501] text-[#E8DCBF]">
       <Navbar settings={settings} />
 
-      <div className="flex flex-col pt-20">
-        
-        {/* Filter Bar */}
-        <div className="h-16 lg:h-14 border-b border-[#C6A75E]/10 flex items-center justify-between px-4 lg:px-8 shrink-0 bg-[#180900] z-40">
-          <div className="flex items-center gap-4 lg:gap-8 overflow-x-auto no-scrollbar flex-grow mr-4">
-            <div className="relative min-w-[150px] lg:min-w-[300px]">
-              <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-[#E8DCBF]/30" size={14} />
-              <input
-                type="text"
-                placeholder="Search by District or Building..."
-                className="w-full bg-transparent border-none text-[10px] font-bold tracking-widest uppercase pl-6 focus:ring-0 text-[#E8DCBF] placeholder:text-[#E8DCBF]/25"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            <div className="hidden sm:flex items-center gap-4 lg:gap-6">
-              {['Price', 'Bed / Bath', 'Type'].map((filter) => (
-                <button key={filter} className="flex items-center gap-2 text-[10px] font-bold tracking-widest uppercase text-[#E8DCBF]/40 hover:text-[#C6A75E] transition-colors whitespace-nowrap">
-                  {filter} <ChevronDown size={14} />
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 lg:gap-4 shrink-0">
-            <Button
-              variant="outline"
-              size="sm"
-              className="border-[#C6A75E]/20 text-[#E8DCBF]/70 h-9 text-[10px] font-bold tracking-widest uppercase hover:border-[#C6A75E] hover:text-[#C6A75E] bg-transparent"
-              onClick={() => setIsFilterModalOpen(true)}
-            >
-              <span className="hidden sm:inline mr-2">ALL FILTERS</span>
-              <SlidersHorizontal size={14} />
-            </Button>
-
-            <div className="h-8 w-px bg-[#C6A75E]/10 hidden lg:block mx-2" />
-
-            <button
-              onClick={() => setViewMode(viewMode === "list" ? "map" : "list")}
-              className="lg:hidden w-9 h-9 border border-[#C6A75E]/15 flex items-center justify-center text-[#E8DCBF]/50"
-            >
-              {viewMode === "list" ? <MapIcon size={18} /> : <ListIcon size={18} />}
-            </button>
-          </div>
+      {/* ── Single slim toolbar ── */}
+      <div className="sticky top-[72px] z-40 h-14 border-b border-[#C6A75E]/12 bg-[#0D0501]/95 backdrop-blur-xl flex items-center gap-4 lg:gap-7 px-4 lg:px-8">
+        <div className="relative flex items-center min-w-0 flex-1 lg:flex-none lg:w-72">
+          <Search size={14} className="text-[#C6A75E]/60 shrink-0" />
+          <input
+            type="text"
+            placeholder="Search district or building…"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-transparent border-none pl-3 text-[10px] font-bold tracking-[0.15em] uppercase text-[#E8DCBF] placeholder:text-[#E8DCBF]/30 focus:outline-none"
+          />
         </div>
 
-        {/* Discovery Hub Container */}
-        <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-140px)] relative">
-          {/* List Section */}
-          <div className={cn(
-            "transition-all duration-500 bg-[#0D0501] custom-scrollbar",
-            viewMode === "map-list" ? "w-full lg:w-[45%] xl:w-[40%] lg:h-full lg:overflow-y-auto" : 
-            viewMode === "list" ? "w-full h-auto" : "hidden lg:block lg:w-0 lg:opacity-0 lg:overflow-hidden"
-          )}>
-            <div className="px-6 py-8 lg:px-10 space-y-6">
-               <div className="space-y-1">
-                  <h1 className="text-2xl lg:text-4xl font-serif tracking-tight text-[#E8DCBF] uppercase">Luxury Listings</h1>
-                  <p className="text-[9px] font-bold tracking-widest text-[#E8DCBF]/35 uppercase">
-                    {filteredProperties.length} Homes for sale
-                  </p>
-               </div>
+        <div className="hidden md:flex items-center gap-6 mr-auto">
+          <FilterPill label="Price" />
+          <FilterPill label="Beds / Baths" />
+          <FilterPill label="Type" />
+          <button className="flex items-center gap-1.5 text-[9px] font-bold tracking-[0.2em] uppercase text-[#E8DCBF]/55 hover:text-[#C6A75E] transition-colors">
+            <SlidersHorizontal size={13} /> All Filters
+          </button>
+        </div>
 
-               <div className="flex items-center justify-between pt-4 border-t border-[#C6A75E]/8">
-                  <div className="flex items-center gap-3">
-                     <span className="text-[9px] font-bold tracking-widest text-[#E8DCBF]/40 uppercase">{t('compare')}</span>
-                     <button 
-                        onClick={() => setIsCompareEnabled(!isCompareEnabled)}
-                        className={cn("w-9 h-4.5 rounded-full relative transition-all duration-500", isCompareEnabled ? "bg-[#C6A75E]" : "bg-gray-200")}
-                     >
-                        <div className={cn("absolute top-0.5 w-3.5 h-3.5 bg-white rounded-full transition-all", isCompareEnabled ? "left-5" : "left-0.5")} />
-                     </button>
-                  </div>
-               </div>
+        <div className="flex items-center gap-4 lg:gap-5 ml-auto md:ml-0 shrink-0">
+          <span className="hidden sm:inline text-[9px] font-bold tracking-[0.25em] uppercase text-[#E8DCBF]/40 whitespace-nowrap">
+            {filteredProperties.length} Homes
+          </span>
+          <button
+            onClick={() => setIsCompareEnabled((v) => !v)}
+            className="flex items-center gap-2 text-[9px] font-bold tracking-[0.2em] uppercase text-[#E8DCBF]/55 hover:text-[#C6A75E] transition-colors"
+          >
+            <span className="hidden sm:inline">Compare</span>
+            <span className={cn("w-8 h-4 rounded-full relative transition-colors duration-300", isCompareEnabled ? "bg-[#C6A75E]" : "bg-[#E8DCBF]/15")}>
+              <span className={cn("absolute top-0.5 w-3 h-3 bg-[#0D0501] rounded-full transition-all duration-300", isCompareEnabled ? "left-4" : "left-0.5")} />
+            </span>
+          </button>
+          <button
+            onClick={() => setViewMode(viewMode === "list" ? "map" : "list")}
+            aria-label="Toggle map"
+            className="lg:hidden w-9 h-9 border border-[#C6A75E]/20 flex items-center justify-center text-[#E8DCBF]/60"
+          >
+            {viewMode === "list" ? <MapIcon size={16} /> : <ListIcon size={16} />}
+          </button>
+        </div>
+      </div>
+
+      {/* ── Split: list + sticky map ── */}
+      <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-126px)]">
+        {/* List */}
+        <div className={cn(
+          "custom-scrollbar bg-[#0D0501]",
+          viewMode === "split" ? "w-full lg:w-[46%] xl:w-[42%] lg:h-full lg:overflow-y-auto"
+            : viewMode === "list" ? "w-full" : "hidden"
+        )}>
+          {filteredProperties.length === 0 ? (
+            <div className="flex flex-col items-center justify-center text-center py-32 px-8">
+              <p className="font-serif text-2xl font-light text-[#C6A75E] mb-3">No matches yet</p>
+              <p className="text-[0.85rem] font-light text-[#E8DCBF]/60 max-w-xs">
+                Try a different district or clear your search to see the full collection.
+              </p>
             </div>
-
+          ) : (
             <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#C6A75E]/8 border-t border-[#C6A75E]/8"
-              initial="hidden"
-              animate="show"
-              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.07 } } }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#C6A75E]/10"
+              initial="hidden" animate="show"
+              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.05 } } }}
             >
               {filteredProperties.map((property) => (
                 <motion.div
                   key={property._id}
                   variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
-                  transition={{ duration: 0.55, ease: [0.23, 1, 0.32, 1] }}
+                  transition={{ duration: 0.5, ease }}
                 >
                   <PropertyCard
                     property={property}
                     isActive={activePropertyId === property._id}
                     onMouseEnter={() => setActivePropertyId(property._id)}
                     isCompareEnabled={isCompareEnabled}
-                    isSelected={selectedProperties.some(p => p._id === property._id)}
+                    isSelected={selectedProperties.some((p) => p._id === property._id)}
                     onToggleSelection={() => togglePropertySelection(property)}
                   />
                 </motion.div>
               ))}
             </motion.div>
-          </div>
-
-          {/* Map Section */}
-          <div className={cn(
-            "transition-all duration-500 relative",
-            viewMode === "map-list" ? "hidden lg:block lg:flex-grow lg:h-full" : 
-            viewMode === "map" ? "w-full h-[60vh] lg:h-full" : "hidden lg:block lg:w-0 lg:opacity-0 lg:overflow-hidden"
-          )}>
-            <PropertyMap 
-              properties={filteredProperties.map(p => ({
-                ...p,
-                price: globalFormatPrice(typeof p.price === 'object' ? p.price.amount : p.price, typeof p.price === 'object' ? p.price.currency : "USD")
-              }))} 
-              activePropertyId={activePropertyId}
-              center={mapCenter}
-              zoom={activePropertyId ? 14 : 12}
-            />
-          </div>
+          )}
         </div>
 
-        {/* Global Footer - Fixed at the bottom of the page */}
-        <Footer settings={settings} />
+        {/* Map */}
+        <div className={cn(
+          "relative bg-[#0D0501]",
+          viewMode === "split" ? "hidden lg:block lg:flex-grow lg:h-full"
+            : viewMode === "map" ? "w-full h-[64vh]" : "hidden"
+        )}>
+          <DistrictMap
+            districts={mapDistricts}
+            properties={mapProperties}
+            activePropertyId={activePropertyId}
+            fitTo="properties"
+          />
+        </div>
       </div>
 
-      {/* Comparison Floating Bar */}
-      {selectedProperties.length > 0 && (
-        <div className="fixed bottom-6 lg:bottom-10 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] lg:max-w-2xl">
-           <div className="bg-[#000B1D] text-white p-4 flex flex-col sm:flex-row items-center justify-between shadow-2xl border border-white/10 gap-4 sm:gap-0">
-              <div className="flex items-center gap-4">
-                 <div className="flex -space-x-4">
-                    {selectedProperties.map((p) => (
-                       <div key={p._id} className="w-10 h-10 border border-[#000B1D] relative overflow-hidden bg-gray-900 group">
-                          <Image src={p.imageUrl} alt={p.title} fill className="object-cover opacity-80" />
-                          <button 
-                            onClick={() => togglePropertySelection(p)}
-                            className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
-                          >
-                            <X size={14} className="text-white" />
-                          </button>
-                       </div>
-                    ))}
-                 </div>
-                 <div className="flex flex-col">
-                   <p className="text-[9px] font-bold tracking-widest uppercase">{selectedProperties.length} Selected</p>
-                   <button 
-                    onClick={() => setSelectedProperties([])}
-                    className="text-[7px] font-bold tracking-widest uppercase text-white/40 hover:text-white transition-colors text-left"
-                   >
-                     CLEAR ALL
-                   </button>
-                 </div>
+      <Footer settings={settings} />
+
+      {/* ── Compare tray ── */}
+      <AnimatePresence>
+        {selectedProperties.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 24 }}
+            transition={{ duration: 0.32, ease }}
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] lg:max-w-2xl"
+          >
+            <div className="bg-[#180900] border border-[#C6A75E]/25 p-4 flex items-center justify-between gap-4 shadow-[0_20px_60px_rgba(13,5,1,0.7)]">
+              <div className="flex items-center gap-4 min-w-0">
+                <div className="flex -space-x-3">
+                  {selectedProperties.map((p) => (
+                    <div key={p._id} className="w-9 h-9 border border-[#180900] relative overflow-hidden group">
+                      <Image src={p.imageUrl} alt={p.title} fill className="object-cover" />
+                      <button onClick={() => togglePropertySelection(p)} className="absolute inset-0 bg-[#0D0501]/70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                        <X size={12} className="text-[#E8DCBF]" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[9px] font-bold tracking-[0.25em] uppercase text-[#E8DCBF]">{selectedProperties.length} Selected</p>
+                  <button onClick={() => setSelectedProperties([])} className="text-[8px] font-bold tracking-[0.25em] uppercase text-[#E8DCBF]/40 hover:text-[#C6A75E] transition-colors">
+                    Clear all
+                  </button>
+                </div>
               </div>
-              <button 
+              <button
                 onClick={() => setIsCompareModalOpen(true)}
                 disabled={selectedProperties.length < 2}
                 className={cn(
-                  "w-full sm:w-auto px-8 py-3 text-[10px] font-bold tracking-[0.3em] uppercase transition-all",
-                  selectedProperties.length < 2 ? "bg-gray-800 text-gray-500 cursor-not-allowed" : "bg-[#C6A75E] text-white hover:bg-white hover:text-[#000B1D]"
+                  "px-7 py-3 text-[9px] font-bold tracking-[0.3em] uppercase transition-all duration-200 whitespace-nowrap",
+                  selectedProperties.length < 2 ? "bg-[#2A1508] text-[#E8DCBF]/30 cursor-not-allowed" : "btn-crimson"
                 )}
               >
-                COMPARE {selectedProperties.length > 0 ? `(${selectedProperties.length}/4)` : ""}
+                Compare ({selectedProperties.length}/4)
               </button>
-           </div>
-        </div>
-      )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Comparison Modal */}
-      {isCompareModalOpen && (
-        <div className="fixed inset-0 z-[100] bg-white overflow-y-auto">
-           <div className="min-h-screen p-6 lg:p-12 xl:p-20">
-              <div className="flex justify-between items-start mb-12 lg:mb-20">
-                 <div className="space-y-2">
-                    <h2 className="text-3xl lg:text-5xl xl:text-6xl font-serif tracking-tight uppercase">Comparison</h2>
-                    <p className="text-[10px] font-bold tracking-[0.5em] text-gray-400 uppercase">Portfolio Analysis • {selectedProperties.length} Units</p>
-                 </div>
-                 <button onClick={() => setIsCompareModalOpen(false)} className="p-4 border border-gray-100 hover:bg-gray-50 transition-colors"><X size={20} /></button>
+      {/* ── Compare modal (themed) ── */}
+      <AnimatePresence>
+        {isCompareModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[100] bg-[#0D0501] overflow-y-auto"
+          >
+            <div className="min-h-screen p-6 lg:p-12 xl:p-20">
+              <div className="flex justify-between items-start mb-12 lg:mb-16">
+                <div className="space-y-2">
+                  <p className="eyebrow">Portfolio Analysis · {selectedProperties.length} Units</p>
+                  <h2 className="text-3xl lg:text-5xl font-serif font-light text-[#E8DCBF]">Side by side</h2>
+                </div>
+                <button onClick={() => setIsCompareModalOpen(false)} className="p-3.5 border border-[#C6A75E]/20 text-[#E8DCBF]/70 hover:border-[#C6A75E] hover:text-[#C6A75E] transition-colors">
+                  <X size={20} />
+                </button>
               </div>
 
               <div className={cn(
-                "grid gap-8 lg:gap-10 xl:gap-12",
-                selectedProperties.length === 2 ? "grid-cols-1 md:grid-cols-3" : 
-                selectedProperties.length === 3 ? "grid-cols-1 md:grid-cols-4" : 
-                "grid-cols-1 md:grid-cols-5"
+                "grid gap-8 lg:gap-10",
+                selectedProperties.length === 2 ? "grid-cols-1 md:grid-cols-3"
+                  : selectedProperties.length === 3 ? "grid-cols-1 md:grid-cols-4" : "grid-cols-1 md:grid-cols-5"
               )}>
-                 <div className="hidden md:block space-y-16 pt-[300px] lg:pt-[400px]">
-                    {[
-                      'ESTIMATED COST', 
-                      'DISTRICT / AREA', 
-                      'PROPERTY TYPE', 
-                      'SPACE & SPECS',
-                      'AMENITIES',
-                      'COMPLETION',
-                      'STATUS'
-                    ].map(spec => (
-                      <div key={spec} className="h-20 flex items-center border-b border-gray-100 text-[10px] font-bold tracking-[0.3em] uppercase text-gray-400">{spec}</div>
-                    ))}
-                 </div>
+                <div className="hidden md:block space-y-12 pt-[340px]">
+                  {["Price", "District", "Type", "Space", "Amenities", "Completion", "Status"].map((spec) => (
+                    <div key={spec} className="h-16 flex items-center border-b border-[#C6A75E]/12 text-[9px] font-bold tracking-[0.3em] uppercase text-[#E8DCBF]/40">{spec}</div>
+                  ))}
+                </div>
 
-                 {selectedProperties.map((p) => (
-                   <div key={p._id} className="space-y-8 lg:space-y-16">
-                      <div className="relative aspect-square lg:aspect-[4/5] overflow-hidden group shadow-2xl">
-                         <Image src={p.imageUrl} alt={p.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                         <div className="absolute top-0 left-0 bg-[#0A0A0F] text-white px-4 py-2 text-[9px] font-bold tracking-widest uppercase">
-                            {p.propertyType?.[0] || 'Exclusive'}
-                         </div>
-                      </div>
-                      
-                      <div className="space-y-4 text-center md:text-left">
-                        <h3 className="text-2xl lg:text-3xl font-serif uppercase tracking-tight">{p.title}</h3>
-                        <p className="text-[10px] tracking-[0.4em] text-gray-400 uppercase font-bold">{p.buildingName || 'Signature Collection'}</p>
-                      </div>
-
-                      <div className="space-y-0 border-t border-gray-100">
-                        {/* COST */}
-                        <div className="md:hidden flex justify-between py-6 border-b text-[10px] uppercase tracking-widest text-gray-400"><span>Cost</span><span className="text-gray-900 font-bold">{globalFormatPrice(typeof p.price === 'object' ? p.price.amount : p.price, typeof p.price === 'object' ? p.price.currency : "USD")}</span></div>
-                        <div className="hidden md:block h-20 flex items-center border-b border-gray-100 text-xl lg:text-2xl font-serif">
-                          {globalFormatPrice(typeof p.price === 'object' ? p.price.amount : p.price, typeof p.price === 'object' ? p.price.currency : "USD")}
-                        </div>
-
-                        {/* DISTRICT */}
-                        <div className="md:hidden flex justify-between py-6 border-b text-[10px] uppercase tracking-widest text-gray-400"><span>District</span><span className="text-gray-900 font-bold">{typeof p.district === 'object' ? p.district.name : p.district}</span></div>
-                        <div className="hidden md:block h-20 flex items-center border-b border-gray-100 text-[11px] font-bold tracking-widest uppercase text-gray-600">
-                          {typeof p.district === 'object' ? p.district.name : p.district}
-                        </div>
-
-                        {/* TYPE */}
-                        <div className="md:hidden flex justify-between py-6 border-b text-[10px] uppercase tracking-widest text-gray-400"><span>Type</span><span className="text-gray-900 font-bold">{p.propertyType?.join(', ') || 'Residential'}</span></div>
-                        <div className="hidden md:block h-20 flex items-center border-b border-gray-100 text-[11px] font-bold tracking-widest uppercase text-gray-600">
-                          {p.propertyType?.slice(0, 2).join(' / ') || 'Residential'}
-                        </div>
-
-                        {/* SPACE & SPECS */}
-                        <div className="md:hidden flex justify-between py-6 border-b text-[10px] uppercase tracking-widest text-gray-400"><span>Space</span><span className="text-gray-900 font-bold">{p.details} / {p.size || 'N/A'}</span></div>
-                        <div className="hidden md:block h-20 flex items-center border-b border-gray-100 text-[11px] font-bold tracking-widest uppercase text-gray-600">
-                           {p.details} <span className="mx-2 opacity-30">|</span> {p.size || 'TBD'}
-                        </div>
-
-                        {/* AMENITIES */}
-                        <div className="md:hidden flex flex-col py-6 border-b gap-4">
-                           <span className="text-[10px] uppercase tracking-widest text-gray-400">Amenities</span>
-                           <div className="flex flex-wrap gap-2">
-                              {p.amenities?.slice(0, 4).map(a => <span key={a} className="px-2 py-1 bg-gray-50 text-[8px] font-bold uppercase tracking-widest">{a}</span>)}
-                           </div>
-                        </div>
-                        <div className="hidden md:block h-20 flex items-center border-b border-gray-100">
-                           <div className="flex flex-wrap gap-2">
-                              {p.amenities?.slice(0, 3).map(a => (
-                                 <span key={a} className="text-[9px] font-bold uppercase tracking-widest text-gray-400 px-2 py-1 border border-gray-100">{a}</span>
-                              ))}
-                              {p.amenities && p.amenities.length > 3 && <span className="text-[9px] font-bold text-[#C6A75E]">+{p.amenities.length - 3}</span>}
-                           </div>
-                        </div>
-
-                        {/* COMPLETION */}
-                        <div className="md:hidden flex justify-between py-6 border-b text-[10px] uppercase tracking-widest text-gray-400"><span>Completion</span><span className="text-gray-900 font-bold">{p.yearBuilt || 'TBD'}</span></div>
-                        <div className="hidden md:block h-20 flex items-center border-b border-gray-100 text-[11px] font-bold tracking-widest uppercase text-gray-600">
-                          {p.yearBuilt || 'Ready to Move'}
-                        </div>
-
-                        {/* STATUS */}
-                        <div className="md:hidden flex justify-between py-6 border-b text-[10px] uppercase tracking-widest text-gray-400"><span>Status</span><span className="text-gray-900 font-bold">AVAILABLE</span></div>
-                        <div className="hidden md:block h-20 flex items-center border-b border-gray-100 text-[11px] font-bold tracking-widest uppercase text-[#C6A75E]">
-                          AVAILABLE FOR VIEWING
-                        </div>
-                      </div>
-
-                      <div className="pt-8">
-                         <Link href={`/properties/${p.slug}`} className="block w-full py-5 bg-[#0A0A0F] text-white text-center text-[10px] font-bold tracking-[0.4em] uppercase hover:bg-[#C6A75E] transition-all">
-                            {t('view_details')}
-                         </Link>
-                      </div>
-                   </div>
-                 ))}
+                {selectedProperties.map((p) => (
+                  <div key={p._id} className="space-y-10">
+                    <div className="relative aspect-[4/5] overflow-hidden">
+                      <Image src={p.imageUrl} alt={p.title} fill className="object-cover" />
+                      <span className="absolute top-0 left-0 bg-[#84262B] text-[#E8DCBF] px-3 py-1.5 text-[8px] font-bold tracking-[0.25em] uppercase">
+                        {p.propertyType?.[0] || "Exclusive"}
+                      </span>
+                    </div>
+                    <div className="space-y-1.5 text-center md:text-left">
+                      <p className="text-[8px] font-bold tracking-[0.4em] uppercase text-[#C6A75E]">{typeof p.district === "object" ? p.district.name : p.district}</p>
+                      <h3 className="text-2xl font-serif font-light text-[#E8DCBF]">{p.title}</h3>
+                    </div>
+                    <div className="border-t border-[#C6A75E]/12">
+                      <Row label="Price" value={formatPrice(typeof p.price === "object" ? p.price.amount : p.price, typeof p.price === "object" ? p.price.currency : "USD")} serif />
+                      <Row label="District" value={typeof p.district === "object" ? p.district.name : p.district} />
+                      <Row label="Type" value={p.propertyType?.slice(0, 2).join(" / ") || "Residential"} />
+                      <Row label="Space" value={`${p.details || "—"}${p.size ? ` · ${p.size}` : ""}`} />
+                      <Row label="Amenities" value={p.amenities?.slice(0, 3).join(", ") || "On request"} />
+                      <Row label="Completion" value={p.yearBuilt || "Ready"} />
+                      <Row label="Status" value="Available" gold />
+                    </div>
+                    <Link href={`/properties/${p.slug}`} className="btn-crimson flex items-center justify-center gap-3 w-full py-4 text-[9px] font-bold tracking-[0.35em] uppercase">
+                      View Details <ArrowRight size={12} />
+                    </Link>
+                  </div>
+                ))}
               </div>
-           </div>
-        </div>
-      )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #C6A75E40; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        * { border-radius: 0 !important; }
       `}</style>
     </div>
+  );
+}
+
+function Row({ label, value, serif, gold }: { label: string; value?: string; serif?: boolean; gold?: boolean }) {
+  return (
+    <>
+      <div className="md:hidden flex justify-between gap-4 py-4 border-b border-[#C6A75E]/10 text-[10px] uppercase tracking-[0.15em]">
+        <span className="text-[#E8DCBF]/40 font-bold">{label}</span>
+        <span className={cn("text-right", gold ? "text-[#C6A75E] font-bold" : "text-[#E8DCBF]/85")}>{value}</span>
+      </div>
+      <div className={cn(
+        "hidden md:flex h-16 items-center border-b border-[#C6A75E]/12",
+        serif ? "font-serif text-xl text-[#E8DCBF]" : gold ? "text-[10px] font-bold tracking-[0.2em] uppercase text-[#C6A75E]" : "text-[10px] font-bold tracking-[0.2em] uppercase text-[#E8DCBF]/70"
+      )}>
+        {value}
+      </div>
+    </>
   );
 }
