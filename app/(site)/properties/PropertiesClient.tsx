@@ -209,11 +209,11 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
   }, [filteredProperties, formatPrice]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0D0501] text-[#E8DCBF]">
+    <div className="flex flex-col min-h-screen bg-[#0D0501] text-[#E8DCBF] pt-[72px]">
       <Navbar settings={settings} />
 
-      {/* ── Single slim toolbar ── */}
-      <div className="sticky top-[72px] z-40 h-14 border-b border-[#C6A75E]/12 bg-[#0D0501]/95 backdrop-blur-xl flex items-center gap-4 lg:gap-7 px-4 lg:px-8">
+      {/* ── Single slim toolbar (above Leaflet panes, below navbar) ── */}
+      <div className="sticky top-[72px] z-[500] h-14 border-b border-[#C6A75E]/12 bg-[#0D0501]/95 backdrop-blur-xl flex items-center gap-4 lg:gap-7 px-4 lg:px-8">
         <div className="relative flex items-center min-w-0 flex-1 lg:flex-none lg:w-72">
           <Search size={14} className="text-[#C6A75E]/60 shrink-0" />
           <input
@@ -258,7 +258,7 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
       </div>
 
       {/* ── Split: list + sticky map ── */}
-      <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-126px)]">
+      <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-128px)]">
         {/* List */}
         <div className={cn(
           "custom-scrollbar bg-[#0D0501]",
@@ -298,9 +298,9 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
           )}
         </div>
 
-        {/* Map */}
+        {/* Map — isolate so Leaflet's high z-index panes stay contained */}
         <div className={cn(
-          "relative bg-[#0D0501]",
+          "relative isolate z-0 bg-[#0D0501]",
           viewMode === "split" ? "hidden lg:block lg:flex-grow lg:h-full"
             : viewMode === "map" ? "w-full h-[64vh]" : "hidden"
         )}>
