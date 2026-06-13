@@ -62,13 +62,12 @@ export default function Footer({ settings }: FooterProps) {
             <h4 className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C6A75E]/70">Navigation</h4>
             <ul className="space-y-3 text-[10px] font-medium tracking-[0.2em] text-[#E8DCBF]/45">
               {[
-                { label: "Home",         href: "/" },
-                { label: "Properties",   href: "/properties" },
-                { label: "Neighborhoods",href: "/neighborhoods" },
-                { label: "Gallery",      href: "/properties" },
-                { label: "Insights",     href: "/properties" },
-                { label: "About Us",     href: "/contact" },
-                { label: "Contact",      href: "/contact" },
+                { label: "Home",          href: "/" },
+                { label: "Properties",    href: "/properties" },
+                { label: "Neighbourhoods",href: "/neighborhoods" },
+                { label: "Gallery",       href: "/gallery" },
+                { label: "About Us",      href: "/about" },
+                { label: "Contact",       href: "/contact" },
               ].map(({ label, href }) => (
                 <li key={label}>
                   <Link href={href} className="hover:text-[#C6A75E] transition-colors">{label}</Link>

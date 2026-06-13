@@ -1,0 +1,121 @@
+
+> pavani-realty-group@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.4 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.17:3000
+- Environments: .env.local
+✓ Ready in 7.3s
+⚠ `images.domains` is deprecated in favor of `images.remotePatterns`. Please update next.config.ts to protect your application from malicious users.
+
+○ Compiling / ...
+[Home] Sanity fetch failed: TypeError: fetch failed
+    at ignore-listed frames {
+  isNetworkError: true,
+  request: {
+    timeout: { connect: 300000, socket: 300000 },
+    maxRedirects: 0,
+    maxRetries: undefined,
+    retryDelay: undefined,
+    lineage: undefined,
+    method: 'GET',
+    uri: '/data/query/production?query=%7B%0A++%22heroVideo%22%3A+*%5B_type+%3D%3D+%22heroSection%22%5D%5B0%5D%7B%0A++++...%2C%0A++++%22fileUrl%22%3A+videoFile.asset-%3Eurl%0A++%7D%2C%0A++%22secondaryVideo%22%3A+*%5B_type+%3D%3D+%22secondarySection%22%5D%5B0%5D%7B%0A++++...%2C%0A++++%22fileUrl%22%3A+videoFile.asset-%3Eurl%0A++%7D%2C%0A++%22propertiesSection%22%3A+*%5B_type+%3D%3D+%22propertiesSection%22%5D%5B0%5D%7B%0A++++...%2C%0A++++featuredProperties%5B%5D-%3E+%7B%0A++++++_id%2C%0A++++++title%2C%0A++++++%22slug%22%3A+slug.current%2C%0A++++++buildingName%2C%0A++++++price%2C%0A++++++%22imageUrl%22%3A+coalesce%28%0A++++++++image.asset-%3Eurl%2C+%0A++++++++image.externalUrl%2C%0A++++++++media%5B_type+%3D%3D+%22image%22%5D%5B0%5D.asset-%3Eurl%2C%0A++++++++media%5B_type+%3D%3D+%22externalImage%22%5D%5B0%5D.url%0A++++++%29%2C%0A++++++%22county%22%3A+county-%3Ename%2C%0A++++++%22district%22%3A+district-%3Ename%2C%0A++++++details%2C%0A++++++propertyType%0A++++%7D%0A++%7D%2C%0A++%22experienceVideo%22%3A+*%5B_type+%3D%3D+%22experienceSection%22%5D%5B0%5D%7B%0A++++...%2C%0A++++%22fileUrl%22%3A+videoFile.asset-%3Eurl%0A++%7D%2C%0A++%22spotlightSection%22%3A+*%5B_type+%3D%3D+%22spotlightSection%22%5D%5B0%5D%7B%0A++++...%2C%0A++++featuredEvent-%3E+%7B%0A++++++title%2C%0A++++++description%2C%0A++++++location%2C%0A++++++date%2C%0A++++++%22imageUrl%22%3A+image.asset-%3Eurl%2C%0A++++++media%5B%5D+%7B%0A++++++++...%2C%0A++++++++_type+%3D%3D+%22image%22+%3D%3E+%7B%0A++++++++++%22url%22%3A+asset-%3Eurl%0A++++++++%7D%2C%0A++++++++_type+%3D%3D+%22externalImage%22+%3D%3E+%7B%0A++++++++++%22url%22%3A+url%0A++++++++%7D%0A++++++%7D%0A++++%7D%0A++%7D%2C%0A++%22closingVideo%22%3A+*%5B_type+%3D%3D+%22closingSection%22%5D%5B0%5D%7B%0A++++...%2C%0A++++%22fileUrl%22%3A+videoFile.asset-%3Eurl%0A++%7D%0A%7D',
+    json: true,
+    body: undefined,
+    query: {
+      cacheMode: 'noStale',
+      returnQuery: 'false',
+      perspective: 'published',
+      tag: 'next-loader.fetch.fetch-sync-tags'
+    },
+    headers: { Accept: 'application/json' },
+    token: undefined,
+    tag: 'next-loader.fetch.fetch-sync-tags',
+    returnQuery: false,
+    perspective: 'published',
+    resultSourceMap: undefined,
+    lastLiveEventId: undefined,
+    cacheMode: 'noStale',
+    canUseCdn: true,
+    signal: undefined,
+    fetch: { cache: undefined, next: [Object] },
+    useAbortSignal: false,
+    useCdn: true,
+    url: 'https://msvji5g0.apicdn.sanity.io/v2026-04-29/data/query/production?query=%7B%0A++%22heroVideo%22%3A+*%5B_type+%3D%3D+%22heroSection%22%5D%5B0%5D%7B%0A++++...%2C%0A++++%22fileUrl%22%3A+videoFile.asset-%3Eurl%0A++%7D%2C%0A++%22secondaryVideo%22%3A+*%5B_type+%3D%3D+%22secondarySection%22%5D%5B0%5D%7B%0A++++...%2C%0A++++%22fileUrl%22%3A+videoFile.asset-%3Eurl%0A++%7D%2C%0A++%22propertiesSection%22%3A+*%5B_type+%3D%3D+%22propertiesSection%22%5D%5B0%5D%7B%0A++++...%2C%0A++++featuredProperties%5B%5D-%3E+%7B%0A++++++_id%2C%0A++++++title%2C%0A++++++%22slug%22%3A+slug.current%2C%0A++++++buildingName%2C%0A++++++price%2C%0A++++++%22imageUrl%22%3A+coalesce%28%0A++++++++image.asset-%3Eurl%2C+%0A++++++++image.externalUrl%2C%0A++++++++media%5B_type+%3D%3D+%22image%22%5D%5B0%5D.asset-%3Eurl%2C%0A++++++++media%5B_type+%3D%3D+%22externalImage%22%5D%5B0%5D.url%0A++++++%29%2C%0A++++++%22county%22%3A+county-%3Ename%2C%0A++++++%22district%22%3A+district-%3Ename%2C%0A++++++details%2C%0A++++++propertyType%0A++++%7D%0A++%7D%2C%0A++%22experienceVideo%22%3A+*%5B_type+%3D%3D+%22experienceSection%22%5D%5B0%5D%7B%0A++++...%2C%0A++++%22fileUrl%22%3A+videoFile.asset-%3Eurl%0A++%7D%2C%0A++%22spotlightSection%22%3A+*%5B_type+%3D%3D+%22spotlightSection%22%5D%5B0%5D%7B%0A++++...%2C%0A++++featuredEvent-%3E+%7B%0A++++++title%2C%0A++++++description%2C%0A++++++location%2C%0A++++++date%2C%0A++++++%22imageUrl%22%3A+image.asset-%3Eurl%2C%0A++++++media%5B%5D+%7B%0A++++++++...%2C%0A++++++++_type+%3D%3D+%22image%22+%3D%3E+%7B%0A++++++++++%22url%22%3A+asset-%3Eurl%0A++++++++%7D%2C%0A++++++++_type+%3D%3D+%22externalImage%22+%3D%3E+%7B%0A++++++++++%22url%22%3A+url%0A++++++++%7D%0A++++++%7D%0A++++%7D%0A++%7D%2C%0A++%22closingVideo%22%3A+*%5B_type+%3D%3D+%22closingSection%22%5D%5B0%5D%7B%0A++++...%2C%0A++++%22fileUrl%22%3A+videoFile.asset-%3Eurl%0A++%7D%0A%7D&cacheMode=noStale&returnQuery=false&perspective=published&tag=next-loader.fetch.fetch-sync-tags',
+    proxy: undefined,
+    withCredentials: false,
+    attemptNumber: 5
+  },
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: msvji5g0.apicdn.sanity.io:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+[Home] Sanity fetch failed: TypeError: fetch failed
+    at ignore-listed frames {
+  isNetworkError: true,
+  request: {
+    timeout: { connect: 300000, socket: 300000 },
+    maxRedirects: 0,
+    maxRetries: undefined,
+    retryDelay: undefined,
+    lineage: undefined,
+    method: 'GET',
+    uri: '/data/query/production?query=%7B%0A++%22general%22%3A+*%5B_type+%3D%3D+%22generalSettings%22%5D%5B0%5D%2C%0A++%22brand%22%3A+*%5B_type+%3D%3D+%22brandSettings%22%5D%5B0%5D%7B%0A++++...%2C%0A++++%22logoPrimary%22%3A+logoPrimary.asset-%3Eurl%2C%0A++++%22logoWhite%22%3A+logoWhite.asset-%3Eurl%2C%0A++++%22favicon%22%3A+favicon.asset-%3Eurl%0A++%7D%2C%0A++%22contact%22%3A+*%5B_type+%3D%3D+%22contactSettings%22%5D%5B0%5D%2C%0A++%22socials%22%3A+*%5B_type+%3D%3D+%22socialSettings%22%5D%5B0%5D%0A%7D',
+    json: true,
+    body: undefined,
+    query: {
+      cacheMode: 'noStale',
+      returnQuery: 'false',
+      perspective: 'published',
+      tag: 'next-loader.fetch.fetch-sync-tags'
+    },
+    headers: { Accept: 'application/json' },
+    token: undefined,
+    tag: 'next-loader.fetch.fetch-sync-tags',
+    returnQuery: false,
+    perspective: 'published',
+    resultSourceMap: undefined,
+    lastLiveEventId: undefined,
+    cacheMode: 'noStale',
+    canUseCdn: true,
+    signal: undefined,
+    fetch: { cache: undefined, next: [Object] },
+    useAbortSignal: false,
+    useCdn: true,
+    url: 'https://msvji5g0.apicdn.sanity.io/v2026-04-29/data/query/production?query=%7B%0A++%22general%22%3A+*%5B_type+%3D%3D+%22generalSettings%22%5D%5B0%5D%2C%0A++%22brand%22%3A+*%5B_type+%3D%3D+%22brandSettings%22%5D%5B0%5D%7B%0A++++...%2C%0A++++%22logoPrimary%22%3A+logoPrimary.asset-%3Eurl%2C%0A++++%22logoWhite%22%3A+logoWhite.asset-%3Eurl%2C%0A++++%22favicon%22%3A+favicon.asset-%3Eurl%0A++%7D%2C%0A++%22contact%22%3A+*%5B_type+%3D%3D+%22contactSettings%22%5D%5B0%5D%2C%0A++%22socials%22%3A+*%5B_type+%3D%3D+%22socialSettings%22%5D%5B0%5D%0A%7D&cacheMode=noStale&returnQuery=false&perspective=published&tag=next-loader.fetch.fetch-sync-tags',
+    proxy: undefined,
+    withCredentials: false,
+    attemptNumber: 5
+  },
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: msvji5g0.apicdn.sanity.io:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+ GET / 200 in 74s (next.js: 38.8s, application-code: 34.9s)
+ GET / 200 in 76s (next.js: 33.3s, application-code: 43s)
+ GET / 200 in 2.0min (next.js: 3.2s, application-code: 118s)
+ GET / 200 in 5.7s (next.js: 1616ms, application-code: 4.1s)
+ GET / 200 in 2.1s (next.js: 104ms, application-code: 2.0s)
+ GET / 200 in 1881ms (next.js: 88ms, application-code: 1793ms)
+ GET / 200 in 2.5s (next.js: 22ms, application-code: 2.4s)
+ GET / 200 in 1947ms (next.js: 105ms, application-code: 1843ms)
+✓ Finished filesystem cache database compaction in 22.2s
+ GET / 200 in 1616ms (next.js: 84ms, application-code: 1533ms)
+ GET / 200 in 1374ms (next.js: 22ms, application-code: 1352ms)
+ GET / 200 in 1873ms (next.js: 359ms, application-code: 1513ms)
+ GET / 200 in 2.1s (next.js: 99ms, application-code: 2.0s)
+ GET / 200 in 1809ms (next.js: 46ms, application-code: 1763ms)
+ GET / 200 in 1786ms (next.js: 120ms, application-code: 1666ms)
+ GET / 200 in 855ms (next.js: 43ms, application-code: 813ms)
+ GET / 200 in 902ms (next.js: 104ms, application-code: 798ms)
+ GET / 200 in 675ms (next.js: 94ms, application-code: 581ms)
+ GET / 200 in 1128ms (next.js: 46ms, application-code: 1082ms)
+ GET /neighborhoods 200 in 15.2s (next.js: 1046ms, application-code: 14.2s)
+ GET /neighborhoods/karen 200 in 29.4s (next.js: 22.0s, application-code: 7.4s)
+ GET /neighborhoods 200 in 10.6s (next.js: 251ms, application-code: 10.3s)
+ GET /neighborhoods/karen 200 in 8.6s (next.js: 201ms, application-code: 8.4s)
+ GET /neighborhoods 200 in 8.8s (next.js: 184ms, application-code: 8.6s)
+ GET /neighborhoods 200 in 6.1s (next.js: 105ms, application-code: 6.0s)
