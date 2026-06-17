@@ -15,14 +15,14 @@ export default async function PropertiesPage() {
       sanityFetch({ query: SITE_SETTINGS_QUERY })
     ]);
     return (
-      <Suspense fallback={<div className="min-h-screen bg-[#0D0501]" />}>
+      <Suspense fallback={<div className="min-h-screen bg-[#FAF8F4]" />}>
         <PropertiesClient initialProperties={properties ?? []} settings={siteSettings} />
       </Suspense>
     );
   } catch (err) {
     console.error("[Properties] Sanity fetch failed:", err);
     return (
-      <Suspense fallback={<div className="min-h-screen bg-[#0D0501]" />}>
+      <Suspense fallback={<div className="min-h-screen bg-[#FAF8F4]" />}>
         <PropertiesClient initialProperties={[]} settings={undefined} />
       </Suspense>
     );

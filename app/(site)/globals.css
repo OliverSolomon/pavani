@@ -2,26 +2,30 @@
 
 @theme inline {
   /* ══ Pavani Official Brand Palette (source: Brand Identity PDF) ══
-     Gold:    #C6A75E  — Primary Logo Gold
-     Cream:   #E8DCBF  — Primary Logo Light
-     Crimson: #84262B  — Monogram mark primary
-     Dark bg: #0D0501  — warmer than brand #1A1A1A, pairs better with gold on screen
+     Primary  Crimson: #82000D  (R130 G0 B13)  — dominant brand colour
+       shades: #631C20 #421316 #210A0B
+       tints : #9D5155 #B57D80 #CEA8AA
+     Secondary Gold:   #C49027  — supporting accent
+       tints : #D1B97E #DDCA9E #E8DCBF
+     Light, glass-forward surface system on warm white.
   */
-  --color-rich:     #0D0501;
-  --color-surface:  #180900;
-  --color-card:     #1E0D02;
-  --color-elevated: #2A1508;
-  --color-gold:     #C6A75E;
-  --color-gold-lt:  #EDCF7A;
-  --color-gold-dk:  #9B7D3D;
-  --color-cream:    #E8DCBF;
-  --color-crimson:  #84262B;
-  --color-muted:    #9A8570;
+  --color-rich:     #FAF8F4;  /* page background — warm white */
+  --color-surface:  #F3EFE9;  /* alternating bands */
+  --color-card:     #FFFFFF;  /* solid card */
+  --color-elevated: #ECE6DD;  /* raised / disabled fills */
 
-  --color-pavani-deep:    #0D0501;
-  --color-pavani-gold:    #C6A75E;
-  --color-pavani-cream:   #E8DCBF;
-  --color-pavani-crimson: #84262B;
+  --color-crimson:    #82000D;  /* primary accent */
+  --color-crimson-lt: #9D5155;  /* tint */
+  --color-crimson-dk: #631C20;  /* shade */
+  --color-gold:       #C49027;  /* secondary accent */
+
+  --color-ink:    #1C1714;  /* primary text on light */
+  --color-muted:  #7A7068;  /* secondary text */
+
+  --color-pavani-deep:    #FAF8F4;
+  --color-pavani-crimson: #82000D;
+  --color-pavani-gold:    #C49027;
+  --color-pavani-ink:     #1C1714;
 
   --font-serif: var(--font-cormorant);
   --font-sans:  var(--font-montserrat);
@@ -38,17 +42,18 @@
 
 html, body {
   scroll-behavior: smooth;
-  background-color: #0D0501;
+  background-color: #FAF8F4;
+  color: #1C1714;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
-/* ── Warm gold scrollbar ── */
+/* ── Crimson scrollbar ── */
 ::-webkit-scrollbar        { width: 3px; }
-::-webkit-scrollbar-track  { background: #0D0501; }
-::-webkit-scrollbar-thumb  { background: #C6A75E40; border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: #C6A75E; }
+::-webkit-scrollbar-track  { background: #F3EFE9; }
+::-webkit-scrollbar-thumb  { background: #82000D40; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #82000D; }
 
 /* ── Global tactile press (Emil: scale(0.97) on :active) ── */
 button:active { transform: scale(0.97); }
@@ -61,59 +66,195 @@ button:active { transform: scale(0.97); }
 }
 
 /* ══════════════════════════════════════════════════
-   CONTRAST SYSTEM — minimum readability standards
-   Dark bg (#0D0501) requires minimum 70% opacity for
-   body text to pass WCAG AA (4.5:1).
+   GLASS SYSTEM — frosted translucent surfaces
+   ══════════════════════════════════════════════════ */
+.glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.32));
+  backdrop-filter: blur(26px) saturate(185%);
+  -webkit-backdrop-filter: blur(26px) saturate(185%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 14px 44px rgba(33, 10, 11, 0.08);
+}
+.glass-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.44));
+  backdrop-filter: blur(22px) saturate(175%);
+  -webkit-backdrop-filter: blur(22px) saturate(175%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    0 18px 50px rgba(130, 0, 13, 0.07),
+    0 4px 14px rgba(28, 23, 20, 0.05);
+}
+.glass-nav {
+  background: rgba(250, 248, 244, 0.60);
+  backdrop-filter: blur(28px) saturate(185%);
+  -webkit-backdrop-filter: blur(28px) saturate(185%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+/* frosted glass over dark imagery (hero / CTA) */
+.glass-dark {
+  background: linear-gradient(135deg, rgba(33, 10, 11, 0.40), rgba(33, 10, 11, 0.20));
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 28px 70px rgba(33, 10, 11, 0.32);
+}
+
+/* ══════════════════════════════════════════════════
+   CONTRAST SYSTEM — readability on warm white
    ══════════════════════════════════════════════════ */
 
-/* Eyebrow — brand gold (#C6A75E exact) */
+/* Eyebrow — brand crimson */
 .eyebrow {
   font-size: 0.5625rem;
   font-weight: 700;
   letter-spacing: 0.45em;
   text-transform: uppercase;
-  color: #C6A75E;
+  color: #82000D;
   opacity: 1;
 }
 
-/* Brand crimson — primary mark color, used for strong CTA moments */
+/* Brand crimson — primary CTA */
 .btn-crimson {
-  background-color: #84262B;
-  color: #E8DCBF;
-  transition: background-color 280ms var(--ease-out), transform 120ms var(--ease-out);
+  background-color: #82000D;
+  color: #FFFFFF;
+  box-shadow: 0 8px 22px rgba(130, 0, 13, 0.22);
+  transition: background-color 260ms var(--ease-out), box-shadow 260ms var(--ease-out), transform 120ms var(--ease-out);
 }
-.btn-crimson:hover  { background-color: #9E2F35; }
+.btn-crimson:hover  { background-color: #631C20; box-shadow: 0 10px 28px rgba(130, 0, 13, 0.30); }
 .btn-crimson:active { transform: scale(0.97); }
 
-/* Body text — 78% minimum on dark bg */
+/* WhatsApp — direct contact CTA */
+.btn-whatsapp {
+  background-color: #25D366;
+  color: #06321B;
+  box-shadow: 0 8px 22px rgba(37, 211, 102, 0.28);
+  transition: background-color 240ms var(--ease-out), box-shadow 240ms var(--ease-out), transform 120ms var(--ease-out);
+}
+.btn-whatsapp:hover  { background-color: #1EC15B; box-shadow: 0 10px 28px rgba(37, 211, 102, 0.36); }
+.btn-whatsapp:active { transform: scale(0.97); }
+
+/* ══════════════════════════════════════════════════
+   WHATSAPP FLOATING ACTION BUTTON
+   ══════════════════════════════════════════════════ */
+.wa-fab {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 1500;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(14px) scale(0.9);
+  transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+}
+.wa-fab[data-mounted="true"] { opacity: 1; transform: translateY(0) scale(1); }
+@media (min-width: 1024px) { .wa-fab { right: 2rem; bottom: 2rem; } }
+
+/* Expanding frosted label — desktop hover only */
+.wa-fab-label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 0;
+  margin-right: 0;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid rgba(130, 0, 13, 0.1);
+  border-right: none;
+  box-shadow: 0 12px 34px rgba(130, 0, 13, 0.1);
+  border-radius: 999px 0 0 999px;
+  transition: max-width 380ms var(--ease-out), opacity 260ms var(--ease-out), padding 380ms var(--ease-out), margin-right 380ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .wa-fab:hover .wa-fab-label {
+    max-width: 240px;
+    opacity: 1;
+    padding: 0.7rem 1.6rem 0.7rem 1.25rem;
+    margin-right: -1.5rem; /* tuck under the button so they read as one object */
+  }
+}
+
+.wa-fab-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  background: linear-gradient(140deg, #2BE06F 0%, #1FAE54 100%);
+  box-shadow: 0 12px 30px rgba(30, 174, 84, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+  z-index: 1;
+  transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
+}
+@media (min-width: 1024px) { .wa-fab-btn { width: 3.875rem; height: 3.875rem; } }
+@media (hover: hover) and (pointer: fine) {
+  .wa-fab:hover .wa-fab-btn {
+    transform: scale(1.05);
+    box-shadow: 0 16px 38px rgba(30, 174, 84, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  }
+}
+.wa-fab:active .wa-fab-btn { transform: scale(0.95); }
+
+.wa-fab-icon { color: #FFFFFF; width: 1.6rem; height: 1.6rem; }
+@media (min-width: 1024px) { .wa-fab-icon { width: 1.75rem; height: 1.75rem; } }
+
+.wa-fab-online {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: #4ADE80;
+  border: 2px solid #FAF8F4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-fab { transform: none; transition: opacity 300ms ease; }
+  .wa-fab[data-mounted="true"] { transform: none; }
+}
+
+/* Body text — ink at 78% on warm white */
 .body-text {
-  color: rgba(237, 224, 200, 0.78);
+  color: rgba(28, 23, 20, 0.80);
   font-size: 0.9375rem;
   font-weight: 300;
   line-height: 1.78;
 }
 
-/* Muted text — 60% minimum, use sparingly */
+/* Muted text */
 .muted-text {
-  color: rgba(237, 224, 200, 0.60);
+  color: rgba(28, 23, 20, 0.62);
 }
 
-/* Caption / meta — 50% minimum */
+/* Caption / meta */
 .caption-text {
-  color: rgba(237, 224, 200, 0.50);
+  color: rgba(28, 23, 20, 0.52);
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.3em;
   text-transform: uppercase;
 }
 
-/* ── Gold shimmer ── */
+/* ── Crimson shimmer ── */
 @keyframes gold-shimmer {
   0%   { background-position: -200% center; }
   100% { background-position:  200% center; }
 }
 .gold-shimmer {
-  background: linear-gradient(90deg, #C6A75E, #EDCF7A, #C6A75E, #9E7A42, #C6A75E);
+  background: linear-gradient(90deg, #82000D, #9D5155, #82000D, #631C20, #82000D);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -142,13 +283,13 @@ button:active { transform: scale(0.97); }
 .hero-sub    { transition-delay: 500ms; }
 .hero-cta    { transition-delay: 640ms; }
 
-/* Gold divider line expand */
+/* Crimson divider line expand */
 @keyframes line-expand {
   from { transform: scaleX(0); }
   to   { transform: scaleX(1); }
 }
 .gold-line-animate {
-  transform-origin: left;
+  transform-origin: center;
   animation: line-expand 600ms var(--ease-out) 850ms both;
 }
 
@@ -182,7 +323,7 @@ button:active { transform: scale(0.97); }
   left: 0;
   right: 0;
   height: 1px;
-  background: #C6A75E;
+  background: #82000D;
   clip-path: inset(0 100% 0 0);
   transition: clip-path 280ms var(--ease-out);
 }
@@ -195,29 +336,31 @@ button:active { transform: scale(0.97); }
 .card-border-reveal {
   position: absolute;
   inset: 0;
-  border: 1px solid rgba(201, 169, 110, 0);
+  border: 1px solid rgba(130, 0, 13, 0);
   transition: border-color 350ms var(--ease-out);
   pointer-events: none;
   z-index: 2;
 }
 .group:hover .card-border-reveal {
-  border-color: rgba(201, 169, 110, 0.40);
+  border-color: rgba(130, 0, 13, 0.38);
 }
 
-/* Form input */
+/* Form input — glassy on light */
 .pavani-input {
   width: 100%;
-  background: #180900;
-  border: 1px solid rgba(201, 169, 110, 0.18);
-  color: #E8DCBF;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(130, 0, 13, 0.16);
+  color: #1C1714;
   padding: 0.875rem 1rem;
   font-size: 0.8125rem;
   letter-spacing: 0.02em;
   outline: none;
   transition: border-color 200ms var(--ease-out);
 }
-.pavani-input::placeholder { color: rgba(237, 224, 200, 0.32); }
-.pavani-input:focus { border-color: rgba(201, 169, 110, 0.60); }
+.pavani-input::placeholder { color: rgba(28, 23, 20, 0.38); }
+.pavani-input:focus { border-color: rgba(130, 0, 13, 0.55); }
 
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {

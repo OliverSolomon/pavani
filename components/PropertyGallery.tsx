@@ -2,8 +2,61 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { X, ChevronLeft, ChevronRight, Grid3X3, Maximize2, Play } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Grid3X3, Play, ImageOff } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+/* Resilient media tile: real first-frame poster for videos,
+   graceful branded fallback for unavailable images. */
+function MediaThumb({
+  item, alt, sizes, priority, big,
+}: { item: MediaItem; alt: string; sizes: string; priority?: boolean; big?: boolean }) {
+  const [errored, setErrored] = useState(false);
+
+  if (item.type === "video") {
+    return (
+      <div className="relative w-full h-full bg-[#210A0B]">
+        {/* shows the first frame for direct video files; branded surface otherwise */}
+        <video
+          src={item.url}
+          muted
+          playsInline
+          preload="metadata"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-[#210A0B]/25" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className={cn(
+            "rounded-full bg-[#FBF5F2]/15 backdrop-blur-sm border border-[#FBF5F2]/60 flex items-center justify-center text-[#FBF5F2]",
+            big ? "w-16 h-16" : "w-10 h-10"
+          )}>
+            <Play size={big ? 22 : 15} fill="currentColor" className="ml-0.5" />
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  if (errored) {
+    return (
+      <div className="w-full h-full bg-[#F3EFE9] flex flex-col items-center justify-center gap-2 text-[#82000D]/55">
+        <ImageOff size={big ? 26 : 18} strokeWidth={1.5} />
+        <span className="text-[7px] lg:text-[8px] font-bold tracking-[0.3em] uppercase">Image unavailable</span>
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={item.url}
+      alt={alt}
+      fill
+      sizes={sizes}
+      priority={priority}
+      onError={() => setErrored(true)}
+      className="object-cover transition-transform duration-[2s] group-hover:scale-105"
+    />
+  );
+}
 
 interface MediaItem {
   url: string;
@@ -68,22 +121,7 @@ export default function PropertyGallery({ media, title }: PropertyGalleryProps) 
             className="col-span-4 lg:col-span-2 row-span-2 relative cursor-pointer group overflow-hidden bg-gray-100"
             onClick={() => openLightbox(0)}
           >
-            {primary.type === "video" ? (
-              <div className="w-full h-full bg-[#0A0A0F] flex items-center justify-center">
-                <div className="w-16 h-16 rounded-full border border-white/30 flex items-center justify-center text-white">
-                  <Play size={22} fill="currentColor" />
-                </div>
-              </div>
-            ) : (
-              <Image
-                src={primary.url}
-                alt={`${title} - main`}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover transition-transform duration-[2s] group-hover:scale-105"
-                priority
-              />
-            )}
+            <MediaThumb item={primary} alt={`${title} - main`} sizes="(max-width: 768px) 100vw, 50vw" priority big />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500" />
           </div>
 
@@ -107,19 +145,7 @@ export default function PropertyGallery({ media, title }: PropertyGalleryProps) 
                 )}
                 onClick={() => openLightbox(i + 1)}
               >
-                {item.type === "video" ? (
-                  <div className="w-full h-full bg-[#0A0A0F] flex items-center justify-center">
-                    <Play size={18} fill="white" className="text-white" />
-                  </div>
-                ) : (
-                  <Image
-                    src={item.url}
-                    alt={`${title} - ${i + 2}`}
-                    fill
-                    sizes="25vw"
-                    className="object-cover transition-transform duration-[2s] group-hover:scale-105"
-                  />
-                )}
+                <MediaThumb item={item} alt={`${title} - ${i + 2}`} sizes="25vw" />
                 {i === 3 && media.length > 5 && (
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
                     <span className="text-white font-serif text-2xl">+{media.length - 5}</span>
@@ -149,16 +175,10 @@ export default function PropertyGallery({ media, title }: PropertyGalleryProps) 
               onClick={() => openLightbox(i)}
               className={cn(
                 "relative shrink-0 w-16 h-16 cursor-pointer overflow-hidden",
-                activeIdx === i && "ring-2 ring-[#C6A75E]"
+                activeIdx === i && "ring-2 ring-[#82000D]"
               )}
             >
-              {item.type === "image" ? (
-                <Image src={item.url} alt="" fill className="object-cover" sizes="64px" />
-              ) : (
-                <div className="w-full h-full bg-[#0A0A0F] flex items-center justify-center">
-                  <Play size={14} fill="white" className="text-white" />
-                </div>
-              )}
+              <MediaThumb item={item} alt="" sizes="64px" />
             </div>
           ))}
         </div>
@@ -229,16 +249,10 @@ export default function PropertyGallery({ media, title }: PropertyGalleryProps) 
                 onClick={() => setLightboxIdx(i)}
                 className={cn(
                   "relative shrink-0 w-14 h-14 cursor-pointer overflow-hidden border-2 transition-all",
-                  lightboxIdx === i ? "border-[#C6A75E] opacity-100" : "border-transparent opacity-40 hover:opacity-70"
+                  lightboxIdx === i ? "border-[#82000D] opacity-100" : "border-transparent opacity-40 hover:opacity-70"
                 )}
               >
-                {item.type === "image" ? (
-                  <Image src={item.url} alt="" fill className="object-cover" sizes="56px" />
-                ) : (
-                  <div className="w-full h-full bg-[#111] flex items-center justify-center">
-                    <Play size={12} fill="white" className="text-white" />
-                  </div>
-                )}
+                <MediaThumb item={item} alt="" sizes="56px" />
               </div>
             ))}
           </div>

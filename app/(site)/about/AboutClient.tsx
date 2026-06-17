@@ -43,7 +43,7 @@ const WHY_US = [
   },
   {
     title: "Proven Track Record",
-    body: "Over 500 successful transactions and a portfolio of satisfied clients from around the world.",
+    body: "A long history of successful transactions and a portfolio of satisfied clients from around the world.",
   },
   {
     title: "Comprehensive Solutions",
@@ -115,18 +115,8 @@ export default function AboutClient({ settings }: AboutClientProps) {
           transition: { duration: 0.82, ease, delay },
         };
 
-  const springIn = (delay = 0) =>
-    reduce
-      ? {}
-      : {
-          initial:    { opacity: 0, y: 16 },
-          whileInView:{ opacity: 1, y: 0 },
-          viewport:   { once: true, amount: 0.3 },
-          transition: { type: "spring" as const, duration: 0.65, bounce: 0.22, delay },
-        };
-
   return (
-    <main className="min-h-screen bg-[#0D0501] text-[#E8DCBF]">
+    <main className="min-h-screen bg-[#FAF8F4] text-[#1C1714]">
       <Navbar settings={settings} />
 
       {/* ── PAGE HERO ── */}
@@ -135,56 +125,41 @@ export default function AboutClient({ settings }: AboutClientProps) {
           className="absolute inset-0 opacity-[0.022] pointer-events-none"
           style={{
             backgroundImage:
-              "repeating-linear-gradient(0deg,#C6A75E,#C6A75E 1px,transparent 1px,transparent 72px),repeating-linear-gradient(90deg,#C6A75E,#C6A75E 1px,transparent 1px,transparent 72px)",
+              "repeating-linear-gradient(0deg,#82000D,#82000D 1px,transparent 1px,transparent 72px),repeating-linear-gradient(90deg,#82000D,#82000D 1px,transparent 1px,transparent 72px)",
           }}
         />
         <div className="relative max-w-[1400px] mx-auto page-hero-enter">
           <p className="eyebrow mb-4">Our Story</p>
-          <h1 className="text-4xl md:text-5xl lg:text-[3.75rem] font-serif font-light text-[#E8DCBF] leading-tight mb-5">
+          <h1 className="text-4xl md:text-5xl lg:text-[3.75rem] font-serif font-light text-[#1C1714] leading-tight mb-5">
             About{" "}
-            <em className="italic text-[#C6A75E]">Pavani Realty Co</em>
+            <em className="italic text-[#82000D]">Pavani Realty Co</em>
           </h1>
-          <div className="w-10 h-px bg-[#C6A75E]/60 mb-5" />
-          <p className="text-[0.9375rem] text-[#E8DCBF]/75 font-light leading-relaxed max-w-lg">
+          <div className="w-10 h-px bg-[#82000D]/60 mb-5" />
+          <p className="text-[0.9375rem] text-[#1C1714]/75 font-light leading-relaxed max-w-lg">
             Nairobi's trusted authority in luxury real estate since 2009.
           </p>
         </div>
       </section>
 
-      {/* ── STORY + STATS ── */}
-      <section className="py-16 lg:py-24 px-6 lg:px-16 border-t border-[#C6A75E]/10">
-        <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-24 items-start">
-          <motion.div {...fadeLeft(0)} className="space-y-7">
-            <h2 className="text-3xl lg:text-4xl font-serif font-light text-[#E8DCBF] leading-snug">
-              Nairobi's Most{" "}
-              <em className="italic text-[#C6A75E]">Trusted Authority</em>
-            </h2>
-            <div className="w-8 h-px bg-[#C6A75E]/50" />
-            <p className="text-[0.9375rem] text-[#E8DCBF]/78 font-light leading-[1.82]">
-              Since 2009, Pavani Realty Co has been the definitive name in luxury real estate across Nairobi's most prestigious addresses. We've built our reputation on a foundation of excellence, discretion, and unwavering commitment to our clients' success.
-            </p>
-            <p className="text-[0.9375rem] text-[#E8DCBF]/78 font-light leading-[1.82]">
-              Our deep market knowledge, combined with a network of industry connections and a team of seasoned professionals, positions us uniquely to serve discerning buyers, sellers, and investors seeking the finest properties in Kenya's capital.
-            </p>
-          </motion.div>
-
-          <motion.div {...fadeRight(0.1)} className="grid grid-cols-3 gap-6 lg:gap-10 pt-2">
-            {[
-              { stat: "15+",  label: "Years of Experience" },
-              { stat: "500+", label: "Successful Transactions" },
-              { stat: "6",    label: "Prime Neighbourhoods" },
-            ].map(({ stat, label }, i) => (
-              <motion.div key={stat} {...springIn(0.12 + i * 0.09)} className="flex flex-col gap-2">
-                <p className="text-4xl lg:text-5xl font-serif font-light text-[#C6A75E]">{stat}</p>
-                <p className="text-[8px] font-bold tracking-[0.35em] uppercase text-[#E8DCBF]/58 leading-relaxed">{label}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
+      {/* ── STORY ── */}
+      <section className="py-16 lg:py-24 px-6 lg:px-16 border-t border-[#82000D]/10">
+        <motion.div {...fadeUp(0)} className="max-w-3xl mx-auto space-y-7 text-center">
+          <h2 className="text-3xl lg:text-4xl font-serif font-light text-[#1C1714] leading-snug">
+            Nairobi's Most{" "}
+            <em className="italic text-[#82000D]">Trusted Authority</em>
+          </h2>
+          <div className="w-8 h-px bg-[#82000D]/50 mx-auto" />
+          <p className="text-[0.9375rem] text-[#1C1714]/78 font-light leading-[1.82]">
+            Since 2009, Pavani Realty Co has been the definitive name in luxury real estate across Nairobi's most prestigious addresses. We've built our reputation on a foundation of excellence, discretion, and unwavering commitment to our clients' success.
+          </p>
+          <p className="text-[0.9375rem] text-[#1C1714]/78 font-light leading-[1.82]">
+            Our deep market knowledge, combined with a network of industry connections and a team of seasoned professionals, positions us uniquely to serve discerning buyers, sellers, and investors seeking the finest properties in Kenya's capital.
+          </p>
+        </motion.div>
       </section>
 
       {/* ── LEADERSHIP ── */}
-      <section className="py-16 lg:py-24 px-6 lg:px-16 bg-[#180900]">
+      <section className="py-16 lg:py-24 px-6 lg:px-16 bg-[#F3EFE9]">
         <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
           <motion.div {...fadeLeft(0)} className="relative aspect-[3/4] max-h-[580px] overflow-hidden">
             <Image
@@ -199,20 +174,20 @@ export default function AboutClient({ settings }: AboutClientProps) {
           <motion.div {...fadeRight(0.1)} className="space-y-7">
             <div>
               <p className="eyebrow mb-3">Leadership</p>
-              <h2 className="text-3xl lg:text-4xl font-serif text-[#E8DCBF] leading-tight">
+              <h2 className="text-3xl lg:text-4xl font-serif text-[#1C1714] leading-tight">
                 Imani{" "}
-                <em className="italic text-[#C6A75E]">Karugu</em>
+                <em className="italic text-[#82000D]">Karugu</em>
               </h2>
-              <p className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#E8DCBF]/55 mt-2">
+              <p className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#1C1714]/55 mt-2">
                 Founder &amp; CEO, Pavani Realty Co
               </p>
             </div>
-            <div className="w-8 h-px bg-[#C6A75E]/40" />
-            <blockquote className="font-serif italic text-[1rem] text-[#E8DCBF]/82 leading-[1.82]">
+            <div className="w-8 h-px bg-[#82000D]/40" />
+            <blockquote className="font-serif italic text-[1rem] text-[#1C1714]/82 leading-[1.82]">
               "Luxury real estate is not just about properties — it's about crafting legacies and enabling dreams. At Pavani Realty Co, we believe every client deserves an experience that matches the calibre of their aspirations."
             </blockquote>
-            <p className="text-[0.9375rem] text-[#E8DCBF]/72 font-light leading-[1.82]">
-              With over 15 years of experience in Nairobi's luxury real estate market, Imani Karugu founded Pavani Realty Co to set a new standard for excellence, discretion, and client-centric service. Her deep understanding of the market, combined with an unwavering commitment to integrity, has established Pavani as the trusted choice for discerning buyers, sellers, and investors.
+            <p className="text-[0.9375rem] text-[#1C1714]/72 font-light leading-[1.82]">
+              With many years of experience in Nairobi's luxury real estate market, Imani Karugu founded Pavani Realty Co to set a new standard for excellence, discretion, and client-centric service. Her deep understanding of the market, combined with an unwavering commitment to integrity, has established Pavani as the trusted choice for discerning buyers, sellers, and investors.
             </p>
           </motion.div>
         </div>
@@ -223,22 +198,22 @@ export default function AboutClient({ settings }: AboutClientProps) {
         <div className="max-w-[1400px] mx-auto">
           <motion.div {...fadeUp(0)} className="mb-14">
             <p className="eyebrow mb-4">Values</p>
-            <h2 className="text-3xl lg:text-4xl font-serif font-light text-[#E8DCBF]">
+            <h2 className="text-3xl lg:text-4xl font-serif font-light text-[#1C1714]">
               Our{" "}
-              <em className="italic text-[#C6A75E]">Core Values</em>
+              <em className="italic text-[#82000D]">Core Values</em>
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#C6A75E]/8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#82000D]/8">
             {CORE_VALUES.map(({ title, body }, i) => (
               <motion.div
                 key={title}
                 {...fadeUp(i * 0.1)}
-                className="bg-[#0D0501] p-8 lg:p-10 space-y-4"
+                className="bg-[#FAF8F4] p-8 lg:p-10 space-y-4"
               >
-                <h3 className="text-xl font-serif text-[#E8DCBF]">{title}</h3>
-                <div className="w-6 h-px bg-[#C6A75E]/45" />
-                <p className="text-[0.9rem] text-[#E8DCBF]/75 font-light leading-[1.82]">{body}</p>
+                <h3 className="text-xl font-serif text-[#1C1714]">{title}</h3>
+                <div className="w-6 h-px bg-[#82000D]/45" />
+                <p className="text-[0.9rem] text-[#1C1714]/75 font-light leading-[1.82]">{body}</p>
               </motion.div>
             ))}
           </div>
@@ -246,13 +221,13 @@ export default function AboutClient({ settings }: AboutClientProps) {
       </section>
 
       {/* ── WHY CHOOSE US ── */}
-      <section className="py-16 lg:py-24 px-6 lg:px-16 bg-[#180900]">
+      <section className="py-16 lg:py-24 px-6 lg:px-16 bg-[#F3EFE9]">
         <div className="max-w-[1400px] mx-auto">
           <motion.div {...fadeUp(0)} className="mb-14">
             <p className="eyebrow mb-4">Why Us</p>
-            <h2 className="text-3xl lg:text-4xl font-serif font-light text-[#E8DCBF]">
+            <h2 className="text-3xl lg:text-4xl font-serif font-light text-[#1C1714]">
               Why Choose{" "}
-              <em className="italic text-[#C6A75E]">Pavani Realty Co</em>
+              <em className="italic text-[#82000D]">Pavani Realty Co</em>
             </h2>
           </motion.div>
 
@@ -260,11 +235,11 @@ export default function AboutClient({ settings }: AboutClientProps) {
             {WHY_US.map(({ title, body }, i) => (
               <motion.div key={title} {...fadeUp(i * 0.07)} className="flex gap-4">
                 <div className="mt-0.5 shrink-0">
-                  <CheckCircle size={17} className="text-[#C6A75E]" strokeWidth={1.5} />
+                  <CheckCircle size={17} className="text-[#82000D]" strokeWidth={1.5} />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-[0.875rem] font-bold tracking-wide text-[#E8DCBF]">{title}</h3>
-                  <p className="text-[0.875rem] text-[#E8DCBF]/72 font-light leading-[1.78]">{body}</p>
+                  <h3 className="text-[0.875rem] font-bold tracking-wide text-[#1C1714]">{title}</h3>
+                  <p className="text-[0.875rem] text-[#1C1714]/72 font-light leading-[1.78]">{body}</p>
                 </div>
               </motion.div>
             ))}
@@ -277,9 +252,9 @@ export default function AboutClient({ settings }: AboutClientProps) {
         <div className="max-w-[1400px] mx-auto">
           <motion.div {...fadeUp(0)} className="mb-14">
             <p className="eyebrow mb-4">Testimonials</p>
-            <h2 className="text-3xl lg:text-4xl font-serif font-light text-[#E8DCBF]">
+            <h2 className="text-3xl lg:text-4xl font-serif font-light text-[#1C1714]">
               What Our{" "}
-              <em className="italic text-[#C6A75E]">Clients Say</em>
+              <em className="italic text-[#82000D]">Clients Say</em>
             </h2>
           </motion.div>
 
@@ -288,19 +263,19 @@ export default function AboutClient({ settings }: AboutClientProps) {
               <motion.div
                 key={name}
                 {...fadeUp(i * 0.08)}
-                className="bg-[#180900] border border-[#C6A75E]/12 p-7 space-y-5"
+                className="glass-card p-7 space-y-5"
               >
                 <div className="flex gap-0.5">
                   {Array.from({ length: stars }).map((_, j) => (
-                    <span key={j} className="text-[#C6A75E] text-sm">★</span>
+                    <span key={j} className="text-[#82000D] text-sm">★</span>
                   ))}
                 </div>
-                <p className="text-[0.875rem] font-serif italic text-[#E8DCBF]/80 leading-[1.82]">
+                <p className="text-[0.875rem] font-serif italic text-[#1C1714]/80 leading-[1.82]">
                   &ldquo;{quote}&rdquo;
                 </p>
-                <div className="pt-3 border-t border-[#C6A75E]/10 space-y-1">
-                  <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#E8DCBF]/88">{name}</p>
-                  <p className="text-[9px] tracking-widest text-[#E8DCBF]/52 uppercase font-medium">{role}</p>
+                <div className="pt-3 border-t border-[#82000D]/10 space-y-1">
+                  <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#1C1714]/88">{name}</p>
+                  <p className="text-[9px] tracking-widest text-[#1C1714]/52 uppercase font-medium">{role}</p>
                 </div>
               </motion.div>
             ))}
@@ -317,7 +292,7 @@ export default function AboutClient({ settings }: AboutClientProps) {
           className="object-cover"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-[#0D0501]/72" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#210A0B]/75 via-[#210A0B]/65 to-[#210A0B]/80" />
         <motion.div
           className="relative z-10 text-center px-6 max-w-2xl mx-auto space-y-8"
           {...(reduce ? {} : {
@@ -327,13 +302,13 @@ export default function AboutClient({ settings }: AboutClientProps) {
             transition: { duration: 0.95, ease },
           })}
         >
-          <div className="w-px h-12 bg-[#C6A75E]/30 mx-auto" />
-          <h2 className="text-4xl lg:text-5xl font-serif font-light text-[#E8DCBF] leading-tight">
+          <div className="w-px h-12 bg-[#E8DCBF]/40 mx-auto" />
+          <h2 className="text-4xl lg:text-5xl font-serif font-light text-[#FBF5F2] leading-tight">
             Ready to Begin Your{" "}
-            <em className="italic text-[#C6A75E]">Journey?</em>
+            <em className="italic text-[#E8DCBF]">Journey?</em>
           </h2>
-          <div className="w-8 h-px bg-[#C6A75E]/50 mx-auto" />
-          <p className="text-[0.9375rem] font-light text-[#E8DCBF]/72 leading-relaxed max-w-md mx-auto">
+          <div className="w-8 h-px bg-[#E8DCBF]/60 mx-auto" />
+          <p className="text-[0.9375rem] font-light text-[#FBF5F2]/80 leading-relaxed max-w-md mx-auto">
             Let our advisors guide you through Nairobi's most prestigious addresses.
           </p>
           <Link

@@ -5,6 +5,7 @@ import { VisualEditing } from "next-sanity/visual-editing";
 import { draftMode } from "next/headers";
 import "./globals.css";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
+import WhatsAppFab from "@/components/WhatsAppFab";
 import { CurrencyProvider } from "@/context/CurrencyContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 
@@ -76,7 +77,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
-      <body className={`${cormorant.variable} ${montserrat.variable} font-sans bg-[#0D0501] text-[#E8DCBF] antialiased`} suppressHydrationWarning>
+      <body className={`${cormorant.variable} ${montserrat.variable} font-sans bg-[#FAF8F4] text-[#1C1714] antialiased`} suppressHydrationWarning>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -85,6 +86,7 @@ export default async function RootLayout({
         <CurrencyProvider>
           <LanguageProvider>
             {children}
+            <WhatsAppFab />
           </LanguageProvider>
         </CurrencyProvider>
         <SanityLive />

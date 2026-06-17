@@ -17,12 +17,12 @@ const ease = [0.23, 1, 0.32, 1] as const;
 
 /* ── Video data ── */
 const VIDEOS = [
-  { id: "v1", title: "Karen Estate Luxury Tour",          thumb: "photo-1600607687940-c52af096999c", ytId: "" },
+  { id: "v1", title: "Karen Estate Luxury Tour",          thumb: "photo-1568605114967-8130f3a36994", ytId: "" },
   { id: "v2", title: "Muthaiga Penthouse Showcase",       thumb: "photo-1600585154340-be6161a56a0c", ytId: "" },
   { id: "v3", title: "Investment Guide 2024",             thumb: "photo-1582407947304-fd86f028f716", ytId: "" },
   { id: "v4", title: "Runda Estate Community Tour",       thumb: "photo-1613490493576-7fde63acd811", ytId: "" },
   { id: "v5", title: "Westlands Luxury Living",           thumb: "photo-1512917774080-9991f1c4c750", ytId: "" },
-  { id: "v6", title: "Lavington Family Homes",            thumb: "photo-1600607687644-c7f34b5063c7", ytId: "" },
+  { id: "v6", title: "Lavington Family Homes",            thumb: "photo-1564013799919-ab600027ffc6", ytId: "" },
   { id: "v7", title: "Gigiri Diplomatic Villas",          thumb: "photo-1613977257363-707ba9348227", ytId: "" },
   { id: "v8", title: "Nairobi Real Estate Market Trends", thumb: "photo-1486406146926-c627a92ad1ab", ytId: "" },
 ];
@@ -31,16 +31,16 @@ type Category = "all" | "villa" | "apartment" | "interior" | "exterior" | "ameni
 
 /* ── Property photo showcase ── */
 const PHOTOS: { id: string; category: Category; name: string; thumb: string }[] = [
-  { id: "p1",  category: "villa",     name: "Villa Serene, Runda",       thumb: "photo-1600607687940-c52af096999c" },
+  { id: "p1",  category: "villa",     name: "Villa Serene, Runda",       thumb: "photo-1568605114967-8130f3a36994" },
   { id: "p2",  category: "villa",     name: "Karen Grand Estate",         thumb: "photo-1613490493576-7fde63acd811" },
   { id: "p3",  category: "interior",  name: "Luxury Living Room",         thumb: "photo-1600585154340-be6161a56a0c" },
   { id: "p4",  category: "apartment", name: "Westlands Penthouse Suite",  thumb: "photo-1512917774080-9991f1c4c750" },
-  { id: "p5",  category: "exterior",  name: "Muthaiga Estate Exterior",   thumb: "photo-1600607687644-c7f34b5063c7" },
+  { id: "p5",  category: "exterior",  name: "Muthaiga Estate Exterior",   thumb: "photo-1564013799919-ab600027ffc6" },
   { id: "p6",  category: "penthouse", name: "Sky Residence, Upperhill",   thumb: "photo-1582407947304-fd86f028f716" },
   { id: "p7",  category: "amenities", name: "Infinity Pool, Karen",       thumb: "photo-1613977257363-707ba9348227" },
   { id: "p8",  category: "interior",  name: "Master Suite Design",        thumb: "photo-1486406146926-c627a92ad1ab" },
   { id: "p9",  category: "villa",     name: "Runda Villa Gardens",        thumb: "photo-1613490493576-7fde63acd811" },
-  { id: "p10", category: "apartment", name: "Kilimani Residence",         thumb: "photo-1600607687940-c52af096999c" },
+  { id: "p10", category: "apartment", name: "Kilimani Residence",         thumb: "photo-1568605114967-8130f3a36994" },
   { id: "p11", category: "amenities", name: "Rooftop Terrace, Parklands", thumb: "photo-1512917774080-9991f1c4c750" },
   { id: "p12", category: "exterior",  name: "Lavington Garden Estate",    thumb: "photo-1600585154340-be6161a56a0c" },
 ];
@@ -81,7 +81,7 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
     setLightboxIdx(i => (i === null ? null : (i + 1) % filteredPhotos.length));
 
   return (
-    <main className="min-h-screen bg-[#0D0501] text-[#E8DCBF]">
+    <main className="min-h-screen bg-[#FAF8F4] text-[#1C1714]">
       <Navbar settings={settings} />
 
       {/* ── PAGE HERO ── */}
@@ -90,24 +90,24 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
           className="absolute inset-0 opacity-[0.025] pointer-events-none"
           style={{
             backgroundImage:
-              "repeating-linear-gradient(0deg,#C6A75E,#C6A75E 1px,transparent 1px,transparent 72px),repeating-linear-gradient(90deg,#C6A75E,#C6A75E 1px,transparent 1px,transparent 72px)",
+              "repeating-linear-gradient(0deg,#82000D,#82000D 1px,transparent 1px,transparent 72px),repeating-linear-gradient(90deg,#82000D,#82000D 1px,transparent 1px,transparent 72px)",
           }}
         />
         <div className="relative max-w-[1400px] mx-auto page-hero-enter">
-          <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#C6A75E] mb-4">Gallery</p>
-          <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-serif font-light text-[#E8DCBF] leading-tight mb-5">
+          <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#82000D] mb-4">Gallery</p>
+          <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-serif font-light text-[#1C1714] leading-tight mb-5">
             Visual Showcase
           </h1>
-          <div className="w-10 h-px bg-[#C6A75E]/60" />
+          <div className="w-10 h-px bg-[#82000D]/60" />
         </div>
       </section>
 
       {/* ── VIDEO TOURS ── */}
-      <section className="py-14 lg:py-20 px-6 lg:px-16 border-t border-[#C6A75E]/10">
+      <section className="py-14 lg:py-20 px-6 lg:px-16 border-t border-[#82000D]/10">
         <div className="max-w-[1400px] mx-auto">
           <motion.div {...fadeUp(0)} className="mb-10">
-            <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#C6A75E]/70 mb-3">Featured Videos</p>
-            <h2 className="text-2xl lg:text-3xl font-serif font-light text-[#E8DCBF]">
+            <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#82000D]/70 mb-3">Featured Videos</p>
+            <h2 className="text-2xl lg:text-3xl font-serif font-light text-[#1C1714]">
               Video Tours &amp; Insights
             </h2>
           </motion.div>
@@ -144,16 +144,16 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
                     className="object-cover transition-transform duration-[2s] ease-out group-hover:scale-105"
                   />
                   {/* Dark scrim */}
-                  <div className="absolute inset-0 bg-[#0D0501]/45 group-hover:bg-[#0D0501]/25 transition-colors duration-300" />
+                  <div className="absolute inset-0 bg-[#FAF8F4]/45 group-hover:bg-[#FAF8F4]/25 transition-colors duration-300" />
                   {/* Play button */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-12 h-12 rounded-full border-2 border-[#C6A75E] bg-[#0D0501]/40 flex items-center justify-center group-hover:bg-[#C6A75E] group-hover:border-[#C6A75E] transition-all duration-300">
-                      <Play size={16} className="text-[#C6A75E] group-hover:text-[#0D0501] transition-colors ml-0.5" fill="currentColor" />
+                    <div className="w-12 h-12 rounded-full border-2 border-[#82000D] bg-[#FAF8F4]/40 flex items-center justify-center group-hover:bg-[#82000D] group-hover:border-[#82000D] transition-all duration-300">
+                      <Play size={16} className="text-[#82000D] group-hover:text-[#FAF8F4] transition-colors ml-0.5" fill="currentColor" />
                     </div>
                   </div>
                   {/* Title overlay at bottom */}
-                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-[#0D0501]/90 to-transparent">
-                    <p className="text-[8px] font-bold tracking-[0.25em] uppercase text-[#E8DCBF]/80 leading-tight">
+                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-[#FAF8F4]/90 to-transparent">
+                    <p className="text-[8px] font-bold tracking-[0.25em] uppercase text-[#1C1714]/80 leading-tight">
                       {title}
                     </p>
                   </div>
@@ -168,7 +168,7 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
               href="https://youtube.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="cta-link inline-flex items-center gap-3 border border-[#C6A75E]/35 px-10 py-4 text-[10px] font-bold tracking-[0.45em] uppercase text-[#C6A75E] hover:bg-[#C6A75E] hover:text-[#0D0501] transition-all duration-300"
+              className="cta-link inline-flex items-center gap-3 border border-[#82000D]/35 px-10 py-4 text-[10px] font-bold tracking-[0.45em] uppercase text-[#82000D] hover:bg-[#82000D] hover:text-[#FAF8F4] transition-all duration-300"
             >
               SUBSCRIBE ON YOUTUBE <ArrowRight size={12} />
             </a>
@@ -177,11 +177,11 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
       </section>
 
       {/* ── PROPERTY SHOWCASE ── */}
-      <section className="py-14 lg:py-20 px-6 lg:px-16 bg-[#180900]">
+      <section className="py-14 lg:py-20 px-6 lg:px-16 bg-[#F3EFE9]">
         <div className="max-w-[1400px] mx-auto">
           <motion.div {...fadeUp(0)} className="mb-10">
-            <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#C6A75E]/70 mb-3">Property Showcase</p>
-            <h2 className="text-2xl lg:text-3xl font-serif font-light text-[#E8DCBF]">
+            <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#82000D]/70 mb-3">Property Showcase</p>
+            <h2 className="text-2xl lg:text-3xl font-serif font-light text-[#1C1714]">
               Featured Properties
             </h2>
           </motion.div>
@@ -195,8 +195,8 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
                 className={cn(
                   "px-4 py-2 text-[9px] font-bold tracking-[0.3em] uppercase border transition-all duration-200",
                   activeFilter === value
-                    ? "bg-[#C6A75E] text-[#0D0501] border-[#C6A75E]"
-                    : "border-[#C6A75E]/20 text-[#E8DCBF]/55 hover:border-[#C6A75E]/40 hover:text-[#E8DCBF]/80"
+                    ? "bg-[#82000D] text-[#FAF8F4] border-[#82000D]"
+                    : "border-[#82000D]/20 text-[#1C1714]/55 hover:border-[#82000D]/40 hover:text-[#1C1714]/80"
                 )}
               >
                 {label}
@@ -231,14 +231,14 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover transition-transform duration-[2.5s] ease-out group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0D0501]/80 via-[#0D0501]/10 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F4]/80 via-[#FAF8F4]/10 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300" />
                     <div className="absolute top-3 left-3">
-                      <span className="text-[7px] font-bold tracking-[0.4em] uppercase bg-[#0D0501]/70 text-[#C6A75E] px-2.5 py-1.5">
+                      <span className="text-[7px] font-bold tracking-[0.4em] uppercase bg-[#FAF8F4]/70 text-[#82000D] px-2.5 py-1.5">
                         {photo.category}
                       </span>
                     </div>
                     <div className="absolute bottom-4 left-4 right-4">
-                      <p className="text-[13px] font-serif text-[#E8DCBF] leading-snug">{photo.name}</p>
+                      <p className="text-[13px] font-serif text-[#1C1714] leading-snug">{photo.name}</p>
                     </div>
                   </button>
                 </motion.div>
@@ -250,7 +250,7 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
           <motion.div {...fadeUp(0.15)} className="mt-12 flex justify-center">
             <Link
               href="/properties"
-              className="cta-link inline-flex items-center gap-3 border border-[#C6A75E]/35 px-10 py-4 text-[10px] font-bold tracking-[0.45em] uppercase text-[#C6A75E] hover:bg-[#C6A75E] hover:text-[#0D0501] transition-all duration-300"
+              className="cta-link inline-flex items-center gap-3 border border-[#82000D]/35 px-10 py-4 text-[10px] font-bold tracking-[0.45em] uppercase text-[#82000D] hover:bg-[#82000D] hover:text-[#FAF8F4] transition-all duration-300"
             >
               VIEW ALL PROPERTIES <ArrowRight size={12} />
             </Link>
@@ -262,7 +262,7 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
       <AnimatePresence>
         {lightboxIdx !== null && (
           <motion.div
-            className="fixed inset-0 z-[9000] bg-[#0D0501]/95 flex items-center justify-center p-4"
+            className="fixed inset-0 z-[9000] bg-[#FAF8F4]/95 flex items-center justify-center p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -285,38 +285,38 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
                 sizes="100vw"
               />
               {/* Title bar */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#0D0501]/90 to-transparent p-6">
-                <p className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C6A75E] mb-1">
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#FAF8F4]/90 to-transparent p-6">
+                <p className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#82000D] mb-1">
                   {filteredPhotos[lightboxIdx].category}
                 </p>
-                <p className="font-serif text-lg text-[#E8DCBF]">
+                <p className="font-serif text-lg text-[#1C1714]">
                   {filteredPhotos[lightboxIdx].name}
                 </p>
               </div>
               {/* Close */}
               <button
-                className="absolute top-4 right-4 w-10 h-10 bg-[#0D0501]/70 flex items-center justify-center text-[#E8DCBF]/70 hover:text-[#C6A75E] transition-colors"
+                className="absolute top-4 right-4 w-10 h-10 bg-[#FAF8F4]/70 flex items-center justify-center text-[#1C1714]/70 hover:text-[#82000D] transition-colors"
                 onClick={closeLightbox}
               >
                 <X size={18} />
               </button>
               {/* Prev */}
               <button
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#0D0501]/70 flex items-center justify-center text-[#E8DCBF]/70 hover:text-[#C6A75E] transition-colors text-lg"
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#FAF8F4]/70 flex items-center justify-center text-[#1C1714]/70 hover:text-[#82000D] transition-colors text-lg"
                 onClick={prevPhoto}
               >
                 &#8592;
               </button>
               {/* Next */}
               <button
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#0D0501]/70 flex items-center justify-center text-[#E8DCBF]/70 hover:text-[#C6A75E] transition-colors text-lg"
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#FAF8F4]/70 flex items-center justify-center text-[#1C1714]/70 hover:text-[#82000D] transition-colors text-lg"
                 onClick={nextPhoto}
               >
                 &#8594;
               </button>
             </motion.div>
             {/* Counter */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-bold tracking-[0.3em] uppercase text-[#E8DCBF]/40">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/40">
               {lightboxIdx + 1} / {filteredPhotos.length}
             </div>
           </motion.div>

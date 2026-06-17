@@ -1,14 +1,13 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronDown } from "lucide-react";
-import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
 import { motion, useReducedMotion } from "framer-motion";
 import { useCurrency } from "@/context/CurrencyContext";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 interface VideoSource {
   title?: string;
@@ -54,15 +53,9 @@ const fadeUpNoBlur = (delay = 0) => ({
 });
 
 export default function HomeClient({ data, settings }: HomeClientProps) {
-  const { formatPrice, currency } = useCurrency();
-  const [email, setEmail] = useState("");
+  const { formatPrice } = useCurrency();
   const videoRef = useRef<HTMLVideoElement>(null);
   const reduce = useReducedMotion();
-  const siteName = settings?.general?.siteName || "PAVANI";
-  const agencyEmail = settings?.contact?.email || "pavanirealtyco@gmail.com";
-  const agencyPhone = settings?.contact?.phone || "+254 729 377 495";
-  const agencyAddress = settings?.contact?.address || "Kofisi, Westlands, Nairobi, Kenya";
-  const socials = settings?.socials;
 
   const getVideoSrc = (s?: VideoSource, fallback?: string) => {
     if (!s) return fallback;
@@ -81,11 +74,11 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
   const mp = <T extends object>(props: T) => (reduce ? {} : props);
 
   return (
-    <main className="min-h-screen bg-[#0D0501] text-[#E8DCBF]">
+    <main className="min-h-screen bg-[#FAF8F4] text-[#1C1714]">
       <Navbar settings={settings} />
 
       {/* ── HERO ── */}
-      <section className="relative min-h-[100dvh] w-full overflow-hidden">
+      <section className="relative min-h-[100dvh] w-full overflow-hidden flex items-center justify-center">
         <video
           ref={videoRef}
           autoPlay loop muted playsInline
@@ -93,40 +86,47 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
         >
           <source src={vHero} type="video/mp4" />
         </video>
-        {/* Layered scrims: bottom-up gradient + overall tint */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0D0501] via-[#0D0501]/40 to-[#0D0501]/15" />
-        <div className="absolute inset-0 bg-[#0D0501]/18" />
+        {/* Soft scrim for legibility of the centred glass panel */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#210A0B]/35 via-[#210A0B]/15 to-[#210A0B]/45" />
 
-        {/* Hero text — bottom left, CSS @starting-style stagger + blur bridge */}
-        <div className="absolute bottom-0 left-0 right-0 px-8 lg:px-16 pb-28 lg:pb-32 z-20 max-w-4xl">
-          <h1 className="text-5xl lg:text-[5.5rem] xl:text-[6rem] leading-[0.92] tracking-tight mb-8">
-            <span className="hero-line hero-line-1 block font-serif font-light text-[#E8DCBF]">Nairobi's</span>
-            <span className="hero-line hero-line-2 block font-serif italic text-[#C6A75E] pb-1">Finest</span>
-            <span className="hero-line hero-line-3 block font-serif font-light text-[#E8DCBF]">Addresses</span>
-          </h1>
-          <div className="hero-line hero-sub w-12 h-px bg-[#C6A75E]/60 mb-6 gold-line-animate" />
-          <p className="hero-line hero-sub text-[0.9375rem] font-light text-[#E8DCBF]/78 max-w-md leading-[1.75] tracking-wide mb-10">
-            Exceptional apartments and villas across Kenya's most prestigious neighbourhoods.
-          </p>
-          <div className="hero-line hero-cta flex items-center gap-4">
-            <Link
-              href="/properties"
-              className="btn-crimson inline-flex items-center gap-3 px-8 py-4 text-[10px] font-bold tracking-[0.4em] uppercase"
-            >
-              BROWSE PROPERTIES
-            </Link>
-            <Link
-              href="/contact"
-              className="cta-link inline-flex items-center gap-3 border border-[#E8DCBF]/40 px-8 py-4 text-[10px] font-bold tracking-[0.4em] uppercase text-[#E8DCBF]/88 hover:border-[#C6A75E] hover:text-[#C6A75E] transition-all duration-300"
-            >
-              CONTACT US
-            </Link>
+        {/* Hero text — centred glass panel, two-line headline */}
+        <div className="relative z-20 w-full max-w-2xl mx-auto px-6 text-center">
+          <div className="glass-dark px-8 py-12 lg:px-14 lg:py-16">
+            <p className="hero-line hero-line-1 text-[9px] font-bold tracking-[0.45em] uppercase text-[#E8DCBF] mb-6">
+              Pavani Realty Co
+            </p>
+            <h1 className="text-4xl sm:text-5xl lg:text-[4.5rem] leading-[1.04] tracking-tight mb-7">
+              <span className="hero-line hero-line-2 block font-serif font-light text-[#FBF5F2]">
+                Nairobi's <em className="italic text-[#E8DCBF]">Finest</em>
+              </span>
+              <span className="hero-line hero-line-3 block font-serif italic font-light text-[#FBF5F2]">
+                Addresses
+              </span>
+            </h1>
+            <div className="hero-line hero-sub w-12 h-px bg-[#E8DCBF]/70 mb-7 mx-auto gold-line-animate" />
+            <p className="hero-line hero-sub text-[0.9375rem] font-light text-[#FBF5F2]/85 max-w-md mx-auto leading-[1.75] tracking-wide mb-9">
+              Exceptional apartments and villas across Kenya's most prestigious neighbourhoods.
+            </p>
+            <div className="hero-line hero-cta flex flex-wrap items-center justify-center gap-4">
+              <Link
+                href="/properties"
+                className="btn-crimson inline-flex items-center gap-3 px-8 py-4 text-[10px] font-bold tracking-[0.4em] uppercase"
+              >
+                BROWSE PROPERTIES
+              </Link>
+              <Link
+                href="/contact"
+                className="cta-link inline-flex items-center gap-3 border border-[#FBF5F2]/45 px-8 py-4 text-[10px] font-bold tracking-[0.4em] uppercase text-[#FBF5F2]/90 hover:border-[#E8DCBF] hover:text-[#E8DCBF] transition-all duration-300"
+              >
+                CONTACT US
+              </Link>
+            </div>
           </div>
         </div>
 
         {/* Scroll indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
-          <ChevronDown size={18} className="text-[#E8DCBF]/40 animate-bounce" />
+          <ChevronDown size={18} className="text-[#FBF5F2]/55 animate-bounce" />
         </div>
       </section>
 
@@ -138,9 +138,9 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
             {...mp(fadeUp(0))}
           >
             <p className="eyebrow mb-4">Featured</p>
-            <h2 className="text-4xl lg:text-6xl font-serif font-light text-[#E8DCBF] leading-tight">
+            <h2 className="text-4xl lg:text-6xl font-serif font-light text-[#1C1714] leading-tight">
               Exceptional<br />
-              <em className="italic text-[#C6A75E]">Residences</em>
+              <em className="italic text-[#82000D]">Residences</em>
             </h2>
           </motion.div>
 
@@ -166,18 +166,18 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
                     </div>
                     <div className="space-y-2">
                       {district && (
-                        <p className="text-[8px] font-bold tracking-[0.5em] uppercase text-[#C6A75E]">{district}</p>
+                        <p className="text-[8px] font-bold tracking-[0.5em] uppercase text-[#82000D]">{district}</p>
                       )}
-                      <h3 className="text-xl lg:text-2xl font-serif font-light text-[#E8DCBF] group-hover:text-[#C6A75E] transition-colors duration-300">
+                      <h3 className="text-xl lg:text-2xl font-serif font-light text-[#1C1714] group-hover:text-[#82000D] transition-colors duration-300">
                         {p.title}
                       </h3>
                       {amt && (
-                        <p className="text-base font-serif text-[#E8DCBF]/80">
+                        <p className="text-base font-serif text-[#1C1714]/80">
                           {formatPrice(amt, cur)}
                         </p>
                       )}
                       {p.details && (
-                        <p className="text-[9px] tracking-widest text-[#E8DCBF]/50 font-medium">{p.details}</p>
+                        <p className="text-[9px] tracking-widest text-[#1C1714]/50 font-medium">{p.details}</p>
                       )}
                     </div>
                   </Link>
@@ -192,7 +192,7 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
           >
             <Link
               href="/properties"
-              className="cta-link inline-flex items-center gap-3 border border-[#C6A75E]/40 px-10 py-4 text-[10px] font-bold tracking-[0.4em] uppercase text-[#C6A75E] hover:bg-[#C6A75E] hover:text-[#0D0501] transition-all duration-300"
+              className="cta-link inline-flex items-center gap-3 border border-[#82000D]/40 px-10 py-4 text-[10px] font-bold tracking-[0.4em] uppercase text-[#82000D] hover:bg-[#82000D] hover:text-[#FAF8F4] transition-all duration-300"
             >
               VIEW ALL PROPERTIES <ArrowRight size={13} />
             </Link>
@@ -201,7 +201,7 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
       </section>
 
       {/* ── ABOUT / STATEMENT ── */}
-      <section className="py-20 lg:py-28 px-6 lg:px-16 bg-[#180900]">
+      <section className="py-20 lg:py-28 px-6 lg:px-16 bg-[#F3EFE9]">
         <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           {/* Left text */}
           <motion.div
@@ -215,13 +215,13 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
           >
             <div>
               <p className="eyebrow mb-5">Our Story</p>
-              <h2 className="text-3xl lg:text-5xl font-serif font-light text-[#E8DCBF] leading-snug">
+              <h2 className="text-3xl lg:text-5xl font-serif font-light text-[#1C1714] leading-snug">
                 Nairobi's Most{" "}
-                <em className="italic text-[#C6A75E]">Trusted<br />Authority</em>
+                <em className="italic text-[#82000D]">Trusted<br />Authority</em>
               </h2>
             </div>
-            <div className="w-8 h-px bg-[#C6A75E]/50" />
-            <p className="text-[0.9375rem] font-light text-[#E8DCBF]/78 leading-[1.78] max-w-lg">
+            <div className="w-8 h-px bg-[#82000D]/50" />
+            <p className="text-[0.9375rem] font-light text-[#1C1714]/78 leading-[1.78] max-w-lg">
               Since 2009, Pavani Realty Co has been the definitive name in luxury real estate across Nairobi's most prestigious addresses. We've built our reputation on a foundation of excellence, discretion, and unwavering commitment to our clients' success.
             </p>
 
@@ -241,13 +241,13 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
                     transition: { type: "spring" as const, duration: 0.6, bounce: 0.25, delay: 0.15 + i * 0.09 },
                   })}
                 >
-                  <p className="text-3xl lg:text-4xl font-serif font-light text-[#C6A75E]">{stat}</p>
-                  <p className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#E8DCBF]/55 mt-1.5">{label}</p>
+                  <p className="text-3xl lg:text-4xl font-serif font-light text-[#82000D]">{stat}</p>
+                  <p className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/55 mt-1.5">{label}</p>
                 </motion.div>
               ))}
             </div>
 
-            <Link href="/about" className="cta-link inline-flex items-center gap-3 text-[9px] font-bold tracking-[0.35em] uppercase text-[#C6A75E] border-b border-[#C6A75E]/35 pb-1 hover:border-[#C6A75E] transition-all">
+            <Link href="/about" className="cta-link inline-flex items-center gap-3 text-[9px] font-bold tracking-[0.35em] uppercase text-[#82000D] border-b border-[#82000D]/35 pb-1 hover:border-[#82000D] transition-all">
               MEET OUR TEAM <ArrowRight size={12} />
             </Link>
           </motion.div>
@@ -293,35 +293,47 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
           >
             <div>
               <p className="eyebrow mb-4">Discover</p>
-              <h2 className="text-3xl lg:text-5xl font-serif font-light text-[#E8DCBF]">Prime Neighborhoods</h2>
+              <h2 className="text-3xl lg:text-5xl font-serif font-light text-[#1C1714]">Prime Neighborhoods</h2>
             </div>
-            <Link href="/neighborhoods" className="cta-link flex items-center gap-2 text-[9px] font-bold tracking-[0.3em] uppercase text-[#E8DCBF]/58 hover:text-[#C6A75E] transition-colors">
+            <Link href="/neighborhoods" className="cta-link flex items-center gap-2 text-[9px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/58 hover:text-[#82000D] transition-colors">
               ALL NEIGHBORHOODS <ArrowRight size={12} />
             </Link>
           </motion.div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Editorial bento: two tall anchors + a 2×2 cluster */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:auto-rows-[272px]">
             {[
-              { name: "Westlands", slug: "westlands", count: "City living",   img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" },
-              { name: "Muthaiga",  slug: "muthaiga",  count: "Diplomatic",    img: "https://images.unsplash.com/photo-1600607687940-c52af096999c?auto=format&fit=crop&w=800&q=80" },
-              { name: "Karen",     slug: "karen",     count: "Green belt",    img: "https://images.unsplash.com/photo-1600607687644-c7f34b5063c7?auto=format&fit=crop&w=800&q=80" },
-              { name: "Kilimani",  slug: "kilimani",  count: "Cosmopolitan",  img: "https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=800&q=80" },
-            ].map(({ name, slug, count, img }, i) => (
-              <motion.div key={name} {...mp(fadeUpNoBlur(i * 0.08))}>
-                <Link href={`/neighborhoods/${slug}`} className="group relative h-52 lg:h-80 overflow-hidden block">
+              { name: "Westlands", slug: "westlands", count: "City living",     tall: true,  img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=900&q=80" },
+              { name: "Muthaiga",  slug: "muthaiga",  count: "Diplomatic",      tall: true,  img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=900&q=80" },
+              { name: "Karen",     slug: "karen",     count: "Green belt",      tall: false, img: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=700&q=80" },
+              { name: "Kilimani",  slug: "kilimani",  count: "Cosmopolitan",    tall: false, img: "https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=700&q=80" },
+              { name: "Lavington", slug: "lavington", count: "Leafy & central", tall: false, img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=700&q=80" },
+              { name: "Runda",     slug: "runda",     count: "Gated estates",   tall: false, img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=700&q=80" },
+            ].map(({ name, slug, count, tall, img }, i) => (
+              <motion.div
+                key={name}
+                {...mp(fadeUpNoBlur(i * 0.07))}
+                className={tall ? "lg:row-span-2" : ""}
+              >
+                <Link
+                  href={`/neighborhoods/${slug}`}
+                  className="group relative h-56 lg:h-full w-full overflow-hidden block"
+                >
                   <Image
                     src={img}
                     alt={name}
                     fill
-                    sizes="25vw"
-                    className="object-cover transition-transform duration-[2.5s] ease-out group-hover:scale-110"
+                    sizes={tall ? "(max-width: 1024px) 50vw, 25vw" : "(max-width: 1024px) 50vw, 25vw"}
+                    className="object-cover transition-transform duration-[2.5s] ease-out group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0D0501]/85 via-[#0D0501]/20 to-transparent" />
-                  <div className="absolute bottom-5 left-5">
-                    <p className="font-serif text-[1.1rem] text-[#E8DCBF] group-hover:text-[#C6A75E] transition-colors duration-300">
+                  {/* dark-bottom scrim for legible labels over photography */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#210A0B]/80 via-[#210A0B]/10 to-transparent" />
+                  <div className="card-border-reveal" />
+                  <div className="absolute bottom-5 left-5 right-5">
+                    <p className={`font-serif font-light text-[#FBF5F2] leading-tight ${tall ? "text-2xl lg:text-3xl" : "text-lg lg:text-xl"}`}>
                       {name}
                     </p>
-                    <p className="text-[8px] font-bold tracking-[0.35em] uppercase text-[#E8DCBF]/55 mt-0.5">{count}</p>
+                    <p className="text-[8px] font-bold tracking-[0.35em] uppercase text-[#E8DCBF]/80 mt-1.5">{count}</p>
                   </div>
                 </Link>
               </motion.div>
@@ -331,13 +343,13 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
       </section>
 
       {/* ── TESTIMONIALS ── */}
-      <section className="py-24 lg:py-32 px-6 lg:px-16 bg-[#180900]">
+      <section className="py-24 lg:py-32 px-6 lg:px-16 bg-[#F3EFE9]">
         <div className="max-w-[1400px] mx-auto">
           <motion.div className="mb-14" {...mp(fadeUpNoBlur(0))}>
             <p className="eyebrow mb-4">Testimonials</p>
-            <h2 className="text-4xl lg:text-6xl font-serif font-light text-[#E8DCBF]">
+            <h2 className="text-4xl lg:text-6xl font-serif font-light text-[#1C1714]">
               What Our{" "}
-              <em className="italic text-[#C6A75E]">Clients Say</em>
+              <em className="italic text-[#82000D]">Clients Say</em>
             </h2>
           </motion.div>
 
@@ -346,19 +358,19 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
               <motion.div
                 key={name}
                 {...mp(fadeUp(i * 0.1))}
-                className="bg-[#1E0D02] border border-[#C6A75E]/12 p-8 lg:p-10 space-y-6"
+                className="glass-card p-8 lg:p-10 space-y-6"
               >
                 <div className="flex gap-1">
                   {Array.from({ length: stars }).map((_, j) => (
-                    <span key={j} className="text-[#C6A75E] text-base">★</span>
+                    <span key={j} className="text-[#82000D] text-base">★</span>
                   ))}
                 </div>
-                <p className="text-[0.9rem] font-light text-[#E8DCBF]/80 leading-[1.8] italic font-serif">
+                <p className="text-[0.9rem] font-light text-[#1C1714]/80 leading-[1.8] italic font-serif">
                   &ldquo;{quote}&rdquo;
                 </p>
-                <div className="pt-4 border-t border-[#C6A75E]/10">
-                  <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#E8DCBF]/88">{name}</p>
-                  <p className="text-[9px] tracking-widest text-[#E8DCBF]/50 font-medium mt-1">{role}</p>
+                <div className="pt-4 border-t border-[#82000D]/10">
+                  <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/88">{name}</p>
+                  <p className="text-[9px] tracking-widest text-[#1C1714]/50 font-medium mt-1">{role}</p>
                 </div>
               </motion.div>
             ))}
@@ -375,7 +387,7 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
           className="object-cover"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-[#0D0501]/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#210A0B]/75 via-[#210A0B]/65 to-[#210A0B]/80" />
         <motion.div
           className="relative z-10 text-center px-6 max-w-3xl mx-auto space-y-8"
           {...mp({
@@ -385,13 +397,13 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
             transition: { duration: 0.95, ease },
           })}
         >
-          <div className="w-px h-14 bg-[#C6A75E]/30 mx-auto" />
-          <h2 className="text-5xl lg:text-7xl font-serif font-light text-[#E8DCBF] leading-tight">
+          <div className="w-px h-14 bg-[#E8DCBF]/40 mx-auto" />
+          <h2 className="text-5xl lg:text-7xl font-serif font-light text-[#FBF5F2] leading-tight">
             Ready to Begin Your{" "}
-            <em className="italic text-[#C6A75E]">Journey?</em>
+            <em className="italic text-[#E8DCBF]">Journey?</em>
           </h2>
-          <div className="w-8 h-px bg-[#C6A75E]/50 mx-auto" />
-          <p className="text-[0.9375rem] font-light text-[#E8DCBF]/72 leading-relaxed max-w-md mx-auto">
+          <div className="w-8 h-px bg-[#E8DCBF]/60 mx-auto" />
+          <p className="text-[0.9375rem] font-light text-[#FBF5F2]/80 leading-relaxed max-w-md mx-auto">
             Let our team guide you through every step of finding your perfect property in Nairobi's most prestigious neighbourhoods.
           </p>
           <Link
@@ -404,83 +416,7 @@ export default function HomeClient({ data, settings }: HomeClientProps) {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-[#0D0501] border-t border-[#C6A75E]/10 pt-20 pb-10 px-6 lg:px-16 print:hidden">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-16 mb-16 pb-16 border-b border-[#C6A75E]/10">
-            {/* Brand */}
-            <div className="space-y-6">
-              <Link href="/" className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#C6A75E] flex items-center justify-center">
-                  <span className="font-serif text-[#0D0501] text-xl font-semibold">P</span>
-                </div>
-                <div>
-                  <p className="text-[11px] font-bold tracking-[0.35em] uppercase text-[#E8DCBF]">{siteName}</p>
-                  <p className="text-[8px] tracking-[0.3em] uppercase text-[#C6A75E]/60">REALTY CO</p>
-                </div>
-              </Link>
-              <div className="flex gap-5">
-                {socials?.instagram && <Link href={socials.instagram} target="_blank" className="text-[#E8DCBF]/40 hover:text-[#C6A75E] transition-colors"><FaInstagram size={16} /></Link>}
-                {socials?.linkedin  && <Link href={socials.linkedin}  target="_blank" className="text-[#E8DCBF]/40 hover:text-[#C6A75E] transition-colors"><FaLinkedinIn size={16} /></Link>}
-                {socials?.facebook  && <Link href={socials.facebook}  target="_blank" className="text-[#E8DCBF]/40 hover:text-[#C6A75E] transition-colors"><FaFacebookF size={16} /></Link>}
-                {socials?.twitter   && <Link href={socials.twitter}   target="_blank" className="text-[#E8DCBF]/40 hover:text-[#C6A75E] transition-colors"><FaXTwitter size={16} /></Link>}
-                {!socials && <>
-                  <span className="text-[#E8DCBF]/25"><FaInstagram size={16} /></span>
-                  <span className="text-[#E8DCBF]/25"><FaLinkedinIn size={16} /></span>
-                  <span className="text-[#E8DCBF]/25"><FaFacebookF size={16} /></span>
-                </>}
-              </div>
-            </div>
-
-            {/* Get in Touch */}
-            <div className="space-y-5">
-              <h4 className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C6A75E]/80">Get in Touch</h4>
-              <div className="space-y-3 text-[0.875rem] font-light text-[#E8DCBF]/65">
-                <p>{agencyAddress}</p>
-                <p>{agencyPhone}</p>
-                <p>{agencyEmail}</p>
-              </div>
-            </div>
-
-            {/* Navigation */}
-            <div className="space-y-5">
-              <h4 className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C6A75E]/80">Navigation</h4>
-              <ul className="space-y-3 text-[0.6875rem] font-medium tracking-widest text-[#E8DCBF]/60">
-                {[
-                  { label: "Home",          href: "/" },
-                  { label: "Properties",    href: "/properties" },
-                  { label: "Neighbourhoods", href: "/neighborhoods" },
-                  { label: "Gallery",       href: "/gallery" },
-                  { label: "About Us",      href: "/about" },
-                  { label: "Contact",       href: "/contact" },
-                ].map(item => (
-                  <li key={item.label}>
-                    <Link href={item.href} className="hover:text-[#C6A75E] transition-colors duration-200">
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Most Viewed */}
-            <div className="space-y-5">
-              <h4 className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C6A75E]/80">Most Viewed</h4>
-              <ul className="space-y-3 text-[0.6875rem] font-medium tracking-widest text-[#E8DCBF]/60">
-                {["Villa Serene, Runda", "Karen Estate Villa", "Muthaiga Modern Apartment"].map(item => (
-                  <li key={item}>
-                    <Link href="/properties" className="hover:text-[#C6A75E] transition-colors duration-200">{item}</Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-[8px] tracking-[0.3em] uppercase text-[#E8DCBF]/38">
-            <p>© {new Date().getFullYear()} {siteName} Realty Co. All rights reserved.</p>
-            <Link href="#" className="hover:text-[#C6A75E] transition-colors">Privacy Policy</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer settings={settings} />
     </main>
   );
 }
