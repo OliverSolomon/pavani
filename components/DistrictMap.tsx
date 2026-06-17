@@ -25,9 +25,8 @@ interface DistrictMapProps {
   onSelect?: (slug: string) => void;
 }
 
-const GOLD = "#C6A75E";
-const CRIMSON = "#84262B";
-const CREAM = "#E8DCBF";
+const CRIMSON = "#82000D";
+const PIN_RING = "#FFFFFF";
 
 function Layers({ districts, properties = [], activeSlug, activePropertyId, fitTo = "districts", onSelect }: DistrictMapProps) {
   const map = useMap();
@@ -80,8 +79,8 @@ function Layers({ districts, properties = [], activeSlug, activePropertyId, fitT
       className: "pavani-pin",
       html: `<span style="
         display:block;width:${active ? 16 : 11}px;height:${active ? 16 : 11}px;
-        background:${GOLD};border:2px solid ${active ? CREAM : "rgba(232,220,191,.45)"};
-        border-radius:50%;box-shadow:0 0 0 ${active ? 6 : 0}px rgba(198,167,94,.18),0 4px 14px rgba(0,0,0,.5);
+        background:${CRIMSON};border:2px solid ${PIN_RING};
+        border-radius:50%;box-shadow:0 0 0 ${active ? 6 : 0}px rgba(130,0,13,.18),0 4px 12px rgba(33,10,11,.35);
         transition:all .3s cubic-bezier(.23,1,.32,1);"></span>`,
       iconSize: [active ? 16 : 11, active ? 16 : 11],
       iconAnchor: [active ? 8 : 5.5, active ? 8 : 5.5],
@@ -93,7 +92,7 @@ function Layers({ districts, properties = [], activeSlug, activePropertyId, fitT
     <>
       <TileLayer
         attribution='&copy; <a href="https://carto.com/attributions">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
       />
 
       {districts.map((d) => {
@@ -105,18 +104,18 @@ function Layers({ districts, properties = [], activeSlug, activePropertyId, fitT
             positions={d.boundary.map((p) => [p.lat, p.lng] as [number, number])}
             eventHandlers={{ click: () => onSelect?.(d.slug) }}
             pathOptions={{
-              color: active ? GOLD : "rgba(198,167,94,0.55)",
+              color: active ? CRIMSON : "rgba(130,0,13,0.5)",
               weight: active ? 2.5 : 1.25,
-              fillColor: active ? CRIMSON : GOLD,
-              fillOpacity: dimmed ? 0.04 : active ? 0.22 : 0.1,
+              fillColor: CRIMSON,
+              fillOpacity: dimmed ? 0.03 : active ? 0.16 : 0.07,
               dashArray: active ? undefined : "4 8",
             }}
           >
             <Popup>
               <div style={{ fontFamily: "var(--font-cormorant), serif", padding: "2px 4px" }}>
-                <p style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: "#9B7D3D", margin: 0 }}>District</p>
+                <p style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: "#631C20", margin: 0 }}>District</p>
                 <h4 style={{ fontSize: 18, margin: "2px 0 4px", letterSpacing: "-0.01em" }}>{d.name}</h4>
-                <p style={{ fontSize: 11, color: "#84262B", fontWeight: 700, margin: 0 }}>{d.priceBand}</p>
+                <p style={{ fontSize: 11, color: "#82000D", fontWeight: 700, margin: 0 }}>{d.priceBand}</p>
               </div>
             </Popup>
           </Polygon>
@@ -133,7 +132,7 @@ function Layers({ districts, properties = [], activeSlug, activePropertyId, fitT
             <Popup>
               <div style={{ fontFamily: "var(--font-montserrat), sans-serif", padding: "2px 4px", minWidth: 140 }}>
                 <h3 style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.04em", margin: "0 0 4px" }}>{p.title}</h3>
-                {p.price && <p style={{ fontSize: 12, color: "#84262B", fontWeight: 700, margin: 0 }}>{p.price}</p>}
+                {p.price && <p style={{ fontSize: 12, color: "#82000D", fontWeight: 700, margin: 0 }}>{p.price}</p>}
               </div>
             </Popup>
           </Marker>
@@ -149,14 +148,14 @@ export default function DistrictMap(props: DistrictMapProps) {
   useEffect(() => setMounted(true), []);
 
   if (!mounted)
-    return <div className="w-full h-full bg-[#180900] animate-pulse" />;
+    return <div className="w-full h-full bg-[#F3EFE9] animate-pulse" />;
 
   return (
     <div className="w-full h-full relative" id={`district-map-${id}`}>
       <MapContainer
         center={[-1.2721, 36.79]}
         zoom={12}
-        style={{ height: "100%", width: "100%", background: "#0D0501" }}
+        style={{ height: "100%", width: "100%", background: "#FAF8F4" }}
         zoomControl={false}
         scrollWheelZoom={false}
         attributionControl={false}
@@ -169,11 +168,11 @@ export default function DistrictMap(props: DistrictMapProps) {
         .leaflet-container { font-family: var(--font-montserrat), sans-serif; }
         .leaflet-popup-content-wrapper {
           border-radius: 0 !important;
-          box-shadow: 0 18px 50px rgba(13, 5, 1, 0.35) !important;
-          border: 1px solid rgba(198, 167, 94, 0.25);
+          box-shadow: 0 18px 50px rgba(33, 10, 11, 0.22) !important;
+          border: 1px solid rgba(130, 0, 13, 0.2);
         }
         .leaflet-popup-content { margin: 12px 14px !important; }
-        .leaflet-popup-tip { border: 1px solid rgba(198, 167, 94, 0.25); }
+        .leaflet-popup-tip { border: 1px solid rgba(130, 0, 13, 0.2); }
       `}</style>
     </div>
   );

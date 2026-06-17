@@ -14,7 +14,7 @@ import { extractCoordsFromGoogleMapsUrl, getCoordsBySearch } from "@/lib/geocodi
 const DistrictMap = dynamic(() => import("@/components/DistrictMap"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full bg-[#180900] flex items-center justify-center text-[#C6A75E]/50 tracking-[0.3em] text-[10px] uppercase">
+    <div className="w-full h-full bg-[#F3EFE9] flex items-center justify-center text-[#82000D]/50 tracking-[0.3em] text-[10px] uppercase">
       Tracing districts…
     </div>
   ),
@@ -52,7 +52,7 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
   const mp = <T extends object>(p: T) => (reduce ? {} : p);
 
   return (
-    <main className="min-h-screen bg-[#0D0501] text-[#E8DCBF]">
+    <main className="min-h-screen bg-[#FAF8F4] text-[#1C1714]">
       <Navbar settings={settings} />
 
       {/* ── Header ── */}
@@ -62,15 +62,15 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
             The Pavani Guide
           </motion.p>
           <motion.h1
-            className="text-5xl lg:text-7xl xl:text-[5rem] font-serif font-light leading-[0.95] text-[#E8DCBF] max-w-4xl"
+            className="text-5xl lg:text-7xl xl:text-[5rem] font-serif font-light leading-[0.95] text-[#1C1714] max-w-4xl"
             style={{ textWrap: "balance" } as any}
             {...mp({ initial: { opacity: 0, y: 22, filter: "blur(6px)" }, animate: { opacity: 1, y: 0, filter: "blur(0px)" }, transition: { duration: 0.85, ease, delay: 0.08 } })}
           >
             Nairobi, read{" "}
-            <em className="italic text-[#C6A75E]">district by district.</em>
+            <em className="italic text-[#82000D]">district by district.</em>
           </motion.h1>
           <motion.p
-            className="mt-7 text-[0.95rem] font-light text-[#E8DCBF]/72 leading-[1.78] max-w-xl"
+            className="mt-7 text-[0.95rem] font-light text-[#1C1714]/72 leading-[1.78] max-w-xl"
             {...mp({ initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.7, ease, delay: 0.2 } })}
           >
             Every address tells a different story — of pace, privacy and place. Explore the
@@ -82,11 +82,11 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
 
       {/* ── Explorer: list + detail (left), sticky map (right) ── */}
       <section className="px-6 lg:px-16 pb-24">
-        <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_1.05fr] gap-px bg-[#C6A75E]/12 border border-[#C6A75E]/12">
+        <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_1.05fr] gap-px bg-[#82000D]/12 border border-[#82000D]/12">
           {/* LEFT */}
-          <div className="bg-[#0D0501] lg:max-h-[80vh] lg:overflow-y-auto no-scrollbar">
+          <div className="bg-[#FAF8F4] lg:max-h-[80vh] lg:overflow-y-auto no-scrollbar">
             {/* District list — inline accordion */}
-            <div className="divide-y divide-[#C6A75E]/10">
+            <div className="divide-y divide-[#82000D]/10">
               {DISTRICTS.map((d, i) => {
                 const isActive = activeSlug === d.slug;
                 const count = countBySlug[d.slug] || 0;
@@ -98,19 +98,19 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
                     <button
                       onClick={() => setActiveSlug(isActive ? null : d.slug)}
                       aria-expanded={isActive}
-                      className={`group w-full text-left px-7 lg:px-9 py-6 flex items-baseline justify-between gap-4 transition-colors duration-300 ${isActive ? "bg-[#120701]" : "hover:bg-[#180900]"}`}
+                      className={`group w-full text-left px-7 lg:px-9 py-6 flex items-baseline justify-between gap-4 transition-colors duration-300 ${isActive ? "bg-[#82000D]/[0.05]" : "hover:bg-[#F3EFE9]"}`}
                     >
                       <div className="min-w-0">
-                        <h3 className={`font-serif text-2xl lg:text-[1.7rem] font-light leading-tight transition-colors duration-300 ${isActive ? "text-[#C6A75E]" : "text-[#E8DCBF] group-hover:text-[#C6A75E]"}`}>
+                        <h3 className={`font-serif text-2xl lg:text-[1.7rem] font-light leading-tight transition-colors duration-300 ${isActive ? "text-[#82000D]" : "text-[#1C1714] group-hover:text-[#82000D]"}`}>
                           {d.name}
                         </h3>
-                        <p className="mt-1 text-[0.8rem] font-light text-[#E8DCBF]/55 leading-snug truncate">{d.tagline}</p>
+                        <p className="mt-1 text-[0.8rem] font-light text-[#1C1714]/55 leading-snug truncate">{d.tagline}</p>
                       </div>
                       <div className="flex items-center gap-3 shrink-0">
-                        <span className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#E8DCBF]/45 whitespace-nowrap">
+                        <span className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/45 whitespace-nowrap">
                           {count > 0 ? `${count} Listing${count === 1 ? "" : "s"}` : "Guide"}
                         </span>
-                        <span className={`h-7 w-7 flex items-center justify-center border transition-all duration-300 ${isActive ? "bg-[#C6A75E] border-[#C6A75E] text-[#0D0501] rotate-90" : "border-[#C6A75E]/25 text-[#C6A75E]/60 group-hover:border-[#C6A75E]"}`}>
+                        <span className={`h-7 w-7 flex items-center justify-center border transition-all duration-300 ${isActive ? "bg-[#82000D] border-[#82000D] text-[#FAF8F4] rotate-90" : "border-[#82000D]/25 text-[#82000D]/60 group-hover:border-[#82000D]"}`}>
                           <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-0.5" />
                         </span>
                       </div>
@@ -124,17 +124,17 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
                           animate={{ height: "auto", opacity: 1 }}
                           exit={reduce ? undefined : { height: 0, opacity: 0 }}
                           transition={{ duration: 0.45, ease }}
-                          className="overflow-hidden bg-[#120701]"
+                          className="overflow-hidden bg-[#82000D]/[0.05]"
                         >
                           <div className="px-7 lg:px-9 pb-10 pt-2">
-                            <p className="font-serif italic text-xl lg:text-2xl text-[#C6A75E] leading-snug mb-5">{d.summary}</p>
-                            <p className="text-[0.9rem] font-light text-[#E8DCBF]/72 leading-[1.8] mb-8">{d.character}</p>
+                            <p className="font-serif italic text-xl lg:text-2xl text-[#82000D] leading-snug mb-5">{d.summary}</p>
+                            <p className="text-[0.9rem] font-light text-[#1C1714]/72 leading-[1.8] mb-8">{d.character}</p>
 
                             <div className="grid grid-cols-3 gap-4 mb-8">
                               {d.stats.map((s) => (
-                                <div key={s.label} className="border-t border-[#C6A75E]/20 pt-3">
-                                  <p className="font-serif text-2xl font-light text-[#C6A75E] leading-none">{s.value}</p>
-                                  <p className="mt-1.5 text-[8px] font-bold tracking-[0.25em] uppercase text-[#E8DCBF]/50">{s.label}</p>
+                                <div key={s.label} className="border-t border-[#82000D]/20 pt-3">
+                                  <p className="font-serif text-2xl font-light text-[#82000D] leading-none">{s.value}</p>
+                                  <p className="mt-1.5 text-[8px] font-bold tracking-[0.25em] uppercase text-[#1C1714]/50">{s.label}</p>
                                 </div>
                               ))}
                             </div>
@@ -152,7 +152,7 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
 
                             <div className="flex flex-wrap gap-2 mb-9">
                               {d.vibe.map((v) => (
-                                <span key={v} className="px-3 py-1.5 text-[8px] font-bold tracking-[0.25em] uppercase text-[#C6A75E] border border-[#C6A75E]/25">{v}</span>
+                                <span key={v} className="px-3 py-1.5 text-[8px] font-bold tracking-[0.25em] uppercase text-[#82000D] border border-[#82000D]/25">{v}</span>
                               ))}
                             </div>
 
@@ -173,7 +173,7 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
           </div>
 
           {/* RIGHT — sticky map */}
-          <div className="bg-[#0D0501] relative h-[420px] lg:h-[80vh] lg:sticky lg:top-[72px]">
+          <div className="bg-[#FAF8F4] relative h-[420px] lg:h-[80vh] lg:sticky lg:top-[72px]">
             <DistrictMap
               districts={DISTRICTS}
               properties={mapProperties}
@@ -181,10 +181,10 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
               onSelect={setActiveSlug}
             />
             {/* Legend */}
-            <div className="absolute bottom-5 left-5 z-[500] bg-[#0D0501]/90 backdrop-blur-md border border-[#C6A75E]/20 px-5 py-4 space-y-2.5">
-              <p className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#C6A75E]/70">Legend</p>
-              <Legend swatch={<span className="block w-4 h-0 border-t border-dashed border-[#C6A75E]" />} label="District boundary" />
-              <Legend swatch={<span className="block w-2.5 h-2.5 rounded-full bg-[#C6A75E]" />} label="Active listing" />
+            <div className="absolute bottom-5 left-5 z-[500] bg-[#FAF8F4]/90 backdrop-blur-md border border-[#82000D]/20 px-5 py-4 space-y-2.5">
+              <p className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#82000D]/70">Legend</p>
+              <Legend swatch={<span className="block w-4 h-0 border-t border-dashed border-[#82000D]" />} label="District boundary" />
+              <Legend swatch={<span className="block w-2.5 h-2.5 rounded-full bg-[#82000D]" />} label="Active listing" />
             </div>
           </div>
         </div>
@@ -203,9 +203,9 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
 function Fact({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="text-[#C6A75E]/70">{icon}</span>
-      <span className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#E8DCBF]/45 w-24 shrink-0">{label}</span>
-      <span className="font-light text-[#E8DCBF]/85">{value}</span>
+      <span className="text-[#82000D]/70">{icon}</span>
+      <span className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/45 w-24 shrink-0">{label}</span>
+      <span className="font-light text-[#1C1714]/85">{value}</span>
     </div>
   );
 }
@@ -213,13 +213,13 @@ function Fact({ icon, label, value }: { icon: React.ReactNode; label: string; va
 function Column({ icon, title, children }: { icon: React.ReactNode; title: string; children: string[] }) {
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-2 text-[#C6A75E]">
+      <div className="flex items-center gap-2 text-[#82000D]">
         {icon}
         <span className="text-[8px] font-bold tracking-[0.35em] uppercase">{title}</span>
       </div>
       <ul className="space-y-2">
         {children.map((c) => (
-          <li key={c} className="text-[0.82rem] font-light text-[#E8DCBF]/72 border-b border-[#C6A75E]/8 pb-2">{c}</li>
+          <li key={c} className="text-[0.82rem] font-light text-[#1C1714]/72 border-b border-[#82000D]/8 pb-2">{c}</li>
         ))}
       </ul>
     </div>
@@ -230,7 +230,7 @@ function Legend({ swatch, label }: { swatch: React.ReactNode; label: string }) {
   return (
     <div className="flex items-center gap-2.5">
       {swatch}
-      <span className="text-[8px] font-bold tracking-[0.2em] uppercase text-[#E8DCBF]/65">{label}</span>
+      <span className="text-[8px] font-bold tracking-[0.2em] uppercase text-[#1C1714]/65">{label}</span>
     </div>
   );
 }
