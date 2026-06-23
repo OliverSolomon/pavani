@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 
 interface AboutClientProps {
   settings?: any;
+  testimonials?: any[];
 }
 
 const ease = [0.23, 1, 0.32, 1] as const;
@@ -82,8 +83,12 @@ const TESTIMONIALS = [
   },
 ];
 
-export default function AboutClient({ settings }: AboutClientProps) {
+export default function AboutClient({ settings, testimonials }: AboutClientProps) {
   const reduce = useReducedMotion();
+
+  const reviews = testimonials && testimonials.length
+    ? testimonials.map((t: any) => ({ stars: t.rating || 5, quote: t.quote, name: t.authorName, role: t.authorRole }))
+    : TESTIMONIALS;
 
   const fadeUp = (delay = 0) =>
     reduce
@@ -130,12 +135,12 @@ export default function AboutClient({ settings }: AboutClientProps) {
         />
         <div className="relative max-w-[1400px] mx-auto page-hero-enter">
           <p className="eyebrow mb-4">Our Story</p>
-          <h1 className="text-4xl md:text-5xl lg:text-[3.75rem] font-serif font-light text-[#1C1714] leading-tight mb-5">
+          <h1 className="text-4xl md:text-5xl lg:text-[3.75rem] font-serif font-normal text-[#1C1714] leading-tight mb-5">
             About{" "}
             <em className="italic text-[#82000D]">Pavani Realty Co</em>
           </h1>
           <div className="w-10 h-px bg-[#82000D]/60 mb-5" />
-          <p className="text-[0.9375rem] text-[#1C1714]/75 font-light leading-relaxed max-w-lg">
+          <p className="text-[0.9375rem] text-[#1C1714]/88 font-normal leading-relaxed max-w-lg">
             Nairobi's trusted authority in luxury real estate since 2009.
           </p>
         </div>
@@ -144,15 +149,15 @@ export default function AboutClient({ settings }: AboutClientProps) {
       {/* ── STORY ── */}
       <section className="py-16 lg:py-24 px-6 lg:px-16 border-t border-[#82000D]/10">
         <motion.div {...fadeUp(0)} className="max-w-3xl mx-auto space-y-7 text-center">
-          <h2 className="text-3xl lg:text-4xl font-serif font-light text-[#1C1714] leading-snug">
+          <h2 className="text-3xl lg:text-4xl font-serif font-normal text-[#1C1714] leading-snug">
             Nairobi's Most{" "}
             <em className="italic text-[#82000D]">Trusted Authority</em>
           </h2>
           <div className="w-8 h-px bg-[#82000D]/50 mx-auto" />
-          <p className="text-[0.9375rem] text-[#1C1714]/78 font-light leading-[1.82]">
+          <p className="text-[0.9375rem] text-[#1C1714]/88 font-normal leading-[1.82]">
             Since 2009, Pavani Realty Co has been the definitive name in luxury real estate across Nairobi's most prestigious addresses. We've built our reputation on a foundation of excellence, discretion, and unwavering commitment to our clients' success.
           </p>
-          <p className="text-[0.9375rem] text-[#1C1714]/78 font-light leading-[1.82]">
+          <p className="text-[0.9375rem] text-[#1C1714]/88 font-normal leading-[1.82]">
             Our deep market knowledge, combined with a network of industry connections and a team of seasoned professionals, positions us uniquely to serve discerning buyers, sellers, and investors seeking the finest properties in Kenya's capital.
           </p>
         </motion.div>
@@ -178,15 +183,15 @@ export default function AboutClient({ settings }: AboutClientProps) {
                 Imani{" "}
                 <em className="italic text-[#82000D]">Karugu</em>
               </h2>
-              <p className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#1C1714]/55 mt-2">
+              <p className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#1C1714]/74 mt-2">
                 Founder &amp; CEO, Pavani Realty Co
               </p>
             </div>
             <div className="w-8 h-px bg-[#82000D]/40" />
-            <blockquote className="font-serif italic text-[1rem] text-[#1C1714]/82 leading-[1.82]">
+            <blockquote className="font-serif italic text-[1rem] text-[#1C1714]/90 leading-[1.82]">
               "Luxury real estate is not just about properties — it's about crafting legacies and enabling dreams. At Pavani Realty Co, we believe every client deserves an experience that matches the calibre of their aspirations."
             </blockquote>
-            <p className="text-[0.9375rem] text-[#1C1714]/72 font-light leading-[1.82]">
+            <p className="text-[0.9375rem] text-[#1C1714]/86 font-normal leading-[1.82]">
               With many years of experience in Nairobi's luxury real estate market, Imani Karugu founded Pavani Realty Co to set a new standard for excellence, discretion, and client-centric service. Her deep understanding of the market, combined with an unwavering commitment to integrity, has established Pavani as the trusted choice for discerning buyers, sellers, and investors.
             </p>
           </motion.div>
@@ -198,7 +203,7 @@ export default function AboutClient({ settings }: AboutClientProps) {
         <div className="max-w-[1400px] mx-auto">
           <motion.div {...fadeUp(0)} className="mb-14">
             <p className="eyebrow mb-4">Values</p>
-            <h2 className="text-3xl lg:text-4xl font-serif font-light text-[#1C1714]">
+            <h2 className="text-3xl lg:text-4xl font-serif font-normal text-[#1C1714]">
               Our{" "}
               <em className="italic text-[#82000D]">Core Values</em>
             </h2>
@@ -213,7 +218,7 @@ export default function AboutClient({ settings }: AboutClientProps) {
               >
                 <h3 className="text-xl font-serif text-[#1C1714]">{title}</h3>
                 <div className="w-6 h-px bg-[#82000D]/45" />
-                <p className="text-[0.9rem] text-[#1C1714]/75 font-light leading-[1.82]">{body}</p>
+                <p className="text-[0.9rem] text-[#1C1714]/88 font-normal leading-[1.82]">{body}</p>
               </motion.div>
             ))}
           </div>
@@ -225,7 +230,7 @@ export default function AboutClient({ settings }: AboutClientProps) {
         <div className="max-w-[1400px] mx-auto">
           <motion.div {...fadeUp(0)} className="mb-14">
             <p className="eyebrow mb-4">Why Us</p>
-            <h2 className="text-3xl lg:text-4xl font-serif font-light text-[#1C1714]">
+            <h2 className="text-3xl lg:text-4xl font-serif font-normal text-[#1C1714]">
               Why Choose{" "}
               <em className="italic text-[#82000D]">Pavani Realty Co</em>
             </h2>
@@ -239,7 +244,7 @@ export default function AboutClient({ settings }: AboutClientProps) {
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-[0.875rem] font-bold tracking-wide text-[#1C1714]">{title}</h3>
-                  <p className="text-[0.875rem] text-[#1C1714]/72 font-light leading-[1.78]">{body}</p>
+                  <p className="text-[0.875rem] text-[#1C1714]/86 font-normal leading-[1.78]">{body}</p>
                 </div>
               </motion.div>
             ))}
@@ -252,14 +257,14 @@ export default function AboutClient({ settings }: AboutClientProps) {
         <div className="max-w-[1400px] mx-auto">
           <motion.div {...fadeUp(0)} className="mb-14">
             <p className="eyebrow mb-4">Testimonials</p>
-            <h2 className="text-3xl lg:text-4xl font-serif font-light text-[#1C1714]">
+            <h2 className="text-3xl lg:text-4xl font-serif font-normal text-[#1C1714]">
               What Our{" "}
               <em className="italic text-[#82000D]">Clients Say</em>
             </h2>
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {TESTIMONIALS.map(({ stars, quote, name, role }, i) => (
+            {reviews.map(({ stars, quote, name, role }, i) => (
               <motion.div
                 key={name}
                 {...fadeUp(i * 0.08)}
@@ -270,12 +275,12 @@ export default function AboutClient({ settings }: AboutClientProps) {
                     <span key={j} className="text-[#82000D] text-sm">★</span>
                   ))}
                 </div>
-                <p className="text-[0.875rem] font-serif italic text-[#1C1714]/80 leading-[1.82]">
+                <p className="text-[0.875rem] font-serif italic text-[#1C1714]/90 leading-[1.82]">
                   &ldquo;{quote}&rdquo;
                 </p>
                 <div className="pt-3 border-t border-[#82000D]/10 space-y-1">
                   <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#1C1714]/88">{name}</p>
-                  <p className="text-[9px] tracking-widest text-[#1C1714]/52 uppercase font-medium">{role}</p>
+                  <p className="text-[9px] tracking-widest text-[#1C1714]/72 uppercase font-medium">{role}</p>
                 </div>
               </motion.div>
             ))}
@@ -303,12 +308,12 @@ export default function AboutClient({ settings }: AboutClientProps) {
           })}
         >
           <div className="w-px h-12 bg-[#E8DCBF]/40 mx-auto" />
-          <h2 className="text-4xl lg:text-5xl font-serif font-light text-[#FBF5F2] leading-tight">
+          <h2 className="text-4xl lg:text-5xl font-serif font-normal text-[#FBF5F2] leading-tight">
             Ready to Begin Your{" "}
             <em className="italic text-[#E8DCBF]">Journey?</em>
           </h2>
           <div className="w-8 h-px bg-[#E8DCBF]/60 mx-auto" />
-          <p className="text-[0.9375rem] font-light text-[#FBF5F2]/80 leading-relaxed max-w-md mx-auto">
+          <p className="text-[0.9375rem] font-normal text-[#FBF5F2]/80 leading-relaxed max-w-md mx-auto">
             Let our advisors guide you through Nairobi's most prestigious addresses.
           </p>
           <Link

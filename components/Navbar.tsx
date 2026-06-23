@@ -21,11 +21,11 @@ const CURRENCIES = [
 ];
 
 const NAV_LINKS = [
-  { label: "Properties",    href: "/properties" },
-  { label: "Neighbourhoods", href: "/neighborhoods" },
-  { label: "Gallery",       href: "/gallery" },
-  { label: "About",         href: "/about" },
-  { label: "Contact",       href: "/contact" },
+  { label: "Properties", href: "/properties" },
+  { label: "Gallery",    href: "/gallery" },
+  { label: "Insights",   href: "/insights" },
+  { label: "About",      href: "/about" },
+  { label: "Contact",    href: "/contact" },
 ];
 
 const ease = [0.23, 1, 0.32, 1] as const;
@@ -100,7 +100,7 @@ export default function Navbar({ settings }: NavbarProps) {
                       ? "text-[#82000D]"
                       : onHeroTop
                         ? "text-[#FBF5F2]/85 hover:text-[#FBF5F2]"
-                        : "text-[#1C1714]/72 hover:text-[#1C1714]"
+                        : "text-[#1C1714]/86 hover:text-[#1C1714]"
                   )}
                   data-active={active}
                 >
@@ -125,7 +125,7 @@ export default function Navbar({ settings }: NavbarProps) {
                 onClick={() => setCurrOpen(!currOpen)}
                 className={cn(
                   "flex items-center gap-1.5 text-[9px] font-bold tracking-[0.2em] uppercase transition-colors duration-200",
-                  onHeroTop ? "text-[#FBF5F2]/75 hover:text-[#FBF5F2]" : "text-[#1C1714]/62 hover:text-[#82000D]"
+                  onHeroTop ? "text-[#FBF5F2]/75 hover:text-[#FBF5F2]" : "text-[#1C1714]/80 hover:text-[#82000D]"
                 )}
               >
                 {activeCurr.flag} {currency}
@@ -154,7 +154,7 @@ export default function Navbar({ settings }: NavbarProps) {
                         onClick={() => { setCurrency(c.code as any); setCurrOpen(false); }}
                         className={cn(
                           "w-full flex items-center gap-3 px-4 py-2.5 text-[9px] font-bold tracking-[0.2em] uppercase transition-colors duration-150 text-left hover:bg-[#ECE6DD]",
-                          currency === c.code ? "text-[#82000D]" : "text-[#1C1714]/60"
+                          currency === c.code ? "text-[#82000D]" : "text-[#1C1714]/78"
                         )}
                       >
                         {c.flag} {c.label}
@@ -172,7 +172,7 @@ export default function Navbar({ settings }: NavbarProps) {
                 "hidden sm:flex items-center px-5 h-9 border text-[9px] font-bold tracking-[0.3em] uppercase transition-all duration-300",
                 onHeroTop
                   ? "border-[#FBF5F2]/40 text-[#FBF5F2]/90 hover:bg-[#FBF5F2] hover:border-[#FBF5F2] hover:text-[#82000D]"
-                  : "border-[#82000D]/30 text-[#1C1714]/85 hover:bg-[#82000D] hover:border-[#82000D] hover:text-[#FBF5F2]"
+                  : "border-[#82000D]/30 text-[#1C1714]/90 hover:bg-[#82000D] hover:border-[#82000D] hover:text-[#FBF5F2]"
               )}
             >
               INQUIRE
@@ -183,7 +183,7 @@ export default function Navbar({ settings }: NavbarProps) {
               onClick={() => setMobile(true)}
               className={cn(
                 "lg:hidden transition-colors duration-200",
-                onHeroTop ? "text-[#FBF5F2]/85 hover:text-[#FBF5F2]" : "text-[#1C1714]/75 hover:text-[#82000D]"
+                onHeroTop ? "text-[#FBF5F2]/85 hover:text-[#FBF5F2]" : "text-[#1C1714]/88 hover:text-[#82000D]"
               )}
               aria-label="Open menu"
             >
@@ -210,7 +210,7 @@ export default function Navbar({ settings }: NavbarProps) {
               </Link>
               <button
                 onClick={() => setMobile(false)}
-                className="text-[#1C1714]/55 hover:text-[#1C1714] transition-colors"
+                className="text-[#1C1714]/74 hover:text-[#1C1714] transition-colors"
                 aria-label="Close menu"
               >
                 <X size={22} />

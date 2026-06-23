@@ -26,6 +26,16 @@ export const socialSettings = defineType({
       type: 'url',
     }),
     defineField({
+      name: 'tiktok',
+      title: 'TikTok URL',
+      type: 'url',
+    }),
+    defineField({
+      name: 'youtube',
+      title: 'YouTube Channel URL',
+      type: 'url',
+    }),
+    defineField({
       name: 'whatsapp',
       title: 'WhatsApp Number',
       description: 'Format: 254700000000',

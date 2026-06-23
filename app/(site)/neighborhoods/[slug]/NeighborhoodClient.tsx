@@ -57,11 +57,11 @@ export default function NeighborhoodClient({ neighborhood, guide, settings }: Pr
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F4] via-[#FAF8F4]/55 to-[#FAF8F4]/25" />
         <div className="relative z-10 px-6 lg:px-16 pb-16 lg:pb-24 max-w-[1400px] mx-auto w-full">
-          <Link href="/neighborhoods" className="cta-link inline-flex items-center gap-2 text-[9px] font-bold tracking-[0.35em] uppercase text-[#1C1714]/65 hover:text-[#82000D] mb-7">
+          <Link href="/neighborhoods" className="cta-link inline-flex items-center gap-2 text-[9px] font-bold tracking-[0.35em] uppercase text-[#1C1714]/82 hover:text-[#82000D] mb-7">
             <ArrowLeft size={13} /> All Districts
           </Link>
           <p className="hero-line hero-line-1 eyebrow mb-4">District Guide</p>
-          <h1 className="hero-line hero-line-2 text-5xl lg:text-8xl font-serif font-light leading-[0.92] text-[#1C1714]">
+          <h1 className="hero-line hero-line-2 text-5xl lg:text-8xl font-serif font-normal leading-[0.92] text-[#1C1714]">
             {name}
           </h1>
           {guide?.tagline && (
@@ -89,17 +89,17 @@ export default function NeighborhoodClient({ neighborhood, guide, settings }: Pr
         <div className="max-w-3xl mx-auto text-center space-y-8">
           <motion.div className="w-12 h-px bg-[#82000D]/50 mx-auto" {...mp(fadeUp(0))} />
           {summary && (
-            <motion.p className="text-2xl lg:text-4xl font-serif italic font-light text-[#82000D] leading-snug" style={{ textWrap: "balance" } as any} {...mp(fadeUp(0.05))}>
+            <motion.p className="text-2xl lg:text-4xl font-serif italic font-normal text-[#82000D] leading-snug" style={{ textWrap: "balance" } as any} {...mp(fadeUp(0.05))}>
               {summary}
             </motion.p>
           )}
           {character && (
-            <motion.p className="text-[0.98rem] font-light text-[#1C1714]/75 leading-[1.85]" {...mp(fadeUp(0.12))}>
+            <motion.p className="text-[0.98rem] font-normal text-[#1C1714]/88 leading-[1.85]" {...mp(fadeUp(0.12))}>
               {character}
             </motion.p>
           )}
           {neighborhood?.description && (
-            <motion.div className="prose max-w-none text-[#1C1714]/70 font-light leading-relaxed text-left" {...mp(fadeUp(0.16))}>
+            <motion.div className="prose max-w-none text-[#1C1714]/85 font-normal leading-relaxed text-left" {...mp(fadeUp(0.16))}>
               <PortableText value={neighborhood.description} />
             </motion.div>
           )}
@@ -126,7 +126,7 @@ export default function NeighborhoodClient({ neighborhood, guide, settings }: Pr
           <motion.div className={`space-y-12 ${spotlightImg ? "" : "lg:col-span-2 max-w-3xl"}`} {...mp(fadeUp(0.1))}>
             <div>
               <p className="eyebrow mb-4">Local Knowledge</p>
-              <h2 className="text-3xl lg:text-5xl font-serif font-light text-[#1C1714] leading-tight">
+              <h2 className="text-3xl lg:text-5xl font-serif font-normal text-[#1C1714] leading-tight">
                 Living in <em className="italic text-[#82000D]">{name}</em>
               </h2>
             </div>
@@ -144,8 +144,8 @@ export default function NeighborhoodClient({ neighborhood, guide, settings }: Pr
           <DistrictMap districts={DISTRICTS} activeSlug={guide.slug} />
           <div className="absolute top-8 left-6 lg:left-16 z-[500] bg-[#FAF8F4]/92 backdrop-blur-md border border-[#82000D]/20 p-7 max-w-xs hidden sm:block">
             <p className="eyebrow mb-3">On the Map</p>
-            <h4 className="font-serif text-2xl font-light text-[#1C1714] mb-3">{name} boundaries</h4>
-            <p className="text-[0.82rem] font-light text-[#1C1714]/65 leading-relaxed mb-5">
+            <h4 className="font-serif text-2xl font-normal text-[#1C1714] mb-3">{name} boundaries</h4>
+            <p className="text-[0.82rem] font-normal text-[#1C1714]/82 leading-relaxed mb-5">
               The crimson demarcation traces {name}&rsquo;s commonly held extent. Pan and zoom to see how it sits within the city.
             </p>
             <Link href="/neighborhoods" className="cta-link text-[9px] font-bold tracking-[0.3em] uppercase text-[#82000D] border-b border-[#82000D]/40 pb-1 inline-block">
@@ -167,7 +167,7 @@ function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; va
         {icon}
         <span className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#FBF5F2]/65">{label}</span>
       </div>
-      <p className="font-serif text-base lg:text-lg font-light text-[#FBF5F2] leading-tight">{value}</p>
+      <p className="font-serif text-base lg:text-lg font-normal text-[#FBF5F2] leading-tight">{value}</p>
     </div>
   );
 }
@@ -181,7 +181,7 @@ function Listing({ icon, title, items }: { icon: React.ReactNode; title: string;
       </div>
       <ul className="space-y-3">
         {items.map((s) => (
-          <li key={s} className="text-[0.875rem] font-light text-[#1C1714]/72 border-b border-[#82000D]/10 pb-3">{s}</li>
+          <li key={s} className="text-[0.875rem] font-normal text-[#1C1714]/86 border-b border-[#82000D]/10 pb-3">{s}</li>
         ))}
       </ul>
     </div>

@@ -6,8 +6,12 @@ import { draftMode } from "next/headers";
 import "./globals.css";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import WhatsAppFab from "@/components/WhatsAppFab";
+import SocialRail from "@/components/SocialRail";
+import SmoothScroll from "@/components/SmoothScroll";
 import { CurrencyProvider } from "@/context/CurrencyContext";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
+import { sanityFetch } from "@/sanity/lib/live";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -75,6 +79,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let siteSettings: any = undefined;
+  try {
+    const { data } = await sanityFetch({ query: SITE_SETTINGS_QUERY });
+    siteSettings = data;
+  } catch {
+    siteSettings = undefined;
+  }
+
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body className={`${cormorant.variable} ${montserrat.variable} font-sans bg-[#FAF8F4] text-[#1C1714] antialiased`} suppressHydrationWarning>
@@ -82,10 +94,12 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <SmoothScroll />
         <ServiceWorkerRegistration />
         <CurrencyProvider>
           <LanguageProvider>
             {children}
+            <SocialRail settings={siteSettings} />
             <WhatsAppFab />
           </LanguageProvider>
         </CurrencyProvider>

@@ -62,7 +62,7 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
             The Pavani Guide
           </motion.p>
           <motion.h1
-            className="text-5xl lg:text-7xl xl:text-[5rem] font-serif font-light leading-[0.95] text-[#1C1714] max-w-4xl"
+            className="text-5xl lg:text-7xl xl:text-[5rem] font-serif font-normal leading-[0.95] text-[#1C1714] max-w-4xl"
             style={{ textWrap: "balance" } as any}
             {...mp({ initial: { opacity: 0, y: 22, filter: "blur(6px)" }, animate: { opacity: 1, y: 0, filter: "blur(0px)" }, transition: { duration: 0.85, ease, delay: 0.08 } })}
           >
@@ -70,7 +70,7 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
             <em className="italic text-[#82000D]">district by district.</em>
           </motion.h1>
           <motion.p
-            className="mt-7 text-[0.95rem] font-light text-[#1C1714]/72 leading-[1.78] max-w-xl"
+            className="mt-7 text-[0.95rem] font-normal text-[#1C1714]/86 leading-[1.78] max-w-xl"
             {...mp({ initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.7, ease, delay: 0.2 } })}
           >
             Every address tells a different story — of pace, privacy and place. Explore the
@@ -101,10 +101,10 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
                       className={`group w-full text-left px-7 lg:px-9 py-6 flex items-baseline justify-between gap-4 transition-colors duration-300 ${isActive ? "bg-[#82000D]/[0.05]" : "hover:bg-[#F3EFE9]"}`}
                     >
                       <div className="min-w-0">
-                        <h3 className={`font-serif text-2xl lg:text-[1.7rem] font-light leading-tight transition-colors duration-300 ${isActive ? "text-[#82000D]" : "text-[#1C1714] group-hover:text-[#82000D]"}`}>
+                        <h3 className={`font-serif text-2xl lg:text-[1.7rem] font-normal leading-tight transition-colors duration-300 ${isActive ? "text-[#82000D]" : "text-[#1C1714] group-hover:text-[#82000D]"}`}>
                           {d.name}
                         </h3>
-                        <p className="mt-1 text-[0.8rem] font-light text-[#1C1714]/55 leading-snug truncate">{d.tagline}</p>
+                        <p className="mt-1 text-[0.8rem] font-normal text-[#1C1714]/74 leading-snug truncate">{d.tagline}</p>
                       </div>
                       <div className="flex items-center gap-3 shrink-0">
                         <span className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/45 whitespace-nowrap">
@@ -128,13 +128,13 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
                         >
                           <div className="px-7 lg:px-9 pb-10 pt-2">
                             <p className="font-serif italic text-xl lg:text-2xl text-[#82000D] leading-snug mb-5">{d.summary}</p>
-                            <p className="text-[0.9rem] font-light text-[#1C1714]/72 leading-[1.8] mb-8">{d.character}</p>
+                            <p className="text-[0.9rem] font-normal text-[#1C1714]/86 leading-[1.8] mb-8">{d.character}</p>
 
                             <div className="grid grid-cols-3 gap-4 mb-8">
                               {d.stats.map((s) => (
                                 <div key={s.label} className="border-t border-[#82000D]/20 pt-3">
-                                  <p className="font-serif text-2xl font-light text-[#82000D] leading-none">{s.value}</p>
-                                  <p className="mt-1.5 text-[8px] font-bold tracking-[0.25em] uppercase text-[#1C1714]/50">{s.label}</p>
+                                  <p className="font-serif text-2xl font-normal text-[#82000D] leading-none">{s.value}</p>
+                                  <p className="mt-1.5 text-[8px] font-bold tracking-[0.25em] uppercase text-[#1C1714]/70">{s.label}</p>
                                 </div>
                               ))}
                             </div>
@@ -205,7 +205,7 @@ function Fact({ icon, label, value }: { icon: React.ReactNode; label: string; va
     <div className="flex items-center gap-3">
       <span className="text-[#82000D]/70">{icon}</span>
       <span className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/45 w-24 shrink-0">{label}</span>
-      <span className="font-light text-[#1C1714]/85">{value}</span>
+      <span className="font-normal text-[#1C1714]/90">{value}</span>
     </div>
   );
 }
@@ -219,7 +219,7 @@ function Column({ icon, title, children }: { icon: React.ReactNode; title: strin
       </div>
       <ul className="space-y-2">
         {children.map((c) => (
-          <li key={c} className="text-[0.82rem] font-light text-[#1C1714]/72 border-b border-[#82000D]/8 pb-2">{c}</li>
+          <li key={c} className="text-[0.82rem] font-normal text-[#1C1714]/86 border-b border-[#82000D]/8 pb-2">{c}</li>
         ))}
       </ul>
     </div>
@@ -230,7 +230,7 @@ function Legend({ swatch, label }: { swatch: React.ReactNode; label: string }) {
   return (
     <div className="flex items-center gap-2.5">
       {swatch}
-      <span className="text-[8px] font-bold tracking-[0.2em] uppercase text-[#1C1714]/65">{label}</span>
+      <span className="text-[8px] font-bold tracking-[0.2em] uppercase text-[#1C1714]/82">{label}</span>
     </div>
   );
 }

@@ -59,6 +59,7 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
   const reduce = useReducedMotion();
   const [activeFilter, setActiveFilter] = useState<Category>("all");
   const [lightboxIdx, setLightboxIdx]   = useState<number | null>(null);
+  const youtube = settings?.socials?.youtube || "https://www.youtube.com";
 
   const filteredPhotos =
     activeFilter === "all" ? PHOTOS : PHOTOS.filter(p => p.category === activeFilter);
@@ -95,7 +96,7 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
         />
         <div className="relative max-w-[1400px] mx-auto page-hero-enter">
           <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#82000D] mb-4">Gallery</p>
-          <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-serif font-light text-[#1C1714] leading-tight mb-5">
+          <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-serif font-normal text-[#1C1714] leading-tight mb-5">
             Visual Showcase
           </h1>
           <div className="w-10 h-px bg-[#82000D]/60" />
@@ -107,7 +108,7 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
         <div className="max-w-[1400px] mx-auto">
           <motion.div {...fadeUp(0)} className="mb-10">
             <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#82000D]/70 mb-3">Featured Videos</p>
-            <h2 className="text-2xl lg:text-3xl font-serif font-light text-[#1C1714]">
+            <h2 className="text-2xl lg:text-3xl font-serif font-normal text-[#1C1714]">
               Video Tours &amp; Insights
             </h2>
           </motion.div>
@@ -131,10 +132,13 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
                   show:   { opacity: 1, y: 0, transition: { duration: 0.6, ease } },
                 }}
               >
-                {/* Video thumbnail card */}
-                <button
+                {/* Video thumbnail card → opens our YouTube channel */}
+                <a
+                  href={youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group relative aspect-video w-full overflow-hidden block text-left"
-                  aria-label={`Play: ${title}`}
+                  aria-label={`Watch on YouTube: ${title}`}
                 >
                   <Image
                     src={`https://images.unsplash.com/${thumb}?auto=format&fit=crop&w=600&q=75`}
@@ -143,21 +147,21 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
                     sizes="(max-width: 768px) 50vw, 25vw"
                     className="object-cover transition-transform duration-[2s] ease-out group-hover:scale-105"
                   />
-                  {/* Dark scrim */}
-                  <div className="absolute inset-0 bg-[#FAF8F4]/45 group-hover:bg-[#FAF8F4]/25 transition-colors duration-300" />
+                  {/* Maroon scrim */}
+                  <div className="absolute inset-0 bg-[#210A0B]/40 group-hover:bg-[#210A0B]/25 transition-colors duration-300" />
                   {/* Play button */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-12 h-12 rounded-full border-2 border-[#82000D] bg-[#FAF8F4]/40 flex items-center justify-center group-hover:bg-[#82000D] group-hover:border-[#82000D] transition-all duration-300">
-                      <Play size={16} className="text-[#82000D] group-hover:text-[#FAF8F4] transition-colors ml-0.5" fill="currentColor" />
+                    <div className="w-12 h-12 rounded-full border-2 border-[#FBF5F2]/70 bg-[#FBF5F2]/15 backdrop-blur-sm flex items-center justify-center group-hover:bg-[#82000D] group-hover:border-[#82000D] transition-all duration-300">
+                      <Play size={16} className="text-[#FBF5F2] transition-colors ml-0.5" fill="currentColor" />
                     </div>
                   </div>
                   {/* Title overlay at bottom */}
-                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-[#FAF8F4]/90 to-transparent">
-                    <p className="text-[8px] font-bold tracking-[0.25em] uppercase text-[#1C1714]/80 leading-tight">
+                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-[#210A0B]/90 to-transparent">
+                    <p className="text-[8px] font-bold tracking-[0.25em] uppercase text-[#FBF5F2]/90 leading-tight">
                       {title}
                     </p>
                   </div>
-                </button>
+                </a>
               </motion.div>
             ))}
           </motion.div>
@@ -165,7 +169,7 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
           {/* YouTube CTA */}
           <motion.div {...fadeUp(0.2)} className="mt-12 flex justify-center">
             <a
-              href="https://youtube.com"
+              href={youtube}
               target="_blank"
               rel="noopener noreferrer"
               className="cta-link inline-flex items-center gap-3 border border-[#82000D]/35 px-10 py-4 text-[10px] font-bold tracking-[0.45em] uppercase text-[#82000D] hover:bg-[#82000D] hover:text-[#FAF8F4] transition-all duration-300"
@@ -181,7 +185,7 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
         <div className="max-w-[1400px] mx-auto">
           <motion.div {...fadeUp(0)} className="mb-10">
             <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#82000D]/70 mb-3">Property Showcase</p>
-            <h2 className="text-2xl lg:text-3xl font-serif font-light text-[#1C1714]">
+            <h2 className="text-2xl lg:text-3xl font-serif font-normal text-[#1C1714]">
               Featured Properties
             </h2>
           </motion.div>
@@ -196,7 +200,7 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
                   "px-4 py-2 text-[9px] font-bold tracking-[0.3em] uppercase border transition-all duration-200",
                   activeFilter === value
                     ? "bg-[#82000D] text-[#FAF8F4] border-[#82000D]"
-                    : "border-[#82000D]/20 text-[#1C1714]/55 hover:border-[#82000D]/40 hover:text-[#1C1714]/80"
+                    : "border-[#82000D]/20 text-[#1C1714]/74 hover:border-[#82000D]/40 hover:text-[#1C1714]/90"
                 )}
               >
                 {label}
@@ -231,14 +235,14 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover transition-transform duration-[2.5s] ease-out group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F4]/80 via-[#FAF8F4]/10 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#210A0B]/85 via-[#210A0B]/15 to-transparent opacity-90 group-hover:opacity-75 transition-opacity duration-300" />
                     <div className="absolute top-3 left-3">
-                      <span className="text-[7px] font-bold tracking-[0.4em] uppercase bg-[#FAF8F4]/70 text-[#82000D] px-2.5 py-1.5">
+                      <span className="text-[7px] font-bold tracking-[0.4em] uppercase bg-[#82000D] text-[#FBF5F2] px-2.5 py-1.5">
                         {photo.category}
                       </span>
                     </div>
                     <div className="absolute bottom-4 left-4 right-4">
-                      <p className="text-[13px] font-serif text-[#1C1714] leading-snug">{photo.name}</p>
+                      <p className="text-[13px] font-serif text-[#FBF5F2] leading-snug">{photo.name}</p>
                     </div>
                   </button>
                 </motion.div>
@@ -262,7 +266,7 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
       <AnimatePresence>
         {lightboxIdx !== null && (
           <motion.div
-            className="fixed inset-0 z-[9000] bg-[#FAF8F4]/95 flex items-center justify-center p-4"
+            className="fixed inset-0 z-[9000] bg-[#210A0B]/95 flex items-center justify-center p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -285,38 +289,38 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
                 sizes="100vw"
               />
               {/* Title bar */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#FAF8F4]/90 to-transparent p-6">
-                <p className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#82000D] mb-1">
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#210A0B]/95 to-transparent p-6">
+                <p className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#E8DCBF] mb-1">
                   {filteredPhotos[lightboxIdx].category}
                 </p>
-                <p className="font-serif text-lg text-[#1C1714]">
+                <p className="font-serif text-lg text-[#FBF5F2]">
                   {filteredPhotos[lightboxIdx].name}
                 </p>
               </div>
               {/* Close */}
               <button
-                className="absolute top-4 right-4 w-10 h-10 bg-[#FAF8F4]/70 flex items-center justify-center text-[#1C1714]/70 hover:text-[#82000D] transition-colors"
+                className="absolute top-4 right-4 w-10 h-10 bg-[#FBF5F2]/90 flex items-center justify-center text-[#82000D] hover:bg-[#FBF5F2] transition-colors"
                 onClick={closeLightbox}
               >
                 <X size={18} />
               </button>
               {/* Prev */}
               <button
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#FAF8F4]/70 flex items-center justify-center text-[#1C1714]/70 hover:text-[#82000D] transition-colors text-lg"
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#FBF5F2]/90 flex items-center justify-center text-[#82000D] hover:bg-[#FBF5F2] transition-colors text-lg"
                 onClick={prevPhoto}
               >
                 &#8592;
               </button>
               {/* Next */}
               <button
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#FAF8F4]/70 flex items-center justify-center text-[#1C1714]/70 hover:text-[#82000D] transition-colors text-lg"
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#FBF5F2]/90 flex items-center justify-center text-[#82000D] hover:bg-[#FBF5F2] transition-colors text-lg"
                 onClick={nextPhoto}
               >
                 &#8594;
               </button>
             </motion.div>
             {/* Counter */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/40">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-bold tracking-[0.3em] uppercase text-[#FBF5F2]/55">
               {lightboxIdx + 1} / {filteredPhotos.length}
             </div>
           </motion.div>

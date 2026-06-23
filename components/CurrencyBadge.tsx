@@ -62,7 +62,7 @@ export default function CurrencyBadge({
               onClick={() => { setCurrency(c.code as any); setIsOpen(false); }}
               className={cn(
                 "w-full text-left px-3 py-2 text-[9px] font-bold tracking-widest uppercase hover:bg-[#ECE6DD] transition-colors",
-                currency === c.code ? "text-[#82000D]" : "text-[#1C1714]/50"
+                currency === c.code ? "text-[#82000D]" : "text-[#1C1714]/70"
               )}
             >
               {c.symbol} {c.label}

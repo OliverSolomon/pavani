@@ -97,10 +97,10 @@ function PropertyCard({
           {districtName && (
             <p className="text-[8px] font-bold tracking-[0.45em] uppercase text-[#82000D]">{districtName}</p>
           )}
-          <h3 className="font-serif text-xl lg:text-[1.4rem] font-light leading-tight text-[#1C1714] group-hover:text-[#82000D] transition-colors duration-300 line-clamp-1">
+          <h3 className="font-serif text-xl lg:text-[1.4rem] font-normal leading-tight text-[#1C1714] group-hover:text-[#82000D] transition-colors duration-300 line-clamp-1">
             {property.title}
           </h3>
-          <p className="font-serif text-base text-[#1C1714]/80">{formatPrice(amount, currency)}</p>
+          <p className="font-serif text-base text-[#1C1714]/90">{formatPrice(amount, currency)}</p>
           {details.length > 0 && (
             <div className="flex items-center gap-3 pt-2 text-[9px] font-medium tracking-[0.15em] uppercase text-[#1C1714]/45">
               {details.map((d, i) => (
@@ -120,7 +120,7 @@ function PropertyCard({
 /* ── Compact filter pill ── */
 function FilterPill({ label }: { label: string }) {
   return (
-    <button className="flex items-center gap-1.5 text-[9px] font-bold tracking-[0.2em] uppercase text-[#1C1714]/55 hover:text-[#82000D] transition-colors whitespace-nowrap">
+    <button className="flex items-center gap-1.5 text-[9px] font-bold tracking-[0.2em] uppercase text-[#1C1714]/74 hover:text-[#82000D] transition-colors whitespace-nowrap">
       {label} <ChevronDown size={12} className="opacity-60" />
     </button>
   );
@@ -156,7 +156,7 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
       {/* ── Page heading ── */}
       <div className="px-6 lg:px-10 pt-12 pb-8 max-w-[1700px] mx-auto w-full">
         <p className="eyebrow mb-3">The Collection</p>
-        <h1 className="text-3xl lg:text-5xl font-serif font-light text-[#1C1714]">
+        <h1 className="text-3xl lg:text-5xl font-serif font-normal text-[#1C1714]">
           Available <em className="italic text-[#82000D]">Residences</em>
         </h1>
       </div>
@@ -178,7 +178,7 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
           <FilterPill label="Price" />
           <FilterPill label="Beds / Baths" />
           <FilterPill label="Type" />
-          <button className="flex items-center gap-1.5 text-[9px] font-bold tracking-[0.2em] uppercase text-[#1C1714]/55 hover:text-[#82000D] transition-colors">
+          <button className="flex items-center gap-1.5 text-[9px] font-bold tracking-[0.2em] uppercase text-[#1C1714]/74 hover:text-[#82000D] transition-colors">
             <SlidersHorizontal size={13} /> All Filters
           </button>
         </div>
@@ -189,7 +189,7 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
           </span>
           <button
             onClick={() => setIsCompareEnabled((v) => !v)}
-            className="flex items-center gap-2 text-[9px] font-bold tracking-[0.2em] uppercase text-[#1C1714]/55 hover:text-[#82000D] transition-colors"
+            className="flex items-center gap-2 text-[9px] font-bold tracking-[0.2em] uppercase text-[#1C1714]/74 hover:text-[#82000D] transition-colors"
           >
             <span className="hidden sm:inline">Compare</span>
             <span className={cn("w-8 h-4 rounded-full relative transition-colors duration-300", isCompareEnabled ? "bg-[#82000D]" : "bg-[#1C1714]/15")}>
@@ -203,8 +203,8 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
       <div className="flex-grow px-4 lg:px-8 py-8 max-w-[1700px] mx-auto w-full">
         {filteredProperties.length === 0 ? (
           <div className="flex flex-col items-center justify-center text-center py-32 px-8">
-            <p className="font-serif text-2xl font-light text-[#82000D] mb-3">No matches yet</p>
-            <p className="text-[0.85rem] font-light text-[#1C1714]/60 max-w-xs">
+            <p className="font-serif text-2xl font-normal text-[#82000D] mb-3">No matches yet</p>
+            <p className="text-[0.85rem] font-normal text-[#1C1714]/78 max-w-xs">
               Try a different district or clear your search to see the full collection.
             </p>
           </div>
@@ -288,9 +288,9 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
               <div className="flex justify-between items-start mb-12 lg:mb-16">
                 <div className="space-y-2">
                   <p className="eyebrow">Portfolio Analysis · {selectedProperties.length} Units</p>
-                  <h2 className="text-3xl lg:text-5xl font-serif font-light text-[#1C1714]">Side by side</h2>
+                  <h2 className="text-3xl lg:text-5xl font-serif font-normal text-[#1C1714]">Side by side</h2>
                 </div>
-                <button onClick={() => setIsCompareModalOpen(false)} className="p-3.5 border border-[#82000D]/20 text-[#1C1714]/70 hover:border-[#82000D] hover:text-[#82000D] transition-colors">
+                <button onClick={() => setIsCompareModalOpen(false)} className="p-3.5 border border-[#82000D]/20 text-[#1C1714]/85 hover:border-[#82000D] hover:text-[#82000D] transition-colors">
                   <X size={20} />
                 </button>
               </div>
@@ -316,7 +316,7 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
                     </div>
                     <div className="space-y-1.5 text-center md:text-left">
                       <p className="text-[8px] font-bold tracking-[0.4em] uppercase text-[#82000D]">{typeof p.district === "object" ? p.district.name : p.district}</p>
-                      <h3 className="text-2xl font-serif font-light text-[#1C1714]">{p.title}</h3>
+                      <h3 className="text-2xl font-serif font-normal text-[#1C1714]">{p.title}</h3>
                     </div>
                     <div className="border-t border-[#82000D]/12">
                       <Row label="Price" value={formatPrice(typeof p.price === "object" ? p.price.amount : p.price, typeof p.price === "object" ? p.price.currency : "USD")} serif />
@@ -346,11 +346,11 @@ function Row({ label, value, serif, gold }: { label: string; value?: string; ser
     <>
       <div className="md:hidden flex justify-between gap-4 py-4 border-b border-[#82000D]/10 text-[10px] uppercase tracking-[0.15em]">
         <span className="text-[#1C1714]/40 font-bold">{label}</span>
-        <span className={cn("text-right", gold ? "text-[#82000D] font-bold" : "text-[#1C1714]/85")}>{value}</span>
+        <span className={cn("text-right", gold ? "text-[#82000D] font-bold" : "text-[#1C1714]/90")}>{value}</span>
       </div>
       <div className={cn(
         "hidden md:flex h-16 items-center border-b border-[#82000D]/12",
-        serif ? "font-serif text-xl text-[#1C1714]" : gold ? "text-[10px] font-bold tracking-[0.2em] uppercase text-[#82000D]" : "text-[10px] font-bold tracking-[0.2em] uppercase text-[#1C1714]/70"
+        serif ? "font-serif text-xl text-[#1C1714]" : gold ? "text-[10px] font-bold tracking-[0.2em] uppercase text-[#82000D]" : "text-[10px] font-bold tracking-[0.2em] uppercase text-[#1C1714]/85"
       )}>
         {value}
       </div>

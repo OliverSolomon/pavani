@@ -54,7 +54,7 @@ export default function MortgageCalculator({ propertyPrice = 0, className }: Mor
           <div className="space-y-2 pt-2">
             <div className="flex justify-between">
               <label className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/35">Home Price</label>
-              <span className="text-[9px] font-bold text-[#1C1714]/70">{fmt(price)}</span>
+              <span className="text-[9px] font-bold text-[#1C1714]/85">{fmt(price)}</span>
             </div>
             <input type="range" min={50000} max={10000000} step={10000} value={price} onChange={e => setPrice(Number(e.target.value))} className="w-full h-px bg-[#1C1714]/10 appearance-none cursor-pointer accent-[#82000D]" />
             <div className="flex justify-between text-[7px] text-[#1C1714]/20 tracking-widest"><span>$50K</span><span>$10M</span></div>
@@ -64,7 +64,7 @@ export default function MortgageCalculator({ propertyPrice = 0, className }: Mor
           <div className="space-y-2">
             <div className="flex justify-between">
               <label className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/35">Down Payment</label>
-              <span className="text-[9px] font-bold text-[#1C1714]/70">{downPaymentPct}%</span>
+              <span className="text-[9px] font-bold text-[#1C1714]/85">{downPaymentPct}%</span>
             </div>
             <input type="range" min={5} max={50} step={1} value={downPaymentPct} onChange={e => setDpPct(Number(e.target.value))} className="w-full h-px bg-[#1C1714]/10 appearance-none cursor-pointer accent-[#82000D]" />
           </div>
@@ -73,7 +73,7 @@ export default function MortgageCalculator({ propertyPrice = 0, className }: Mor
           <div className="space-y-2">
             <div className="flex justify-between">
               <label className="text-[8px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/35">Interest Rate</label>
-              <span className="text-[9px] font-bold text-[#1C1714]/70">{interestRate}%</span>
+              <span className="text-[9px] font-bold text-[#1C1714]/85">{interestRate}%</span>
             </div>
             <input type="range" min={1} max={15} step={0.1} value={interestRate} onChange={e => setRate(Number(e.target.value))} className="w-full h-px bg-[#1C1714]/10 appearance-none cursor-pointer accent-[#82000D]" />
           </div>
@@ -109,7 +109,7 @@ export default function MortgageCalculator({ propertyPrice = 0, className }: Mor
             ].map(({ label, value }) => (
               <div key={label} className="bg-[#FFFFFF] px-4 py-4">
                 <p className="text-[7px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/30 mb-1">{label}</p>
-                <p className="text-sm font-serif text-[#1C1714]/80">{value}</p>
+                <p className="text-sm font-serif text-[#1C1714]/90">{value}</p>
               </div>
             ))}
           </div>
