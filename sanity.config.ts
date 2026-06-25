@@ -8,9 +8,7 @@ import { schema } from './sanity/schemaTypes'
 import { structure } from './sanity/structure'
 
 export default defineConfig({
-  // '/studio' for the embedded studio on the website; '/' for the hosted
-  // pavani.sanity.studio build (set SANITY_STUDIO_BASEPATH=/ at deploy time).
-  basePath: process.env.SANITY_STUDIO_BASEPATH || '/studio',
+  basePath: '/studio',
   projectId,
   dataset,
   schema,
