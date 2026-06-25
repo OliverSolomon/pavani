@@ -204,6 +204,28 @@ export const TESTIMONIALS_QUERY = defineQuery(`*[_type == "testimonial"] | order
   rating
 }`)
 
+export const POST_SLUGS_QUERY = defineQuery(`*[_type == "post" && defined(slug.current)]{ "slug": slug.current }`)
+
+export const POST_BY_SLUG_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0]{
+  _id,
+  title,
+  "slug": slug.current,
+  category,
+  excerpt,
+  "coverImage": coalesce(coverImage.asset->url, coverImage.externalUrl),
+  externalUrl,
+  publishedAt,
+  content
+}`)
+
+export const COMMENTS_BY_POST_QUERY = defineQuery(`*[_type == "comment" && approved == true && post._ref == $postId] | order(submittedAt desc){
+  _id,
+  name,
+  rating,
+  message,
+  submittedAt
+}`)
+
 export const SEARCH_QUERY = defineQuery(`*[_type == "district"] {
   _id,
   name,

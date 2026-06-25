@@ -12,7 +12,6 @@ import {
   Printer,
   Mail,
   Phone,
-  Check,
   MapPin,
   Play,
 } from "lucide-react";
@@ -81,14 +80,10 @@ function VideoTour({ url, title }: { url: string; title: string }) {
 }
 
 export default function PropertyDetailClient({ property }: PropertyDetailClientProps) {
-  const [newsletterEmail, setNewsletterEmail] = useState("");
   const { formatPrice: globalFormatPrice } = useCurrency();
   const contactPhone = property.siteSettings?.contact?.phone || "+254 729 377 495";
   const whatsappNumber = contactPhone.replace(/[^0-9]/g, "");
-
-  // Inquiry form state
-  const [inquiryForm, setInquiryForm] = useState({ name: "", email: "", phone: "", message: "", type: "General Inquiry" });
-  const [inquirySent, setInquirySent] = useState(false);
+  const agencyEmail = property.siteSettings?.contact?.email || "pavanirealtyco@gmail.com";
 
   const [isLiked, setIsLiked] = useState(false);
   const [showToast, setShowToast] = useState<string | null>(null);
@@ -140,12 +135,6 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
 
   const priceAmount = typeof property.price === 'object' ? property.price?.amount : property.price;
   const priceCurrency = typeof property.price === 'object' ? property.price?.currency : "USD";
-
-  const handleInquiry = (e: React.FormEvent) => {
-    e.preventDefault();
-    setInquirySent(true);
-    setTimeout(() => setInquirySent(false), 5000);
-  };
 
   return (
     <main className="min-h-screen bg-[#FAF8F4] text-[#1C1714] font-sans">
@@ -293,101 +282,6 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
               </div>
             )}
 
-            {/* Inquiry Form */}
-            <div id="inquire" className="glass-card p-8 lg:p-12 space-y-8 scroll-mt-28">
-              <div>
-                <div className="flex items-center gap-4 mb-2">
-                  <div className="h-px w-10 bg-[#82000D]" />
-                  <h2 className="text-[10px] font-bold tracking-[0.5em] uppercase text-[#82000D]">Send a Message</h2>
-                </div>
-                <p className="text-sm text-[#1C1714]/70 font-normal leading-relaxed">
-                  Connect with our advisors for a private showing or detailed analysis.
-                </p>
-              </div>
-
-              {inquirySent ? (
-                <div className="flex flex-col items-center py-12 gap-4">
-                  <div className="w-12 h-12 bg-[#82000D] flex items-center justify-center">
-                    <Check size={20} className="text-white" />
-                  </div>
-                  <p className="text-[10px] font-bold tracking-[0.3em] uppercase">Inquiry Received</p>
-                  <p className="text-sm text-[#1C1714]/40 text-center">Our team will be in touch within 24 hours.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleInquiry} className="space-y-5">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/40">Full Name</label>
-                      <input
-                        type="text"
-                        required
-                        value={inquiryForm.name}
-                        onChange={e => setInquiryForm(f => ({ ...f, name: e.target.value }))}
-                        className="w-full border border-[#82000D]/15 bg-[#FFFFFF] text-[#1C1714] placeholder:text-[#1C1714]/25 px-4 py-3 text-[11px] tracking-wide focus:outline-none focus:border-[#82000D] transition-colors bg-[#F3EFE9]"
-                        placeholder="Your full name"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/40">Email Address</label>
-                      <input
-                        type="email"
-                        required
-                        value={inquiryForm.email}
-                        onChange={e => setInquiryForm(f => ({ ...f, email: e.target.value }))}
-                        className="w-full border border-[#82000D]/15 bg-[#FFFFFF] text-[#1C1714] placeholder:text-[#1C1714]/25 px-4 py-3 text-[11px] tracking-wide focus:outline-none focus:border-[#82000D] transition-colors bg-[#F3EFE9]"
-                        placeholder="your@email.com"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/40">Phone Number</label>
-                    <input
-                      type="tel"
-                      value={inquiryForm.phone}
-                      onChange={e => setInquiryForm(f => ({ ...f, phone: e.target.value }))}
-                      className="w-full border border-[#82000D]/15 bg-[#FFFFFF] text-[#1C1714] placeholder:text-[#1C1714]/25 px-4 py-3 text-[11px] tracking-wide focus:outline-none focus:border-[#82000D] transition-colors bg-[#F3EFE9]"
-                      placeholder="+254 700 000 000"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/40">Inquiry Type</label>
-                    <div className="flex flex-wrap gap-2">
-                      {["General Inquiry", "Schedule Viewing", "Make Offer", "Investment Analysis"].map(type => (
-                        <button
-                          key={type}
-                          type="button"
-                          onClick={() => setInquiryForm(f => ({ ...f, type }))}
-                          className={cn(
-                            "px-4 py-2 text-[9px] font-bold tracking-widest uppercase border transition-all",
-                            inquiryForm.type === type
-                              ? "bg-[#82000D] text-[#FAF8F4] border-[#82000D]"
-                              : "border-[#82000D]/15 text-[#1C1714]/70 hover:border-[#82000D]/50"
-                          )}
-                        >
-                          {type}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/40">Message</label>
-                    <textarea
-                      rows={4}
-                      value={inquiryForm.message}
-                      onChange={e => setInquiryForm(f => ({ ...f, message: e.target.value }))}
-                      className="w-full border border-[#82000D]/15 bg-[#FFFFFF] text-[#1C1714] placeholder:text-[#1C1714]/25 px-4 py-3 text-[11px] tracking-wide focus:outline-none focus:border-[#82000D] transition-colors bg-[#F3EFE9] resize-none"
-                      placeholder={`I'm interested in ${property.title}...`}
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="btn-crimson w-full h-14 text-[10px] font-bold tracking-[0.4em] uppercase"
-                  >
-                    SEND INQUIRY
-                  </button>
-                </form>
-              )}
-            </div>
           </div>
 
           {/* Sticky Sidebar */}
@@ -411,10 +305,10 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
                   <FaWhatsapp size={16} /> WhatsApp Us
                 </a>
                 <a
-                  href="#inquire"
+                  href={`mailto:${agencyEmail}?subject=${encodeURIComponent(`Inquiry: ${property.title}`)}`}
                   className="btn-crimson flex items-center justify-center gap-3 w-full h-12 text-[10px] font-bold tracking-[0.3em] uppercase"
                 >
-                  <Mail size={14} /> Send an Inquiry
+                  <Mail size={14} /> Email an Advisor
                 </a>
                 <a
                   href={`tel:${contactPhone}`}

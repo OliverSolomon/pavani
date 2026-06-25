@@ -1353,6 +1353,87 @@
             "level": "error",
             "rules": [
               {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "description": "The name the visitor entered.",
+        "readOnly": true,
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "description": "Only visible to you — never shown on the website.",
+        "readOnly": true,
+        "name": "email",
+        "type": "string",
+        "title": "Email (private)"
+      },
+      {
+        "description": "Star rating the visitor gave, 1–5.",
+        "readOnly": true,
+        "name": "rating",
+        "type": "number",
+        "title": "Rating (optional)"
+      },
+      {
+        "rows": 4,
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "readOnly": true,
+        "name": "message",
+        "type": "text",
+        "title": "Comment"
+      },
+      {
+        "description": "The Insight article this comment belongs to.",
+        "to": [
+          {
+            "type": "post"
+          }
+        ],
+        "readOnly": true,
+        "name": "post",
+        "type": "reference",
+        "title": "On Article"
+      },
+      {
+        "readOnly": true,
+        "name": "submittedAt",
+        "type": "datetime",
+        "title": "Submitted"
+      },
+      {
+        "initialValue": false,
+        "description": "Turn ON to publish this comment publicly on the article. OFF keeps it hidden.",
+        "name": "approved",
+        "type": "boolean",
+        "title": "Approved (show on website)"
+      }
+    ],
+    "name": "comment",
+    "type": "document",
+    "title": "Article Comment"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
                 "flag": "uri",
                 "constraint": {
                   "options": {

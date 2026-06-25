@@ -82,14 +82,15 @@ export default function InsightsClient({ settings, posts }: InsightsClientProps)
     title: p.title as string,
     excerpt: p.excerpt || "",
     img: p.coverImage || FEATURED.img,
-    href: p.externalUrl || linkedin,
+    href: p.slug ? `/insights/${p.slug}` : p.externalUrl || linkedin,
+    internal: !!p.slug,
   });
   const cms = posts && posts.length ? posts : null;
   const featuredSrc = cms ? cms.find((p: any) => p.featured) || cms[0] : null;
-  const featured = featuredSrc ? normalize(featuredSrc) : { ...FEATURED, id: "fb", href: linkedin };
+  const featured = featuredSrc ? normalize(featuredSrc) : { ...FEATURED, id: "fb", href: linkedin, internal: false };
   const articles = cms
     ? cms.filter((p: any) => p._id !== featuredSrc._id).map(normalize)
-    : ARTICLES.map((a, i) => ({ ...a, id: `fb-${i}`, href: linkedin }));
+    : ARTICLES.map((a, i) => ({ ...a, id: `fb-${i}`, href: linkedin, internal: false }));
 
   const fadeUp = (delay = 0) =>
     reduce
@@ -142,8 +143,8 @@ export default function InsightsClient({ settings, posts }: InsightsClientProps)
       <section className="px-6 lg:px-16 pb-6">
         <motion.a
           href={featured.href}
-          target="_blank"
-          rel="noopener noreferrer"
+          target={featured.internal ? undefined : "_blank"}
+          rel={featured.internal ? undefined : "noopener noreferrer"}
           {...fadeUp(0)}
           className="group relative block max-w-[1400px] mx-auto overflow-hidden h-[58vh] min-h-[380px]"
         >
@@ -170,7 +171,7 @@ export default function InsightsClient({ settings, posts }: InsightsClientProps)
               {featured.excerpt}
             </p>
             <span className="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.35em] uppercase text-[#E8DCBF] group-hover:gap-3 transition-all">
-              Read on LinkedIn <ArrowUpRight size={14} />
+              {featured.internal ? "Read article" : "Read on LinkedIn"} <ArrowUpRight size={14} />
             </span>
           </div>
         </motion.a>
@@ -189,8 +190,8 @@ export default function InsightsClient({ settings, posts }: InsightsClientProps)
               <motion.a
                 key={a.id}
                 href={a.href}
-                target="_blank"
-                rel="noopener noreferrer"
+                target={a.internal ? undefined : "_blank"}
+                rel={a.internal ? undefined : "noopener noreferrer"}
                 {...fadeUp((i % 3) * 0.08)}
                 className="group block"
               >
@@ -214,7 +215,7 @@ export default function InsightsClient({ settings, posts }: InsightsClientProps)
                 </h3>
                 <p className="text-[0.875rem] font-normal text-[#1C1714]/85 leading-[1.7] mb-4">{a.excerpt}</p>
                 <span className="inline-flex items-center gap-2 text-[9px] font-bold tracking-[0.3em] uppercase text-[#82000D] group-hover:gap-3 transition-all">
-                  Read on LinkedIn <ArrowUpRight size={13} />
+                  {a.internal ? "Read article" : "Read on LinkedIn"} <ArrowUpRight size={13} />
                 </span>
               </motion.a>
             ))}

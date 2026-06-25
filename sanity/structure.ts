@@ -2,7 +2,7 @@ import type { StructureResolver } from 'sanity/structure'
 import {
   CogIcon, UsersIcon, EnvelopeIcon, ImageIcon, EarthAmericasIcon,
   HomeIcon, DocumentTextIcon, PinIcon, CommentIcon,
-  CalendarIcon, PlayIcon, RocketIcon,
+  CalendarIcon, PlayIcon, RocketIcon, StarIcon,
 } from '@sanity/icons'
 
 /**
@@ -60,8 +60,38 @@ export const structure: StructureResolver = (S) =>
             ])
         ),
 
-      S.documentTypeListItem('testimonial').title('Testimonials').icon(CommentIcon),
+      S.documentTypeListItem('testimonial').title('Testimonials').icon(StarIcon),
       S.documentTypeListItem('event').title('Events').icon(CalendarIcon),
+
+      S.listItem()
+        .title('Article Comments')
+        .icon(CommentIcon)
+        .child(
+          S.list()
+            .title('Article Comments')
+            .items([
+              S.listItem()
+                .title('Pending approval')
+                .icon(CommentIcon)
+                .child(
+                  S.documentList()
+                    .title('Pending Approval')
+                    .schemaType('comment')
+                    .filter('_type == "comment" && approved != true')
+                    .defaultOrdering([{ field: 'submittedAt', direction: 'desc' }])
+                ),
+              S.listItem()
+                .title('Published')
+                .icon(CommentIcon)
+                .child(
+                  S.documentList()
+                    .title('Published Comments')
+                    .schemaType('comment')
+                    .filter('_type == "comment" && approved == true')
+                    .defaultOrdering([{ field: 'submittedAt', direction: 'desc' }])
+                ),
+            ])
+        ),
 
       S.divider(),
 
@@ -88,7 +118,7 @@ export const structure: StructureResolver = (S) =>
       ...S.documentTypeListItems().filter(
         (listItem) =>
           ![
-            'post', 'property', 'event', 'district', 'county', 'testimonial',
+            'post', 'property', 'event', 'district', 'county', 'testimonial', 'comment',
             'generalSettings', 'brandSettings', 'contactSettings', 'socialSettings',
             'siteSettings', 'homePage',
             'heroSection', 'secondarySection', 'propertiesSection',
