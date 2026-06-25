@@ -217,6 +217,12 @@ export const property = defineType({
       type: 'url',
     }),
     defineField({
+      name: 'videoTour',
+      title: 'Video Tour URL (YouTube)',
+      description: 'Paste a YouTube link to feature a property video tour on the listing page.',
+      type: 'url',
+    }),
+    defineField({
       name: 'amenities',
       title: 'Amenities',
       description: 'Select all available amenities (e.g., Pool, Gym, Rooftop Terrace)',

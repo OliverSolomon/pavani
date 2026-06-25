@@ -5,6 +5,8 @@ import { property } from './property'
 import { event } from './event'
 import { county } from './county'
 import { district } from './district'
+import { testimonial } from './testimonial'
+import { comment } from './comment'
 import { socialSettings } from './settings/socialSettings'
 import { contactSettings } from './settings/contactSettings'
 import { brandSettings } from './settings/brandSettings'
@@ -23,6 +25,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     event,
     county,
     district,
+    testimonial,
+    comment,
     socialSettings,
     contactSettings,
     brandSettings,

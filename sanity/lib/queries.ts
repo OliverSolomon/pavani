@@ -118,6 +118,7 @@ export const PROPERTY_DETAIL_QUERY = defineQuery(`*[_type == "property" && slug.
   shortDescription,
   longDescription,
   googleMapsUrl,
+  videoTour,
   amenities,
   size,
   yearBuilt,
@@ -181,6 +182,48 @@ export const SITE_SETTINGS_QUERY = defineQuery(`{
   },
   "contact": *[_type == "contactSettings"][0],
   "socials": *[_type == "socialSettings"][0]
+}`)
+
+export const INSIGHTS_QUERY = defineQuery(`*[_type == "post"] | order(publishedAt desc) {
+  _id,
+  title,
+  "slug": slug.current,
+  category,
+  excerpt,
+  "coverImage": coalesce(coverImage.asset->url, coverImage.externalUrl),
+  externalUrl,
+  publishedAt,
+  featured
+}`)
+
+export const TESTIMONIALS_QUERY = defineQuery(`*[_type == "testimonial"] | order(order asc) {
+  _id,
+  quote,
+  authorName,
+  authorRole,
+  rating
+}`)
+
+export const POST_SLUGS_QUERY = defineQuery(`*[_type == "post" && defined(slug.current)]{ "slug": slug.current }`)
+
+export const POST_BY_SLUG_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0]{
+  _id,
+  title,
+  "slug": slug.current,
+  category,
+  excerpt,
+  "coverImage": coalesce(coverImage.asset->url, coverImage.externalUrl),
+  externalUrl,
+  publishedAt,
+  content
+}`)
+
+export const COMMENTS_BY_POST_QUERY = defineQuery(`*[_type == "comment" && approved == true && post._ref == $postId] | order(submittedAt desc){
+  _id,
+  name,
+  rating,
+  message,
+  submittedAt
 }`)
 
 export const SEARCH_QUERY = defineQuery(`*[_type == "district"] {

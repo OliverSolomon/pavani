@@ -12,11 +12,11 @@ import {
   Printer,
   Mail,
   Phone,
-  Check,
   MapPin,
+  Play,
 } from "lucide-react";
 import { PortableText } from "@portabletext/react";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaWhatsapp, FaYoutube } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { cn } from "@/lib/utils";
@@ -29,15 +29,61 @@ interface PropertyDetailClientProps {
   property: any;
 }
 
+/* Extract a YouTube video id from common URL shapes. */
+function getYouTubeId(url?: string): string | null {
+  if (!url) return null;
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/|live\/))([\w-]{11})/);
+  if (m?.[1]) return m[1];
+  return /^[\w-]{11}$/.test(url) ? url : null;
+}
+
+/* Click-to-load YouTube facade — premium thumbnail + play, loads the iframe only on demand. */
+function VideoTour({ url, title }: { url: string; title: string }) {
+  const id = getYouTubeId(url);
+  const [playing, setPlaying] = useState(false);
+  if (!id) return null;
+
+  return (
+    <div className="relative w-full aspect-video overflow-hidden border border-[#82000D]/12 bg-[#210A0B] shadow-[0_18px_50px_rgba(33,10,11,0.12)]">
+      {playing ? (
+        <iframe
+          src={`https://www.youtube.com/embed/${id}?autoplay=1&rel=0`}
+          title={title}
+          className="absolute inset-0 w-full h-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
+      ) : (
+        <button
+          type="button"
+          onClick={() => setPlaying(true)}
+          aria-label={`Play video tour: ${title}`}
+          className="group absolute inset-0 w-full h-full"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`https://i.ytimg.com/vi/${id}/maxresdefault.jpg`}
+            alt={`${title} — video tour`}
+            className="w-full h-full object-cover"
+            onError={(e) => { (e.currentTarget as HTMLImageElement).src = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`; }}
+          />
+          <div className="absolute inset-0 bg-[#210A0B]/30 group-hover:bg-[#210A0B]/15 transition-colors duration-300" />
+          <span className="absolute inset-0 flex items-center justify-center">
+            <span className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-[#82000D] text-[#FBF5F2] flex items-center justify-center shadow-[0_10px_30px_rgba(130,0,13,0.45)] transition-transform duration-300 group-hover:scale-105">
+              <Play size={26} fill="currentColor" className="ml-1" />
+            </span>
+          </span>
+        </button>
+      )}
+    </div>
+  );
+}
+
 export default function PropertyDetailClient({ property }: PropertyDetailClientProps) {
-  const [newsletterEmail, setNewsletterEmail] = useState("");
   const { formatPrice: globalFormatPrice } = useCurrency();
   const contactPhone = property.siteSettings?.contact?.phone || "+254 729 377 495";
   const whatsappNumber = contactPhone.replace(/[^0-9]/g, "");
-
-  // Inquiry form state
-  const [inquiryForm, setInquiryForm] = useState({ name: "", email: "", phone: "", message: "", type: "General Inquiry" });
-  const [inquirySent, setInquirySent] = useState(false);
+  const agencyEmail = property.siteSettings?.contact?.email || "pavanirealtyco@gmail.com";
 
   const [isLiked, setIsLiked] = useState(false);
   const [showToast, setShowToast] = useState<string | null>(null);
@@ -89,12 +135,6 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
 
   const priceAmount = typeof property.price === 'object' ? property.price?.amount : property.price;
   const priceCurrency = typeof property.price === 'object' ? property.price?.currency : "USD";
-
-  const handleInquiry = (e: React.FormEvent) => {
-    e.preventDefault();
-    setInquirySent(true);
-    setTimeout(() => setInquirySent(false), 5000);
-  };
 
   return (
     <main className="min-h-screen bg-[#FAF8F4] text-[#1C1714] font-sans">
@@ -180,10 +220,10 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
                 <div className="h-px w-10 bg-[#82000D]" />
                 <h2 className="text-[10px] font-bold tracking-[0.5em] uppercase text-[#82000D]">The Property</h2>
               </div>
-              <p className="text-xl lg:text-2xl font-light font-serif italic text-[#82000D] leading-relaxed">
+              <p className="text-xl lg:text-2xl font-normal font-serif italic text-[#82000D] leading-relaxed">
                 {property.shortDescription || "A residence of unparalleled distinction and architectural purity."}
               </p>
-              <div className="prose prose-lg max-w-none text-[#1C1714]/75 font-light leading-relaxed">
+              <div className="prose prose-lg max-w-none text-[#1C1714]/88 font-normal leading-relaxed">
                 {property.longDescription ? <PortableText value={property.longDescription} /> : (
                   <p>Detailed architectural specifications and floor plans are available upon request. Contact our advisors for a private presentation.</p>
                 )}
@@ -201,7 +241,7 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
                   {property.amenities.map((amenity: string, i: number) => (
                     <div key={i} className="flex items-center gap-3 py-3 border-b border-[#82000D]/8">
                       <div className="w-1 h-1 bg-[#82000D] shrink-0" />
-                      <span className="text-[10px] font-bold tracking-widest uppercase text-[#1C1714]/50">{amenity}</span>
+                      <span className="text-[10px] font-bold tracking-widest uppercase text-[#1C1714]/70">{amenity}</span>
                     </div>
                   ))}
                 </div>
@@ -229,101 +269,19 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
               </div>
             )}
 
-            {/* Inquiry Form */}
-            <div id="inquire" className="glass-card p-8 lg:p-12 space-y-8 scroll-mt-28">
-              <div>
-                <div className="flex items-center gap-4 mb-2">
+            {/* Property Video Tour */}
+            {property.videoTour && (
+              <div className="space-y-6">
+                <div className="flex items-center gap-4">
                   <div className="h-px w-10 bg-[#82000D]" />
-                  <h2 className="text-[10px] font-bold tracking-[0.5em] uppercase text-[#82000D]">Send a Message</h2>
+                  <h2 className="text-[10px] font-bold tracking-[0.5em] uppercase text-[#82000D] flex items-center gap-2.5">
+                    <FaYoutube size={15} className="text-[#82000D]" /> Property Video Tour
+                  </h2>
                 </div>
-                <p className="text-sm text-[#1C1714]/50 font-light leading-relaxed">
-                  Connect with our advisors for a private showing or detailed analysis.
-                </p>
+                <VideoTour url={property.videoTour} title={property.title} />
               </div>
+            )}
 
-              {inquirySent ? (
-                <div className="flex flex-col items-center py-12 gap-4">
-                  <div className="w-12 h-12 bg-[#82000D] flex items-center justify-center">
-                    <Check size={20} className="text-white" />
-                  </div>
-                  <p className="text-[10px] font-bold tracking-[0.3em] uppercase">Inquiry Received</p>
-                  <p className="text-sm text-[#1C1714]/40 text-center">Our team will be in touch within 24 hours.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleInquiry} className="space-y-5">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/40">Full Name</label>
-                      <input
-                        type="text"
-                        required
-                        value={inquiryForm.name}
-                        onChange={e => setInquiryForm(f => ({ ...f, name: e.target.value }))}
-                        className="w-full border border-[#82000D]/15 bg-[#FFFFFF] text-[#1C1714] placeholder:text-[#1C1714]/25 px-4 py-3 text-[11px] tracking-wide focus:outline-none focus:border-[#82000D] transition-colors bg-[#F3EFE9]"
-                        placeholder="Your full name"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/40">Email Address</label>
-                      <input
-                        type="email"
-                        required
-                        value={inquiryForm.email}
-                        onChange={e => setInquiryForm(f => ({ ...f, email: e.target.value }))}
-                        className="w-full border border-[#82000D]/15 bg-[#FFFFFF] text-[#1C1714] placeholder:text-[#1C1714]/25 px-4 py-3 text-[11px] tracking-wide focus:outline-none focus:border-[#82000D] transition-colors bg-[#F3EFE9]"
-                        placeholder="your@email.com"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/40">Phone Number</label>
-                    <input
-                      type="tel"
-                      value={inquiryForm.phone}
-                      onChange={e => setInquiryForm(f => ({ ...f, phone: e.target.value }))}
-                      className="w-full border border-[#82000D]/15 bg-[#FFFFFF] text-[#1C1714] placeholder:text-[#1C1714]/25 px-4 py-3 text-[11px] tracking-wide focus:outline-none focus:border-[#82000D] transition-colors bg-[#F3EFE9]"
-                      placeholder="+254 700 000 000"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/40">Inquiry Type</label>
-                    <div className="flex flex-wrap gap-2">
-                      {["General Inquiry", "Schedule Viewing", "Make Offer", "Investment Analysis"].map(type => (
-                        <button
-                          key={type}
-                          type="button"
-                          onClick={() => setInquiryForm(f => ({ ...f, type }))}
-                          className={cn(
-                            "px-4 py-2 text-[9px] font-bold tracking-widest uppercase border transition-all",
-                            inquiryForm.type === type
-                              ? "bg-[#82000D] text-[#FAF8F4] border-[#82000D]"
-                              : "border-[#82000D]/15 text-[#1C1714]/50 hover:border-[#82000D]/50"
-                          )}
-                        >
-                          {type}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/40">Message</label>
-                    <textarea
-                      rows={4}
-                      value={inquiryForm.message}
-                      onChange={e => setInquiryForm(f => ({ ...f, message: e.target.value }))}
-                      className="w-full border border-[#82000D]/15 bg-[#FFFFFF] text-[#1C1714] placeholder:text-[#1C1714]/25 px-4 py-3 text-[11px] tracking-wide focus:outline-none focus:border-[#82000D] transition-colors bg-[#F3EFE9] resize-none"
-                      placeholder={`I'm interested in ${property.title}...`}
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="btn-crimson w-full h-14 text-[10px] font-bold tracking-[0.4em] uppercase"
-                  >
-                    SEND INQUIRY
-                  </button>
-                </form>
-              )}
-            </div>
           </div>
 
           {/* Sticky Sidebar */}
@@ -332,7 +290,7 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
             <div className="glass-card p-8 space-y-6">
               <div>
                 <p className="text-[10px] font-bold tracking-[0.5em] text-[#82000D] uppercase mb-2">Make an Inquiry</p>
-                <p className="text-sm text-[#1C1714]/55 font-light leading-relaxed">
+                <p className="text-sm text-[#1C1714]/74 font-normal leading-relaxed">
                   Speak with our advisors about {property.title}. We typically respond within 24 hours.
                 </p>
               </div>
@@ -347,10 +305,10 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
                   <FaWhatsapp size={16} /> WhatsApp Us
                 </a>
                 <a
-                  href="#inquire"
+                  href={`mailto:${agencyEmail}?subject=${encodeURIComponent(`Inquiry: ${property.title}`)}`}
                   className="btn-crimson flex items-center justify-center gap-3 w-full h-12 text-[10px] font-bold tracking-[0.3em] uppercase"
                 >
-                  <Mail size={14} /> Send an Inquiry
+                  <Mail size={14} /> Email an Advisor
                 </a>
                 <a
                   href={`tel:${contactPhone}`}

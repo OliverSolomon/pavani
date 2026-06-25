@@ -19,7 +19,7 @@ export default function Footer({ settings }: FooterProps) {
   const socials       = settings?.socials;
 
   return (
-    <footer className="bg-[#631C20] text-[#E8DCBF] pt-20 pb-10 px-6 lg:px-16 print:hidden">
+    <footer className="bg-[#82000D] text-[#E8DCBF] pt-20 pb-10 px-6 lg:px-16 print:hidden">
       <div className="max-w-[1400px] mx-auto">
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-16 mb-16 pb-16 border-b border-[#E8DCBF]/12">
@@ -34,7 +34,7 @@ export default function Footer({ settings }: FooterProps) {
                 <p className="text-[8px] tracking-[0.3em] uppercase text-[#C49027]">REALTY CO</p>
               </div>
             </Link>
-            <p className="text-sm font-light text-[#E8DCBF]/65 leading-relaxed max-w-xs">
+            <p className="text-sm font-normal text-[#E8DCBF]/65 leading-relaxed max-w-xs">
               Nairobi's trusted authority in luxury real estate — curating the city's finest addresses since 2009.
             </p>
             <div className="flex gap-5 pt-1">
@@ -53,7 +53,7 @@ export default function Footer({ settings }: FooterProps) {
           {/* Get in Touch */}
           <div className="space-y-5">
             <h4 className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C49027]">Get in Touch</h4>
-            <div className="space-y-3 text-sm font-light text-[#E8DCBF]/70 leading-relaxed">
+            <div className="space-y-3 text-sm font-normal text-[#E8DCBF]/70 leading-relaxed">
               <div className="flex items-start gap-3"><MapPin size={13} className="text-[#C49027] shrink-0 mt-0.5" /><span>{agencyAddress}</span></div>
               <div className="flex items-center gap-3"><Phone size={13} className="text-[#C49027] shrink-0" /><a href={`tel:${agencyPhone}`} className="hover:text-[#FBF5F2] transition-colors">{agencyPhone}</a></div>
               <div className="flex items-center gap-3"><Mail  size={13} className="text-[#C49027] shrink-0" /><a href={`mailto:${agencyEmail}`} className="hover:text-[#FBF5F2] transition-colors">{agencyEmail}</a></div>
@@ -67,8 +67,8 @@ export default function Footer({ settings }: FooterProps) {
               {[
                 { label: "Home",          href: "/" },
                 { label: "Properties",    href: "/properties" },
-                { label: "Neighbourhoods",href: "/neighborhoods" },
                 { label: "Gallery",       href: "/gallery" },
+                { label: "Insights",      href: "/insights" },
                 { label: "About Us",      href: "/about" },
                 { label: "Contact",       href: "/contact" },
               ].map(({ label, href }) => (
@@ -82,7 +82,7 @@ export default function Footer({ settings }: FooterProps) {
           {/* Newsletter */}
           <div className="space-y-5">
             <h4 className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#C49027]">Join Our Collective</h4>
-            <p className="text-xs font-light text-[#E8DCBF]/55 leading-relaxed">
+            <p className="text-xs font-normal text-[#E8DCBF]/55 leading-relaxed">
               Curated updates on exclusive developments, delivered privately.
             </p>
             <div className="border-b border-[#E8DCBF]/20 pb-3 flex items-center gap-3 group">
