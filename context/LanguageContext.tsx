@@ -55,7 +55,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>("en");
 
   useEffect(() => {
-    const savedLang = localStorage.getItem("kaara_language") as Language;
+    const savedLang = localStorage.getItem("pavani_language") as Language;
     if (savedLang && ["en", "ar", "zh"].includes(savedLang)) {
       setLanguageState(savedLang);
     }
@@ -63,7 +63,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const setLanguage = (newLang: Language) => {
     setLanguageState(newLang);
-    localStorage.setItem("kaara_language", newLang);
+    localStorage.setItem("pavani_language", newLang);
     document.documentElement.dir = newLang === "ar" ? "rtl" : "ltr";
     document.documentElement.lang = newLang;
   };

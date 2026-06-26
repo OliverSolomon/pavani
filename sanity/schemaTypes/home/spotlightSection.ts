@@ -9,7 +9,7 @@ export const spotlightSection = defineType({
       name: 'title',
       title: 'Main Title',
       type: 'string',
-      initialValue: 'ON THE MOVE WITH @kaararealtygroup',
+      initialValue: 'ON THE MOVE WITH @pavanirealty',
     }),
     defineField({
       name: 'featuredEvent',

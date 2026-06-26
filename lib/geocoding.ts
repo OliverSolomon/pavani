@@ -98,7 +98,7 @@ export async function searchBuildingDynamic(buildingName: string, district: stri
   try {
     const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`, {
       headers: {
-        'User-Agent': 'KaaraRealtyGroup/1.0'
+        'User-Agent': 'PavaniRealty/1.0'
       }
     });
     const data = await response.json();
