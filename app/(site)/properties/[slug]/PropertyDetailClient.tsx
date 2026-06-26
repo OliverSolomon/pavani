@@ -14,6 +14,7 @@ import {
   Phone,
   MapPin,
   Play,
+  ArrowRight,
 } from "lucide-react";
 import { PortableText } from "@portabletext/react";
 import { FaWhatsapp, FaYoutube } from "react-icons/fa";
@@ -287,42 +288,59 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
           {/* Sticky Sidebar */}
           <div className="lg:col-span-4 lg:sticky lg:top-28 h-fit space-y-6">
             {/* Make an Inquiry */}
-            <div className="glass-card p-8 space-y-6">
-              <div>
-                <p className="text-[10px] font-bold tracking-[0.5em] text-[#82000D] uppercase mb-2">Make an Inquiry</p>
-                <p className="text-sm text-[#1C1714]/74 font-normal leading-relaxed">
-                  Speak with our advisors about {property.title}. We typically respond within 24 hours.
+            <div className="glass-card p-7 lg:p-8 space-y-7">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <span className="h-px w-8 bg-[#82000D]" />
+                  <p className="text-[10px] font-bold tracking-[0.5em] text-[#82000D] uppercase">Make an Inquiry</p>
+                </div>
+                <h3 className="font-serif text-2xl font-light text-[#1C1714] leading-snug">
+                  Speak with an <em className="italic text-[#82000D]">advisor</em>
+                </h3>
+                <p className="text-[0.85rem] text-[#1C1714]/70 font-normal leading-relaxed">
+                  Private guidance on {property.title}. Choose how you&rsquo;d like to connect &mdash; your message arrives ready to send.
                 </p>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <a
                   href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello Pavani Realty, I'm interested in ${property.title}.`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-whatsapp flex items-center justify-center gap-3 w-full h-12 text-[10px] font-bold tracking-[0.3em] uppercase"
+                  className="btn-whatsapp group flex items-center gap-3.5 w-full px-5 h-[54px] text-[11px] font-bold tracking-[0.2em] uppercase"
                 >
-                  <FaWhatsapp size={16} /> WhatsApp Us
+                  <FaWhatsapp size={18} className="shrink-0" />
+                  <span className="flex-1 text-left">WhatsApp Us</span>
+                  <ArrowRight size={15} className="opacity-70 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
                 <a
                   href={`mailto:${agencyEmail}?subject=${encodeURIComponent(`Inquiry: ${property.title}`)}`}
-                  className="btn-crimson flex items-center justify-center gap-3 w-full h-12 text-[10px] font-bold tracking-[0.3em] uppercase"
+                  className="btn-crimson group flex items-center gap-3.5 w-full px-5 h-[54px] text-[11px] font-bold tracking-[0.2em] uppercase"
                 >
-                  <Mail size={14} /> Email an Advisor
+                  <Mail size={16} className="shrink-0" />
+                  <span className="flex-1 text-left">Email an Advisor</span>
+                  <ArrowRight size={15} className="opacity-70 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
                 <a
                   href={`tel:${contactPhone}`}
-                  className="flex items-center justify-center gap-3 w-full h-12 border border-[#82000D]/30 text-[#1C1714] text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-[#82000D] hover:text-[#FBF5F2] transition-all"
+                  className="group flex items-center gap-3.5 w-full px-5 h-[54px] border border-[#82000D]/25 text-[#1C1714] text-[11px] font-bold tracking-[0.2em] uppercase transition-all duration-300 hover:border-[#82000D] hover:bg-[#82000D] hover:text-[#FBF5F2]"
                 >
-                  <Phone size={14} /> Call Agent
+                  <Phone size={15} className="shrink-0" />
+                  <span className="flex-1 text-left">Call Agent</span>
+                  <ArrowRight size={15} className="opacity-60 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
               </div>
 
-              <div className="pt-6 border-t border-[#82000D]/10 flex items-center gap-4">
-                <div className="w-10 h-10 bg-[#82000D] text-[#FBF5F2] flex items-center justify-center font-serif text-lg">P</div>
+              <div className="flex items-center gap-2.5 text-[#1C1714]/60">
+                <span className="h-2 w-2 rounded-full bg-[#1FA85A] shrink-0" />
+                <span className="text-[9px] font-bold tracking-[0.25em] uppercase">Typically replies within 24 hours</span>
+              </div>
+
+              <div className="pt-5 border-t border-[#82000D]/10 flex items-center gap-3.5">
+                <div className="w-10 h-10 bg-[#82000D] text-[#FBF5F2] flex items-center justify-center font-serif text-lg shrink-0">P</div>
                 <div>
-                  <p className="text-[10px] font-bold tracking-widest uppercase">Pavani Realty</p>
-                  <p className="text-[8px] text-[#1C1714]/40 tracking-[0.2em] uppercase font-bold">Exclusive Listing Agent</p>
+                  <p className="text-[10px] font-bold tracking-widest uppercase text-[#1C1714]">Pavani Realty</p>
+                  <p className="text-[8px] text-[#1C1714]/45 tracking-[0.2em] uppercase font-bold">Exclusive Listing Agent</p>
                 </div>
               </div>
             </div>
