@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kaara-video-cache-v1';
+const CACHE_NAME = 'pavani-video-cache-v1';
 const VIDEO_URLS = [
   '/videos/amethyst.mp4',
   // You can add Cloudinary URLs here too, but they must support CORS
