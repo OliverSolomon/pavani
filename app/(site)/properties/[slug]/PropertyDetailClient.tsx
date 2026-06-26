@@ -25,6 +25,7 @@ import { useCurrency } from "@/context/CurrencyContext";
 import PropertyGallery from "@/components/PropertyGallery";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import CurrencyBadge from "@/components/CurrencyBadge";
+import ContactForm from "@/components/ContactForm";
 
 interface PropertyDetailClientProps {
   property: any;
@@ -287,79 +288,71 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
 
           {/* Sticky Sidebar */}
           <div className="lg:col-span-4 lg:sticky lg:top-28 h-fit space-y-6">
-            {/* Make an Inquiry */}
-            <div className="glass-card p-7 lg:p-8 space-y-7">
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <span className="h-px w-8 bg-[#82000D]" />
-                  <p className="text-[10px] font-bold tracking-[0.5em] text-[#82000D] uppercase">Make an Inquiry</p>
-                </div>
-                <h3 className="font-serif text-2xl font-light text-[#1C1714] leading-snug">
-                  Speak with an <em className="italic text-[#82000D]">advisor</em>
-                </h3>
-                <p className="text-[0.85rem] text-[#1C1714]/70 font-normal leading-relaxed">
-                  Private guidance on {property.title}. Choose how you&rsquo;d like to connect &mdash; your message arrives ready to send.
-                </p>
-              </div>
-
-              <div className="space-y-2.5">
-                <a
-                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello Pavani Realty, I'm interested in ${property.title}.`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-whatsapp group flex items-center gap-3.5 w-full px-5 h-[54px] text-[11px] font-bold tracking-[0.2em] uppercase"
-                >
-                  <FaWhatsapp size={18} className="shrink-0" />
-                  <span className="flex-1 text-left">WhatsApp Us</span>
-                  <ArrowRight size={15} className="opacity-70 transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
-                <a
-                  href={`mailto:${agencyEmail}?subject=${encodeURIComponent(`Inquiry: ${property.title}`)}`}
-                  className="btn-crimson group flex items-center gap-3.5 w-full px-5 h-[54px] text-[11px] font-bold tracking-[0.2em] uppercase"
-                >
-                  <Mail size={16} className="shrink-0" />
-                  <span className="flex-1 text-left">Email an Advisor</span>
-                  <ArrowRight size={15} className="opacity-70 transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
-                <a
-                  href={`tel:${contactPhone}`}
-                  className="group flex items-center gap-3.5 w-full px-5 h-[54px] border border-[#82000D]/25 text-[#1C1714] text-[11px] font-bold tracking-[0.2em] uppercase transition-all duration-300 hover:border-[#82000D] hover:bg-[#82000D] hover:text-[#FBF5F2]"
-                >
-                  <Phone size={15} className="shrink-0" />
-                  <span className="flex-1 text-left">Call Agent</span>
-                  <ArrowRight size={15} className="opacity-60 transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
-              </div>
-
-              <div className="flex items-center gap-2.5 text-[#1C1714]/60">
-                <span className="h-2 w-2 rounded-full bg-[#1FA85A] shrink-0" />
-                <span className="text-[9px] font-bold tracking-[0.25em] uppercase">Typically replies within 24 hours</span>
-              </div>
-
-              <div className="pt-5 border-t border-[#82000D]/10 flex items-center gap-3.5">
-                <div className="w-10 h-10 bg-[#82000D] text-[#FBF5F2] flex items-center justify-center font-serif text-lg shrink-0">P</div>
+            
+            {/* Agent Profile (moved from the bottom of the old card) */}
+            <div className="bg-[#FFFFFF] border border-[#82000D]/10 p-7 lg:p-8 space-y-6">
+              <h3 className="font-serif text-xl font-light text-[#1C1714] mb-2">
+                Listing <em className="italic text-[#82000D]">Agent</em>
+              </h3>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-[#82000D] text-[#FBF5F2] flex items-center justify-center font-serif text-xl shrink-0 shadow-lg shadow-[#82000D]/20">P</div>
                 <div>
-                  <p className="text-[10px] font-bold tracking-widest uppercase text-[#1C1714]">Pavani Realty</p>
-                  <p className="text-[8px] text-[#1C1714]/45 tracking-[0.2em] uppercase font-bold">Exclusive Listing Agent</p>
+                  <p className="text-[11px] font-bold tracking-widest uppercase text-[#1C1714]">Pavani Realty</p>
+                  <p className="text-[8px] text-[#1C1714]/50 tracking-[0.2em] uppercase font-bold mt-1">Exclusive Advisor</p>
                 </div>
+              </div>
+              <div className="pt-5 border-t border-[#82000D]/10">
+                <a href="#enquire-section" className="group flex items-center justify-between w-full text-[9px] font-bold tracking-[0.2em] uppercase text-[#82000D]">
+                  <span>Enquire Now</span>
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </a>
               </div>
             </div>
 
             {/* Quick Actions */}
-            <div className="flex justify-center gap-10 text-[#1C1714]/40 border border-[#82000D]/10 py-5">
-              <button onClick={handleShare} className="flex flex-col items-center gap-2 hover:text-[#1C1714] transition-colors">
+            <div className="flex justify-center gap-10 text-[#1C1714]/60 border border-[#82000D]/10 py-6 bg-[#FFFFFF] shadow-sm">
+              <button onClick={handleShare} className="flex flex-col items-center gap-2 hover:text-[#82000D] transition-colors">
                 <Share2 size={18} /><span className="text-[8px] font-bold uppercase tracking-widest">Share</span>
               </button>
-              <button onClick={() => window.print()} className="flex flex-col items-center gap-2 hover:text-[#1C1714] transition-colors">
+              <button onClick={() => window.print()} className="flex flex-col items-center gap-2 hover:text-[#82000D] transition-colors">
                 <Printer size={18} /><span className="text-[8px] font-bold uppercase tracking-widest">Print</span>
               </button>
-              <button onClick={toggleLike} className={cn("flex flex-col items-center gap-2 transition-colors", isLiked ? "text-[#82000D]" : "hover:text-[#1C1714]")}>
+              <button onClick={toggleLike} className={cn("flex flex-col items-center gap-2 transition-colors", isLiked ? "text-[#82000D]" : "hover:text-[#82000D]")}>
                 <Heart size={18} fill={isLiked ? "currentColor" : "none"} /><span className="text-[8px] font-bold uppercase tracking-widest">{isLiked ? "Saved" : "Save"}</span>
               </button>
             </div>
+          </div>
+        </section>
 
-            {/* Mortgage Calculator */}
-            <MortgageCalculator propertyPrice={priceAmount ? Number(priceAmount) : undefined} />
+        {/* Enquiry & Mortgage Section */}
+        <section id="enquire-section" className="py-20 lg:py-28 px-6 lg:px-16 max-w-[1500px] mx-auto border-t border-[#82000D]/10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+            
+            {/* Contact Form */}
+            <div className="bg-[#FFFFFF] p-8 lg:p-12 shadow-[0_10px_40px_rgba(28,23,20,0.03)] border border-[#82000D]/5">
+              <div className="mb-10 text-center">
+                <p className="text-[10px] font-bold tracking-[0.4em] text-[#82000D] uppercase mb-3">Interested in this property?</p>
+                <h3 className="text-2xl font-serif text-[#1C1714]">Send an Enquiry</h3>
+              </div>
+              <ContactForm 
+                initialInquiryType="Buying a Property"
+                prefilledMessage={`Hello, I would like more information about the property "${property.title}".`}
+              />
+            </div>
+
+            {/* Mortgage Calculator Expanded */}
+            <div className="flex flex-col">
+              <div className="mb-8">
+                <h3 className="text-3xl font-serif text-[#1C1714] mb-4">Mortgage <em className="italic text-[#82000D]">Calculator</em></h3>
+                <p className="text-[0.95rem] font-normal text-[#1C1714]/70 leading-relaxed">
+                  Estimate your monthly payments. Adjust the home price, down payment, and interest rate to see how they impact your costs.
+                </p>
+              </div>
+              <div className="flex-1 bg-[#FFFFFF] shadow-[0_10px_40px_rgba(28,23,20,0.03)] border border-[#82000D]/5 p-2">
+                <MortgageCalculator propertyPrice={priceAmount ? Number(priceAmount) : undefined} className="border-none shadow-none" />
+              </div>
+            </div>
+
           </div>
         </section>
 
