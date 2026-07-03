@@ -230,6 +230,30 @@ export const COMMENTS_BY_POST_QUERY = defineQuery(`*[_type == "comment" && appro
   submittedAt
 }`)
 
+export const ABOUT_PAGE_QUERY = defineQuery(`*[_type == "aboutPage"][0]{
+  heroEyebrow, heroTitle, heroSubtitle,
+  storyTitle, storyParagraphs,
+  leaderName, leaderRole, leaderQuote, leaderBio,
+  "leaderImage": coalesce(leaderImage.asset->url, leaderImage.externalUrl),
+  coreValuesTitle, coreValues[]{title, body},
+  whyUsTitle, whyUs[]{title, body},
+  testimonialsTitle,
+  ctaTitle, ctaText, ctaButtonLabel,
+  "ctaImage": coalesce(ctaImage.asset->url, ctaImage.externalUrl)
+}`)
+
+export const CONTACT_PAGE_QUERY = defineQuery(`*[_type == "contactPage"][0]{
+  heroEyebrow, heroTitle,
+  officesLabel, officeName,
+  formEyebrow, formTitle
+}`)
+
+export const INSIGHTS_PAGE_QUERY = defineQuery(`*[_type == "insightsPage"][0]{
+  heroEyebrow, heroTitle, heroIntro,
+  gridEyebrow, gridTitle,
+  ctaTitle, ctaText
+}`)
+
 export const SEARCH_QUERY = defineQuery(`*[_type == "district"] {
   _id,
   name,

@@ -3,6 +3,7 @@ import {
   CogIcon, UsersIcon, EnvelopeIcon, ImageIcon, EarthAmericasIcon,
   HomeIcon, DocumentTextIcon, PinIcon, CommentIcon,
   CalendarIcon, PlayIcon, RocketIcon, StarIcon,
+  DocumentsIcon, InfoOutlineIcon,
 } from '@sanity/icons'
 
 /**
@@ -20,17 +21,39 @@ export const structure: StructureResolver = (S) =>
     .title('Pavani Content')
     .items([
       // ───────────────────────── PAGES ─────────────────────────
+      // Each page's editable text lives here, subdivided page by page.
       S.listItem()
-        .title('Home Page')
-        .icon(HomeIcon)
+        .title('Pages')
+        .icon(DocumentsIcon)
         .child(
           S.list()
-            .title('Home Page - Sections (top to bottom)')
+            .title('Pages')
             .items([
-              S.listItem().title('1 · Hero Video (background)').icon(PlayIcon)
-                .child(S.document().schemaType('heroSection').documentId('heroSection')),
-              S.listItem().title('2 · Featured Properties').icon(HomeIcon)
-                .child(S.document().schemaType('propertiesSection').documentId('propertiesSection')),
+              S.listItem()
+                .title('Home Page')
+                .icon(HomeIcon)
+                .child(
+                  S.list()
+                    .title('Home Page - Sections')
+                    .items([
+                      S.listItem().title('1 · Hero Video (background)').icon(PlayIcon)
+                        .child(S.document().schemaType('heroSection').documentId('heroSection')),
+                      S.listItem().title('2 · Featured Properties').icon(HomeIcon)
+                        .child(S.document().schemaType('propertiesSection').documentId('propertiesSection')),
+                    ])
+                ),
+              S.listItem()
+                .title('About Page')
+                .icon(InfoOutlineIcon)
+                .child(S.document().schemaType('aboutPage').documentId('aboutPage')),
+              S.listItem()
+                .title('Contact Page')
+                .icon(EnvelopeIcon)
+                .child(S.document().schemaType('contactPage').documentId('contactPage')),
+              S.listItem()
+                .title('Insights Page')
+                .icon(DocumentTextIcon)
+                .child(S.document().schemaType('insightsPage').documentId('insightsPage')),
             ])
         ),
 
@@ -119,7 +142,7 @@ export const structure: StructureResolver = (S) =>
       ...S.documentTypeListItems().filter(
         (listItem) =>
           ![
-            'post', 'property', 'event', 'district', 'street', 'county', 'testimonial', 'comment',
+            'post', 'property', 'event', 'district', 'street', 'county', 'testimonial', 'comment', 'aboutPage', 'contactPage', 'insightsPage',
             'generalSettings', 'brandSettings', 'contactSettings', 'socialSettings',
             'siteSettings', 'homePage',
             'heroSection', 'secondarySection', 'propertiesSection',

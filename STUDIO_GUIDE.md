@@ -23,17 +23,31 @@ press Publish your change is a private **draft** and won’t show on the live si
 
 ## 2. How the Studio is organised
 
-The left sidebar mirrors the website, top to bottom:
+The left sidebar mirrors the website, top to bottom.
 
-### 🏠 Home Page
+### 📄 Pages
 
-Opens the two editable parts of the homepage:
+The editable text for each page lives here, **subdivided page by page** so you
+can jump straight to the one you want:
 
-- **1 · Hero Video (background)** - the looping background video at the very top.
-  (The headline “Nairobi’s Finest Addresses” is a fixed brand statement.)
-- **2 · Featured Properties** - pick which properties appear in the “Exceptional
-  Residences” row. You select existing properties from your list; their photos
-  and prices are pulled in automatically.
+- **Home Page** - two parts:
+  - **1 · Hero Video (background)** - the looping background video at the very
+    top. (The headline “Nairobi’s Finest Addresses” is a fixed brand statement.)
+  - **2 · Featured Properties** - pick which properties appear in the
+    “Exceptional Residences” row. You select existing properties from your list;
+    their photos and prices are pulled in automatically.
+- **About Page** - every heading and paragraph: hero, the story, leadership
+  (name, role, quote, bio, photo), core values, why-choose-us, testimonials
+  heading, and the closing call-to-action. Grouped into tabs at the top of the
+  document.
+- **Contact Page** - hero heading, the **Offices** card (small label + office
+  name), and the form’s heading. (Phone, email and address shown in the office
+  card come from **Settings → Contact Details**.)
+- **Insights Page** - the hero heading + intro, the “Latest Articles” heading,
+  and the LinkedIn call-to-action wording. (The article cards themselves come
+  from **Insights / Journal** below.)
+
+Each field is fully editable - change it and press **Publish**.
 
 ### 📝 Insights / Journal
 
@@ -107,6 +121,6 @@ Brand-wide details - change once, updates everywhere:
 
 ### Not yet CMS-driven (hardcoded by design - can be wired on request)
 
-- About page body copy (story, leadership bio, core values, why-us)
-- Gallery page photo/video lists
+- Gallery page photo/video lists (a media-upload feature - larger job)
+- Properties listing hero heading (“Available Residences”)
 - Home hero headline + closing CTA copy (fixed brand statements)

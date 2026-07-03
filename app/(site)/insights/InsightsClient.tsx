@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 interface InsightsClientProps {
   settings?: any;
   posts?: any[];
+  content?: any;
 }
 
 const ease = [0.23, 1, 0.32, 1] as const;
@@ -68,9 +69,18 @@ const ARTICLES = [
   },
 ];
 
-export default function InsightsClient({ settings, posts }: InsightsClientProps) {
+export default function InsightsClient({ settings, posts, content }: InsightsClientProps) {
   const reduce = useReducedMotion();
   const linkedin = settings?.socials?.linkedin || "https://www.linkedin.com/company/pavani-realty/";
+
+  const P = content || {};
+  const heroEyebrow = P.heroEyebrow || "Insights";
+  const heroTitle   = P.heroTitle   || "Notes on Nairobi";
+  const heroIntro   = P.heroIntro   || "Market commentary, neighbourhood guides and stories from our advisors. New pieces are published first on LinkedIn.";
+  const gridEyebrow = P.gridEyebrow || "The Journal";
+  const gridTitle   = P.gridTitle   || "Latest Articles";
+  const ctaTitle    = P.ctaTitle    || "Every insight, first on LinkedIn";
+  const ctaText     = P.ctaText     || "Follow Pavani Realty Co for market notes, new listings and the stories behind Nairobi's finest addresses.";
 
   // Render from the CMS when articles exist; otherwise fall back to sample copy.
   const fmtDate = (d?: string) =>
@@ -118,13 +128,13 @@ export default function InsightsClient({ settings, posts }: InsightsClientProps)
         <div className="relative max-w-[1400px] mx-auto page-hero-enter">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div>
-              <p className="eyebrow mb-4">Insights</p>
+              <p className="eyebrow mb-4">{heroEyebrow}</p>
               <h1 className="text-4xl md:text-5xl lg:text-[3.75rem] font-serif font-normal text-[#1C1714] leading-tight mb-5">
-                Notes on <em className="italic text-[#82000D]">Nairobi</em>
+                {heroTitle}
               </h1>
               <div className="w-10 h-px bg-[#82000D]/60 mb-5" />
               <p className="text-[0.9375rem] text-[#1C1714]/86 font-normal leading-relaxed max-w-lg">
-                Market commentary, neighbourhood guides and stories from our advisors. New pieces are published first on LinkedIn.
+                {heroIntro}
               </p>
             </div>
             <a
@@ -181,8 +191,8 @@ export default function InsightsClient({ settings, posts }: InsightsClientProps)
       <section className="py-14 lg:py-20 px-6 lg:px-16">
         <div className="max-w-[1400px] mx-auto">
           <motion.div {...fadeUp(0)} className="mb-10">
-            <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#82000D]/70 mb-3">The Journal</p>
-            <h2 className="text-2xl lg:text-3xl font-serif font-normal text-[#1C1714]">Latest Articles</h2>
+            <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#82000D]/70 mb-3">{gridEyebrow}</p>
+            <h2 className="text-2xl lg:text-3xl font-serif font-normal text-[#1C1714]">{gridTitle}</h2>
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
@@ -236,10 +246,10 @@ export default function InsightsClient({ settings, posts }: InsightsClientProps)
         >
           <div className="w-px h-12 bg-[#E8DCBF]/40 mx-auto" />
           <h2 className="text-3xl lg:text-5xl font-serif font-normal text-[#FBF5F2] leading-tight">
-            Every insight, first on <em className="italic text-[#E8DCBF]">LinkedIn</em>
+            {ctaTitle}
           </h2>
           <p className="text-[0.9375rem] font-normal text-[#FBF5F2]/75 leading-relaxed max-w-md mx-auto">
-            Follow Pavani Realty Co for market notes, new listings and the stories behind Nairobi's finest addresses.
+            {ctaText}
           </p>
           <div className="flex justify-center pt-1">
             <a

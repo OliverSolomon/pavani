@@ -147,10 +147,22 @@ function FilterPill({ label }: { label: string }) {
   );
 }
 
+/* Turn a status into a URL-friendly slug ("Off-Plan" → "off-plan"). */
+const statusToSlug = (s?: string) => (s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+/* SEO-friendly status filters — each links to /properties?status=<slug> */
+const STATUS_FILTERS = [
+  { label: "All", slug: "" },
+  { label: "Off-Plan", slug: "off-plan" },
+  { label: "On-Going", slug: "on-going" },
+  { label: "Ready", slug: "ready" },
+];
+
 export default function PropertiesClient({ initialProperties, settings }: PropertiesClientProps) {
   const { formatPrice } = useCurrency();
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
+  const statusParam = searchParams.get("status") || "";
   const [isCompareEnabled, setIsCompareEnabled] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState<Property[]>([]);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
@@ -166,9 +178,11 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
     const q = searchQuery.toLowerCase();
     return (initialProperties || []).filter((p) => {
       const districtName = typeof p.district === "object" ? p.district.name : p.district;
-      return p.title.toLowerCase().includes(q) || districtName?.toLowerCase().includes(q);
+      const matchesQuery = p.title.toLowerCase().includes(q) || districtName?.toLowerCase().includes(q);
+      const matchesStatus = !statusParam || statusToSlug(p.status) === statusParam;
+      return matchesQuery && matchesStatus;
     });
-  }, [initialProperties, searchQuery]);
+  }, [initialProperties, searchQuery, statusParam]);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#FAF8F4] text-[#1C1714] pt-[72px]">
@@ -180,6 +194,28 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
         <h1 className="text-3xl lg:text-5xl font-serif font-normal text-[#1C1714]">
           Available <em className="italic text-[#82000D]">Residences</em>
         </h1>
+
+        {/* Status filters — real links for SEO (/properties?status=off-plan …) */}
+        <div className="flex flex-wrap items-center gap-2 mt-7">
+          {STATUS_FILTERS.map(({ label, slug }) => {
+            const active = statusParam === slug;
+            const href = slug ? `/properties?status=${slug}` : "/properties";
+            return (
+              <Link
+                key={label}
+                href={href}
+                className={cn(
+                  "px-4 py-2 text-[9px] font-bold tracking-[0.25em] uppercase border transition-all duration-200",
+                  active
+                    ? "bg-[#82000D] text-[#FBF5F2] border-[#82000D]"
+                    : "border-[#82000D]/20 text-[#1C1714]/60 hover:border-[#82000D]/50 hover:text-[#1C1714]"
+                )}
+              >
+                {label}
+              </Link>
+            );
+          })}
+        </div>
       </div>
 
       {/* ── Single slim toolbar (glass) ── */}

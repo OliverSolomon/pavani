@@ -8,6 +8,9 @@ import { district } from './district'
 import { street } from './street'
 import { testimonial } from './testimonial'
 import { comment } from './comment'
+import { aboutPage } from './pages/aboutPage'
+import { contactPage } from './pages/contactPage'
+import { insightsPage } from './pages/insightsPage'
 import { socialSettings } from './settings/socialSettings'
 import { contactSettings } from './settings/contactSettings'
 import { brandSettings } from './settings/brandSettings'
@@ -29,6 +32,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     street,
     testimonial,
     comment,
+    aboutPage,
+    contactPage,
+    insightsPage,
     socialSettings,
     contactSettings,
     brandSettings,

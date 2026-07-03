@@ -1,4 +1,4 @@
-import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
+import { SITE_SETTINGS_QUERY, CONTACT_PAGE_QUERY } from "@/sanity/lib/queries";
 import { sanityFetch } from "@/sanity/lib/live";
 import ContactClient from "./ContactClient";
 
@@ -9,10 +9,13 @@ export const metadata = {
 
 export default async function ContactPage() {
   try {
-    const { data: siteSettings } = await sanityFetch({ query: SITE_SETTINGS_QUERY });
-    return <ContactClient settings={siteSettings} />;
+    const [{ data: siteSettings }, { data: content }] = await Promise.all([
+      sanityFetch({ query: SITE_SETTINGS_QUERY }),
+      sanityFetch({ query: CONTACT_PAGE_QUERY }),
+    ]);
+    return <ContactClient settings={siteSettings} content={content ?? null} />;
   } catch (err) {
     console.error("[Contact] Sanity fetch failed:", err);
-    return <ContactClient settings={undefined} />;
+    return <ContactClient settings={undefined} content={null} />;
   }
 }
