@@ -10,14 +10,11 @@ import {
   FileText,
   Download,
   Printer,
-  Mail,
-  Phone,
   MapPin,
   Play,
-  ArrowRight,
 } from "lucide-react";
 import { PortableText } from "@portabletext/react";
-import { FaWhatsapp, FaYoutube } from "react-icons/fa";
+import { FaYoutube } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { cn } from "@/lib/utils";
@@ -83,9 +80,6 @@ function VideoTour({ url, title }: { url: string; title: string }) {
 
 export default function PropertyDetailClient({ property }: PropertyDetailClientProps) {
   const { formatPrice: globalFormatPrice } = useCurrency();
-  const contactPhone = property.siteSettings?.contact?.phone || "+254 729 377 495";
-  const whatsappNumber = contactPhone.replace(/[^0-9]/g, "");
-  const agencyEmail = property.siteSettings?.contact?.email || "pavanirealtyco@gmail.com";
 
   const [isLiked, setIsLiked] = useState(false);
   const [showToast, setShowToast] = useState<string | null>(null);
@@ -287,27 +281,19 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
 
           </div>
 
-          {/* Sticky Sidebar */}
-          <div className="lg:col-span-4 lg:sticky lg:top-28 h-fit space-y-6">
-            
-            {/* Agent Profile (moved from the bottom of the old card) */}
-            <div className="bg-[#FFFFFF] border border-[#82000D]/10 p-7 lg:p-8 space-y-6">
-              <h3 className="font-serif text-xl font-light text-[#1C1714] mb-2">
-                Listing <em className="italic text-[#82000D]">Agent</em>
-              </h3>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#82000D] text-[#FBF5F2] flex items-center justify-center font-serif text-xl shrink-0 shadow-lg shadow-[#82000D]/20">P</div>
-                <div>
-                  <p className="text-[11px] font-bold tracking-widest uppercase text-[#1C1714]">Pavani Realty</p>
-                  <p className="text-[8px] text-[#1C1714]/50 tracking-[0.2em] uppercase font-bold mt-1">Exclusive Advisor</p>
-                </div>
+          {/* Sidebar */}
+          <div className="lg:col-span-4 h-fit space-y-6">
+
+            {/* Inquiry form — replaces the listing-agent card */}
+            <div id="enquire-section" className="bg-[#FFFFFF] border border-[#82000D]/10 p-7 lg:p-8 scroll-mt-28">
+              <div className="mb-8 text-center">
+                <p className="text-[10px] font-bold tracking-[0.4em] text-[#82000D] uppercase mb-3">Interested in this property?</p>
+                <h3 className="text-2xl font-serif text-[#1C1714]">Send an Enquiry</h3>
               </div>
-              <div className="pt-5 border-t border-[#82000D]/10">
-                <a href="#enquire-section" className="group flex items-center justify-between w-full text-[9px] font-bold tracking-[0.2em] uppercase text-[#82000D]">
-                  <span>Enquire Now</span>
-                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                </a>
-              </div>
+              <ContactForm
+                initialInquiryType="Buying a Property"
+                prefilledMessage={`Hello, I would like more information about the property "${property.title}".`}
+              />
             </div>
 
             {/* Quick Actions */}
@@ -325,35 +311,18 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
           </div>
         </section>
 
-        {/* Enquiry & Mortgage Section */}
-        <section id="enquire-section" className="py-20 lg:py-28 px-6 lg:px-16 max-w-[1500px] mx-auto border-t border-[#82000D]/10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-            
-            {/* Contact Form */}
-            <div className="bg-[#FFFFFF] p-8 lg:p-12 shadow-[0_10px_40px_rgba(28,23,20,0.03)] border border-[#82000D]/5">
-              <div className="mb-10 text-center">
-                <p className="text-[10px] font-bold tracking-[0.4em] text-[#82000D] uppercase mb-3">Interested in this property?</p>
-                <h3 className="text-2xl font-serif text-[#1C1714]">Send an Enquiry</h3>
-              </div>
-              <ContactForm 
-                initialInquiryType="Buying a Property"
-                prefilledMessage={`Hello, I would like more information about the property "${property.title}".`}
-              />
+        {/* Mortgage Section */}
+        <section className="py-20 lg:py-28 px-6 lg:px-16 max-w-[1100px] mx-auto border-t border-[#82000D]/10">
+          <div className="max-w-2xl">
+            <div className="mb-8">
+              <h3 className="text-3xl font-serif text-[#1C1714] mb-4">Mortgage <em className="italic text-[#82000D]">Calculator</em></h3>
+              <p className="text-[0.95rem] font-normal text-[#1C1714]/70 leading-relaxed">
+                Estimate your monthly payments. Adjust the home price, down payment, and interest rate to see how they impact your costs.
+              </p>
             </div>
-
-            {/* Mortgage Calculator Expanded */}
-            <div className="flex flex-col">
-              <div className="mb-8">
-                <h3 className="text-3xl font-serif text-[#1C1714] mb-4">Mortgage <em className="italic text-[#82000D]">Calculator</em></h3>
-                <p className="text-[0.95rem] font-normal text-[#1C1714]/70 leading-relaxed">
-                  Estimate your monthly payments. Adjust the home price, down payment, and interest rate to see how they impact your costs.
-                </p>
-              </div>
-              <div className="flex-1 bg-[#FFFFFF] shadow-[0_10px_40px_rgba(28,23,20,0.03)] border border-[#82000D]/5 p-2">
-                <MortgageCalculator propertyPrice={priceAmount ? Number(priceAmount) : undefined} className="border-none shadow-none" />
-              </div>
+            <div className="bg-[#FFFFFF] shadow-[0_10px_40px_rgba(28,23,20,0.03)] border border-[#82000D]/5 p-2">
+              <MortgageCalculator propertyPrice={priceAmount ? Number(priceAmount) : undefined} className="border-none shadow-none" />
             </div>
-
           </div>
         </section>
 
