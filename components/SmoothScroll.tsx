@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Lenis from "lenis";
 import { useReducedMotion } from "framer-motion";
 
-/* Lenis smooth scroll — disabled when the user prefers reduced motion. */
+/* Lenis smooth scroll - disabled when the user prefers reduced motion. */
 export default function SmoothScroll() {
   const reduce = useReducedMotion();
 

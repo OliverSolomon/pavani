@@ -55,7 +55,7 @@ function PropImg({ src, alt, sizes, className, letterClass }: {
   );
 }
 
-/* ── Listing card — echoes the neighbourhoods design language ── */
+/* ── Listing card - echoes the neighbourhoods design language ── */
 function PropertyCard({
   property, isCompareEnabled, isSelected, onToggleSelection,
 }: {
@@ -343,7 +343,7 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
                       <Row label="Price" value={formatPrice(typeof p.price === "object" ? p.price.amount : p.price, typeof p.price === "object" ? p.price.currency : "USD")} serif />
                       <Row label="District" value={typeof p.district === "object" ? p.district.name : p.district} />
                       <Row label="Type" value={p.propertyType?.slice(0, 2).join(" / ") || "Residential"} />
-                      <Row label="Space" value={`${p.details || "—"}${p.size ? ` · ${p.size}` : ""}`} />
+                      <Row label="Space" value={`${p.details || "-"}${p.size ? ` · ${p.size}` : ""}`} />
                       <Row label="Amenities" value={p.amenities?.slice(0, 3).join(", ") || "On request"} />
                       <Row label="Completion" value={p.yearBuilt || "Ready"} />
                       <Row label="Status" value="Available" gold />

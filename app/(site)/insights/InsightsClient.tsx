@@ -19,7 +19,7 @@ const FEATURED = {
   date: "June 2026",
   title: "The 2026 Nairobi Luxury Market Outlook",
   excerpt:
-    "Where capital is moving across the city's prime addresses — supply, pricing and the neighbourhoods quietly outperforming the rest.",
+    "Where capital is moving across the city's prime addresses - supply, pricing and the neighbourhoods quietly outperforming the rest.",
   img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1400&q=80",
 };
 
@@ -49,14 +49,14 @@ const ARTICLES = [
     category: "Neighbourhoods",
     date: "April 2026",
     title: "The Diplomatic Belt: Living in Muthaiga & Gigiri",
-    excerpt: "Privacy, provenance and green canopy — inside the city's most discreet addresses.",
+    excerpt: "Privacy, provenance and green canopy - inside the city's most discreet addresses.",
     img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=800&q=80",
   },
   {
     category: "Finance",
     date: "March 2026",
     title: "Financing a Luxury Purchase in Kenya",
-    excerpt: "Mortgages, FX and structuring — a clear view of the routes available to buyers.",
+    excerpt: "Mortgages, FX and structuring - a clear view of the routes available to buyers.",
     img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
   },
   {

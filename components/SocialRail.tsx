@@ -11,7 +11,7 @@ interface SocialRailProps {
   settings?: { contact?: any; socials?: any };
 }
 
-/* Floating social rail — all links editable via Sanity (socialSettings + contactSettings). */
+/* Floating social rail - all links editable via Sanity (socialSettings + contactSettings). */
 export default function SocialRail({ settings }: SocialRailProps) {
   const [open, setOpen] = useState(true);
 

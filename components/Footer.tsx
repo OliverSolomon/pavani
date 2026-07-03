@@ -35,7 +35,7 @@ export default function Footer({ settings }: FooterProps) {
               </div>
             </Link>
             <p className="text-sm font-normal text-[#E8DCBF]/65 leading-relaxed max-w-xs">
-              Nairobi's trusted authority in luxury real estate — curating the city's finest addresses since 2009.
+              Nairobi's trusted authority in luxury real estate - curating the city's finest addresses since 2009.
             </p>
             <div className="flex gap-5 pt-1">
               {socials?.instagram && <Link href={socials.instagram} target="_blank" className="text-[#E8DCBF]/55 hover:text-[#C49027] transition-colors"><FaInstagram size={16} /></Link>}

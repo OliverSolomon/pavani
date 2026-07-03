@@ -39,7 +39,7 @@ function getYouTubeId(url?: string): string | null {
   return /^[\w-]{11}$/.test(url) ? url : null;
 }
 
-/* Click-to-load YouTube facade — premium thumbnail + play, loads the iframe only on demand. */
+/* Click-to-load YouTube facade - premium thumbnail + play, loads the iframe only on demand. */
 function VideoTour({ url, title }: { url: string; title: string }) {
   const id = getYouTubeId(url);
   const [playing, setPlaying] = useState(false);
@@ -65,7 +65,7 @@ function VideoTour({ url, title }: { url: string; title: string }) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`https://i.ytimg.com/vi/${id}/maxresdefault.jpg`}
-            alt={`${title} — video tour`}
+            alt={`${title} - video tour`}
             className="w-full h-full object-cover"
             onError={(e) => { (e.currentTarget as HTMLImageElement).src = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`; }}
           />
@@ -85,7 +85,7 @@ function CompareRow({ label, value }: { label: string; value?: string }) {
   return (
     <div className="flex items-center justify-between gap-3 py-3 border-b border-[#82000D]/8 text-[10px] uppercase tracking-[0.15em]">
       <span className="text-[#1C1714]/40 font-bold shrink-0">{label}</span>
-      <span className="text-[#1C1714]/85 font-medium capitalize text-right">{value || "—"}</span>
+      <span className="text-[#1C1714]/85 font-medium capitalize text-right">{value || "-"}</span>
     </div>
   );
 }
@@ -174,7 +174,7 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
           <span className="text-[#1C1714]">{property.title}</span>
         </div>
 
-        {/* Gallery — inset from the screen edges */}
+        {/* Gallery - inset from the screen edges */}
         <div className="pt-6 px-4 sm:px-6 lg:px-12 max-w-[1700px] mx-auto">
           <PropertyGallery media={mediaItems} title={property.title} />
         </div>
@@ -215,8 +215,8 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
 
           <div className="flex flex-wrap justify-center items-center gap-10 lg:gap-20">
             {[
-              { label: "BEDROOMS", value: property.details?.split("|")[0]?.trim() || "—" },
-              { label: "BATHROOMS", value: property.details?.split("|")[1]?.trim() || "—" },
+              { label: "BEDROOMS", value: property.details?.split("|")[0]?.trim() || "-" },
+              { label: "BATHROOMS", value: property.details?.split("|")[1]?.trim() || "-" },
               { label: "APPROX. SIZE", value: property.size || "On Request" }
             ].map((stat, i) => (
               <div key={i} className="flex flex-col items-center gap-1">
@@ -304,7 +304,7 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
           {/* Sidebar */}
           <div className="lg:col-span-4 h-fit space-y-6">
 
-            {/* Inquiry form — replaces the listing-agent card */}
+            {/* Inquiry form - replaces the listing-agent card */}
             <div id="enquire-section" className="bg-[#FFFFFF] border border-[#82000D]/10 p-7 lg:p-8 scroll-mt-28">
               <div className="mb-8 text-center">
                 <p className="text-[10px] font-bold tracking-[0.4em] text-[#82000D] uppercase mb-3">Interested in this property?</p>
@@ -389,8 +389,8 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
                           <h3 className="text-[11px] font-bold tracking-widest text-[#1C1714]/50 uppercase line-clamp-1">{p.title}</h3>
                         </div>
                         <div className="pt-4 border-t border-[#82000D]/8 flex items-center justify-between text-[9px] font-bold tracking-widest text-[#1C1714]/40 uppercase">
-                          <span>{p.details?.split("|")[0]?.trim() || "—"}</span>
-                          <span>{p.details?.split("|")[1]?.trim() || "—"}</span>
+                          <span>{p.details?.split("|")[0]?.trim() || "-"}</span>
+                          <span>{p.details?.split("|")[1]?.trim() || "-"}</span>
                         </div>
                       </div>
                     </Link>
@@ -454,7 +454,7 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
                       </div>
                       <div className="p-6 space-y-4">
                         <div className="space-y-1">
-                          <p className="text-[8px] font-bold tracking-[0.4em] uppercase text-[#82000D]">{it.district || "—"}</p>
+                          <p className="text-[8px] font-bold tracking-[0.4em] uppercase text-[#82000D]">{it.district || "-"}</p>
                           <h3 className="font-serif text-lg font-light text-[#1C1714] capitalize line-clamp-1">{it.title}</h3>
                           <p className="font-serif text-xl text-[#1C1714]">{globalFormatPrice(it.amount, it.currency)}</p>
                         </div>
