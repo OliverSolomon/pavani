@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import {
   Share2,
   Heart,
@@ -12,6 +12,9 @@ import {
   Printer,
   MapPin,
   Play,
+  X,
+  Check,
+  Scale,
 } from "lucide-react";
 import { PortableText } from "@portabletext/react";
 import { FaYoutube } from "react-icons/fa";
@@ -78,12 +81,29 @@ function VideoTour({ url, title }: { url: string; title: string }) {
   );
 }
 
+function CompareRow({ label, value }: { label: string; value?: string }) {
+  return (
+    <div className="flex items-center justify-between gap-3 py-3 border-b border-[#82000D]/8 text-[10px] uppercase tracking-[0.15em]">
+      <span className="text-[#1C1714]/40 font-bold shrink-0">{label}</span>
+      <span className="text-[#1C1714]/85 font-medium capitalize text-right">{value || "—"}</span>
+    </div>
+  );
+}
+
 export default function PropertyDetailClient({ property }: PropertyDetailClientProps) {
   const { formatPrice: globalFormatPrice } = useCurrency();
 
   const [isLiked, setIsLiked] = useState(false);
   const [showToast, setShowToast] = useState<string | null>(null);
   const [currentUrl, setCurrentUrl] = useState("");
+
+  // Compare (similar properties, side by side with the current one)
+  const [compareIds, setCompareIds] = useState<string[]>([]);
+  const [compareOpen, setCompareOpen] = useState(false);
+  const toggleCompare = (id: string) =>
+    setCompareIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : prev.length < 3 ? [...prev, id] : prev
+    );
 
   useEffect(() => {
     setCurrentUrl(window.location.href);
@@ -329,39 +349,132 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
         {/* Similar Listings */}
         {property.similarProperties?.length > 0 && (
           <section className="py-24 bg-[#F3EFE9] px-6 lg:px-16 border-t border-[#82000D]/10">
-            <div className="text-center space-y-3 mb-16">
+            <div className="text-center space-y-3 mb-8">
               <p className="text-[9px] font-bold tracking-[0.5em] text-[#82000D] uppercase">Curated Portfolio</p>
               <h2 className="text-2xl lg:text-4xl font-serif uppercase tracking-tight">Similar Properties</h2>
+              <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#1C1714]/40">Tick properties to compare them side by side</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-[1700px] mx-auto">
-              {property.similarProperties.map((p: any) => (
-                <Link key={p._id} href={`/properties/${p.slug}`} className="group bg-[#F3EFE9] border border-[#82000D]/10 block">
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    {p.imageUrl ? (
-                      <Image src={p.imageUrl} alt={p.title} fill className="object-cover group-hover:scale-105 transition-transform duration-1000" />
-                    ) : (
-                      <div className="w-full h-full bg-[#ECE6DD] flex items-center justify-center"><span className="font-serif text-4xl text-[#82000D]/30">P</span></div>
-                    )}
-                    <div className="absolute top-0 left-0 bg-[#82000D] text-[#FBF5F2] px-3 py-1.5 text-[8px] font-bold tracking-widest uppercase">EXCLUSIVE</div>
+              {property.similarProperties.map((p: any) => {
+                const selected = compareIds.includes(p._id);
+                return (
+                  <div key={p._id} className={cn("relative group bg-[#FFFFFF] border transition-colors duration-200", selected ? "border-[#82000D]" : "border-[#82000D]/10")}>
+                    <button
+                      type="button"
+                      onClick={() => toggleCompare(p._id)}
+                      aria-label={selected ? "Remove from compare" : "Add to compare"}
+                      className="absolute top-3 right-3 z-20"
+                    >
+                      <span className={cn(
+                        "w-6 h-6 flex items-center justify-center border transition-all duration-200",
+                        selected ? "bg-[#82000D] border-[#82000D] text-[#FBF5F2]" : "bg-[#FAF8F4]/80 backdrop-blur-sm border-[#82000D]/40 text-transparent hover:border-[#82000D]"
+                      )}>
+                        <Check size={13} />
+                      </span>
+                    </button>
+                    <Link href={`/properties/${p.slug}`} className="block">
+                      <div className="relative aspect-[4/3] overflow-hidden">
+                        {p.imageUrl ? (
+                          <Image src={p.imageUrl} alt={p.title} fill className="object-cover group-hover:scale-105 transition-transform duration-1000" />
+                        ) : (
+                          <div className="w-full h-full bg-[#ECE6DD] flex items-center justify-center"><span className="font-serif text-4xl text-[#82000D]/30">P</span></div>
+                        )}
+                        <div className="absolute top-0 left-0 bg-[#82000D] text-[#FBF5F2] px-3 py-1.5 text-[8px] font-bold tracking-widest uppercase">EXCLUSIVE</div>
+                      </div>
+                      <div className="p-6 space-y-4">
+                        <div>
+                          <p className="text-xl font-serif text-[#1C1714] mb-1">
+                            {globalFormatPrice(typeof p.price === 'object' ? p.price.amount : p.price, typeof p.price === 'object' ? p.price.currency : "USD")}
+                          </p>
+                          <h3 className="text-[11px] font-bold tracking-widest text-[#1C1714]/50 uppercase line-clamp-1">{p.title}</h3>
+                        </div>
+                        <div className="pt-4 border-t border-[#82000D]/8 flex items-center justify-between text-[9px] font-bold tracking-widest text-[#1C1714]/40 uppercase">
+                          <span>{p.details?.split("|")[0]?.trim() || "—"}</span>
+                          <span>{p.details?.split("|")[1]?.trim() || "—"}</span>
+                        </div>
+                      </div>
+                    </Link>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div>
-                      <p className="text-xl font-serif text-[#1C1714] mb-1">
-                        {globalFormatPrice(typeof p.price === 'object' ? p.price.amount : p.price, typeof p.price === 'object' ? p.price.currency : "USD")}
-                      </p>
-                      <h3 className="text-[10px] font-bold tracking-widest text-[#1C1714]/40 uppercase line-clamp-1">{p.title}</h3>
-                    </div>
-                    <div className="pt-4 border-t border-[#82000D]/8 flex items-center justify-between text-[9px] font-bold tracking-widest text-[#1C1714]/40 uppercase">
-                      <span>{p.details?.split("|")[0]?.trim() || "—"}</span>
-                      <span>{p.details?.split("|")[1]?.trim() || "—"}</span>
-                    </div>
-                  </div>
-                </Link>
-              ))}
+                );
+              })}
             </div>
           </section>
         )}
       </div>
+
+      {/* Compare bar */}
+      <AnimatePresence>
+        {compareIds.length > 0 && !compareOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 24 }}
+            transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] print:hidden"
+          >
+            <div className="glass-card flex items-center gap-4 pl-6 pr-3 py-3">
+              <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#1C1714]">{compareIds.length} selected</span>
+              <button onClick={() => setCompareIds([])} className="text-[9px] font-bold tracking-[0.2em] uppercase text-[#1C1714]/45 hover:text-[#82000D] transition-colors">Clear</button>
+              <button onClick={() => setCompareOpen(true)} className="btn-crimson inline-flex items-center gap-2 px-6 py-3 text-[10px] font-bold tracking-[0.3em] uppercase">
+                <Scale size={13} /> Compare
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Compare modal (side by side) */}
+      <AnimatePresence>
+        {compareOpen && (() => {
+          const selectedSimilars = (property.similarProperties || []).filter((p: any) => compareIds.includes(p._id));
+          const items = [
+            { _id: property._id, title: property.title, imageUrl: property.imageUrl, amount: priceAmount, currency: priceCurrency, district: property.district?.name, type: property.propertyType?.[0], details: property.details, current: true, slug: undefined as string | undefined },
+            ...selectedSimilars.map((p: any) => ({ _id: p._id, slug: p.slug, title: p.title, imageUrl: p.imageUrl, amount: typeof p.price === "object" ? p.price.amount : p.price, currency: typeof p.price === "object" ? p.price.currency : "USD", district: p.district, type: p.propertyType?.[0], details: p.details, current: false })),
+          ];
+          return (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }} className="fixed inset-0 z-[100] bg-[#FAF8F4] overflow-y-auto print:hidden">
+              <div className="min-h-screen p-6 lg:p-12 xl:p-16">
+                <div className="flex justify-between items-start mb-10 lg:mb-14">
+                  <div className="space-y-2">
+                    <p className="eyebrow">Side by side · {items.length} properties</p>
+                    <h2 className="text-3xl lg:text-5xl font-serif font-light text-[#1C1714]">Compare</h2>
+                  </div>
+                  <button onClick={() => setCompareOpen(false)} aria-label="Close compare" className="p-3.5 border border-[#82000D]/20 text-[#1C1714]/70 hover:border-[#82000D] hover:text-[#82000D] transition-colors">
+                    <X size={20} />
+                  </button>
+                </div>
+                <div className={cn("grid gap-6 lg:gap-8", items.length <= 2 ? "sm:grid-cols-2 max-w-3xl" : "sm:grid-cols-2 lg:grid-cols-4")}>
+                  {items.map((it) => (
+                    <div key={it._id} className="border border-[#82000D]/12 bg-[#FFFFFF]">
+                      <div className="relative aspect-[4/3] overflow-hidden">
+                        {it.imageUrl ? (
+                          <Image src={it.imageUrl} alt={it.title} fill className="object-cover" />
+                        ) : (
+                          <div className="w-full h-full bg-[#ECE6DD] flex items-center justify-center"><span className="font-serif text-4xl text-[#82000D]/30">P</span></div>
+                        )}
+                        {it.current && <span className="absolute top-0 left-0 bg-[#82000D] text-[#FBF5F2] px-3 py-1.5 text-[8px] font-bold tracking-[0.25em] uppercase">This Property</span>}
+                      </div>
+                      <div className="p-6 space-y-4">
+                        <div className="space-y-1">
+                          <p className="text-[8px] font-bold tracking-[0.4em] uppercase text-[#82000D]">{it.district || "—"}</p>
+                          <h3 className="font-serif text-lg font-light text-[#1C1714] capitalize line-clamp-1">{it.title}</h3>
+                          <p className="font-serif text-xl text-[#1C1714]">{globalFormatPrice(it.amount, it.currency)}</p>
+                        </div>
+                        <div className="border-t border-[#82000D]/10">
+                          <CompareRow label="Type" value={it.type} />
+                          <CompareRow label="Bedrooms" value={it.details?.split("|")[0]?.trim()} />
+                          <CompareRow label="Bathrooms" value={it.details?.split("|")[1]?.trim()} />
+                        </div>
+                        {!it.current && it.slug && (
+                          <Link href={`/properties/${it.slug}`} onClick={() => setCompareOpen(false)} className="btn-crimson flex items-center justify-center w-full py-3 text-[9px] font-bold tracking-[0.3em] uppercase">View Details</Link>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          );
+        })()}
+      </AnimatePresence>
 
       <Footer settings={property.siteSettings} />
 
