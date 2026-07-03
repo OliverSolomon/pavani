@@ -17,7 +17,7 @@ const ease = [0.23, 1, 0.32, 1] as const;
 const CORE_VALUES = [
   {
     title: "Excellence",
-    body: "We maintain the highest standards in every aspect of our business, from property selection to client service. Excellence is not a destination — it is our commitment to continuous improvement.",
+    body: "We maintain the highest standards in every aspect of our business, from property selection to client service. Excellence is not a destination - it is our commitment to continuous improvement.",
   },
   {
     title: "Integrity",
@@ -169,7 +169,7 @@ export default function AboutClient({ settings, testimonials }: AboutClientProps
           <motion.div {...fadeLeft(0)} className="relative aspect-[3/4] max-h-[580px] overflow-hidden">
             <Image
               src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80"
-              alt="Imani Karugu — Founder and CEO"
+              alt="Imani Karugu - Founder and CEO"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover object-top"
@@ -189,7 +189,7 @@ export default function AboutClient({ settings, testimonials }: AboutClientProps
             </div>
             <div className="w-8 h-px bg-[#82000D]/40" />
             <blockquote className="font-serif italic text-[1rem] text-[#1C1714]/90 leading-[1.82]">
-              "Luxury real estate is not just about properties — it's about crafting legacies and enabling dreams. At Pavani Realty Co, we believe every client deserves an experience that matches the calibre of their aspirations."
+              "Luxury real estate is not just about properties - it's about crafting legacies and enabling dreams. At Pavani Realty Co, we believe every client deserves an experience that matches the calibre of their aspirations."
             </blockquote>
             <p className="text-[0.9375rem] text-[#1C1714]/86 font-normal leading-[1.82]">
               With many years of experience in Nairobi's luxury real estate market, Imani Karugu founded Pavani Realty Co to set a new standard for excellence, discretion, and client-centric service. Her deep understanding of the market, combined with an unwavering commitment to integrity, has established Pavani as the trusted choice for discerning buyers, sellers, and investors.

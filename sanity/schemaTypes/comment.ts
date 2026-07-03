@@ -21,7 +21,7 @@ export const comment = defineType({
     defineField({
       name: 'email',
       title: 'Email (private)',
-      description: 'Only visible to you — never shown on the website.',
+      description: 'Only visible to you - never shown on the website.',
       type: 'string',
       readOnly: true,
     }),

@@ -77,7 +77,7 @@ export default function Navbar({ settings }: NavbarProps) {
       >
         <div className="flex items-center justify-between px-6 lg:px-10 h-[72px]">
 
-          {/* Logo — crimson on light, cream over the hero */}
+          {/* Logo - crimson on light, cream over the hero */}
           <Link href="/" className="flex items-center gap-3 shrink-0 group" aria-label="Pavani Realty Co">
             <img
               src={onHeroTop ? "/logo-light.svg" : "/logo-crimson.svg"}
@@ -86,7 +86,7 @@ export default function Navbar({ settings }: NavbarProps) {
             />
           </Link>
 
-          {/* Centre nav — desktop */}
+          {/* Centre nav - desktop */}
           <div className="hidden lg:flex items-center gap-8 xl:gap-10 absolute left-1/2 -translate-x-1/2">
             {NAV_LINKS.map(l => {
               const active = isActive(l.href);
@@ -193,7 +193,7 @@ export default function Navbar({ settings }: NavbarProps) {
         </div>
       </nav>
 
-      {/* ── Mobile overlay — full-screen with drawer easing ── */}
+      {/* ── Mobile overlay - full-screen with drawer easing ── */}
       <AnimatePresence>
         {mobile && (
           <motion.div

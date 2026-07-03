@@ -26,6 +26,8 @@ interface Property {
   district: { name: string; boundary?: { lat: number; lng: number }[] } | string;
   details?: string;
   propertyType?: string[];
+  status?: string;
+  street?: string;
   shortDescription?: string;
   googleMapsUrl?: string;
   amenities?: string[];
@@ -39,7 +41,21 @@ interface PropertiesClientProps {
   settings?: { general?: any; brand?: any; contact?: any; socials?: any };
 }
 
-/* ── Listing card — echoes the neighbourhoods design language ── */
+/* Property image with a branded fallback when no image is set (avoids empty <Image src>). */
+function PropImg({ src, alt, sizes, className, letterClass }: {
+  src?: string; alt: string; sizes?: string; className?: string; letterClass?: string;
+}) {
+  if (src) {
+    return <Image src={src} alt={alt} fill sizes={sizes} className={className ?? "object-cover"} />;
+  }
+  return (
+    <div className="w-full h-full bg-[#F3EFE9] flex items-center justify-center">
+      <span className={letterClass ?? "font-serif text-3xl text-[#82000D]/30"}>P</span>
+    </div>
+  );
+}
+
+/* ── Listing card - echoes the neighbourhoods design language ── */
 function PropertyCard({
   property, isCompareEnabled, isSelected, onToggleSelection,
 }: {
@@ -73,16 +89,21 @@ function PropertyCard({
 
       <Link href={`/properties/${property.slug}`} className="block p-3 lg:p-4">
         <div className="relative aspect-[4/3] overflow-hidden">
-          <Image
+          <PropImg
             src={property.imageUrl}
             alt={property.title}
-            fill
             sizes="(max-width:768px) 100vw, 40vw"
             className="object-cover transition-transform duration-[1.6s] ease-out group-hover:scale-105"
+            letterClass="font-serif text-4xl text-[#82000D]/30"
           />
-          <span className="absolute top-3 left-3 bg-[#82000D] text-[#FBF5F2] px-2.5 py-1 text-[8px] font-bold tracking-[0.25em] uppercase">
+          <span className="absolute top-3 left-3 bg-[#82000D] text-[#FBF5F2] px-2.5 py-1 text-[8px] font-bold tracking-[0.25em] uppercase capitalize">
             {property.propertyType?.[0] || "For Sale"}
           </span>
+          {property.status && (
+            <span className="absolute bottom-3 left-3 bg-[#FAF8F4]/90 backdrop-blur-sm text-[#82000D] px-2.5 py-1 text-[8px] font-bold tracking-[0.25em] uppercase">
+              {property.status}
+            </span>
+          )}
           <button
             onClick={(e) => e.preventDefault()}
             aria-label="Save"
@@ -247,7 +268,7 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
                 <div className="flex -space-x-3">
                   {selectedProperties.map((p) => (
                     <div key={p._id} className="w-9 h-9 border border-[#FFFFFF] relative overflow-hidden group">
-                      <Image src={p.imageUrl} alt={p.title} fill className="object-cover" />
+                      <PropImg src={p.imageUrl} alt={p.title} letterClass="font-serif text-sm text-[#82000D]/40" />
                       <button onClick={() => togglePropertySelection(p)} className="absolute inset-0 bg-[#210A0B]/70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                         <X size={12} className="text-[#FBF5F2]" />
                       </button>
@@ -309,7 +330,7 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
                 {selectedProperties.map((p) => (
                   <div key={p._id} className="space-y-10">
                     <div className="relative aspect-[4/5] overflow-hidden">
-                      <Image src={p.imageUrl} alt={p.title} fill className="object-cover" />
+                      <PropImg src={p.imageUrl} alt={p.title} className="object-cover" letterClass="font-serif text-5xl text-[#82000D]/30" />
                       <span className="absolute top-0 left-0 bg-[#82000D] text-[#FBF5F2] px-3 py-1.5 text-[8px] font-bold tracking-[0.25em] uppercase">
                         {p.propertyType?.[0] || "Exclusive"}
                       </span>
@@ -322,7 +343,7 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
                       <Row label="Price" value={formatPrice(typeof p.price === "object" ? p.price.amount : p.price, typeof p.price === "object" ? p.price.currency : "USD")} serif />
                       <Row label="District" value={typeof p.district === "object" ? p.district.name : p.district} />
                       <Row label="Type" value={p.propertyType?.slice(0, 2).join(" / ") || "Residential"} />
-                      <Row label="Space" value={`${p.details || "—"}${p.size ? ` · ${p.size}` : ""}`} />
+                      <Row label="Space" value={`${p.details || "-"}${p.size ? ` · ${p.size}` : ""}`} />
                       <Row label="Amenities" value={p.amenities?.slice(0, 3).join(", ") || "On request"} />
                       <Row label="Completion" value={p.yearBuilt || "Ready"} />
                       <Row label="Status" value="Available" gold />

@@ -6,13 +6,13 @@ import {
 } from '@sanity/icons'
 
 /**
- * Pavani Realty — Studio navigation.
+ * Pavani Realty - Studio navigation.
  *
  * Organised the way the website reads, so a non-technical editor can find
  * things fast: PAGES (what visitors see) → LISTINGS (your content library)
  * → SETTINGS (brand-wide details like phone, email and social links).
  *
- * "Singleton" items (Home sections, Settings) open ONE editable document —
+ * "Singleton" items (Home sections, Settings) open ONE editable document -
  * there is only ever one of each, so there is no list to manage.
  */
 export const structure: StructureResolver = (S) =>
@@ -25,7 +25,7 @@ export const structure: StructureResolver = (S) =>
         .icon(HomeIcon)
         .child(
           S.list()
-            .title('Home Page — Sections (top to bottom)')
+            .title('Home Page - Sections (top to bottom)')
             .items([
               S.listItem().title('1 · Hero Video (background)').icon(PlayIcon)
                 .child(S.document().schemaType('heroSection').documentId('heroSection')),
@@ -56,6 +56,7 @@ export const structure: StructureResolver = (S) =>
             .title('Neighbourhoods')
             .items([
               S.documentTypeListItem('district').title('Districts').icon(PinIcon),
+              S.documentTypeListItem('street').title('Streets').icon(PinIcon),
               S.documentTypeListItem('county').title('Counties').icon(EarthAmericasIcon),
             ])
         ),
@@ -118,7 +119,7 @@ export const structure: StructureResolver = (S) =>
       ...S.documentTypeListItems().filter(
         (listItem) =>
           ![
-            'post', 'property', 'event', 'district', 'county', 'testimonial', 'comment',
+            'post', 'property', 'event', 'district', 'street', 'county', 'testimonial', 'comment',
             'generalSettings', 'brandSettings', 'contactSettings', 'socialSettings',
             'siteSettings', 'homePage',
             'heroSection', 'secondarySection', 'propertiesSection',

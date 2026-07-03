@@ -73,7 +73,7 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
             className="mt-7 text-[0.95rem] font-normal text-[#1C1714]/86 leading-[1.78] max-w-xl"
             {...mp({ initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.7, ease, delay: 0.2 } })}
           >
-            Every address tells a different story — of pace, privacy and place. Explore the
+            Every address tells a different story - of pace, privacy and place. Explore the
             neighbourhoods we represent, trace their true boundaries on the map, and find the one
             that already feels like yours.
           </motion.p>
@@ -85,7 +85,7 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
         <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_1.05fr] gap-px bg-[#82000D]/12 border border-[#82000D]/12">
           {/* LEFT */}
           <div className="bg-[#FAF8F4] lg:max-h-[80vh] lg:overflow-y-auto no-scrollbar">
-            {/* District list — inline accordion */}
+            {/* District list - inline accordion */}
             <div className="divide-y divide-[#82000D]/10">
               {DISTRICTS.map((d, i) => {
                 const isActive = activeSlug === d.slug;
@@ -172,7 +172,7 @@ export default function NeighborhoodsClient({ neighborhoods, settings }: Props) 
             </div>
           </div>
 
-          {/* RIGHT — sticky map */}
+          {/* RIGHT - sticky map */}
           <div className="bg-[#FAF8F4] relative h-[420px] lg:h-[80vh] lg:sticky lg:top-[72px]">
             <DistrictMap
               districts={DISTRICTS}

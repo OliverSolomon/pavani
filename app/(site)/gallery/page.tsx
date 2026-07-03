@@ -5,7 +5,7 @@ import GalleryClient from "./GalleryClient";
 export const metadata = {
   title: "Gallery | Pavani Realty Co",
   description:
-    "Explore Pavani's visual showcase — video tours, property photography, and insights across Nairobi's finest addresses.",
+    "Explore Pavani's visual showcase - video tours, property photography, and insights across Nairobi's finest addresses.",
 };
 
 export default async function GalleryPage() {

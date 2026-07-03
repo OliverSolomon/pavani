@@ -94,7 +94,7 @@ export default function HomeClient({ data, settings, testimonials }: HomeClientP
         {/* Soft scrim for legibility of the centred glass panel */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#210A0B]/35 via-[#210A0B]/15 to-[#210A0B]/45" />
 
-        {/* Hero text — centred glass panel, two-line headline (enlarged ~35%) */}
+        {/* Hero text - centred glass panel, two-line headline (enlarged ~35%) */}
         <div className="relative z-20 w-full max-w-4xl mx-auto px-6 text-center">
           <div className="glass-dark px-10 py-16 lg:px-[4.75rem] lg:py-[5.5rem]">
             <p className="hero-line hero-line-1 text-[11px] font-bold tracking-[0.5em] uppercase text-[#E8DCBF] mb-8">
@@ -160,13 +160,17 @@ export default function HomeClient({ data, settings, testimonials }: HomeClientP
                   <Link href={`/properties/${slug}`} className="group block">
                     {/* Image with card-border-reveal (Emil clip-path technique) */}
                     <div className="relative aspect-[4/3] overflow-hidden mb-5">
-                      <Image
-                        src={p.imageUrl}
-                        alt={p.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        className="object-cover transition-transform duration-[2.2s] ease-out group-hover:scale-105"
-                      />
+                      {p.imageUrl ? (
+                        <Image
+                          src={p.imageUrl}
+                          alt={p.title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                          className="object-cover transition-transform duration-[2.2s] ease-out group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-[#ECE6DD] flex items-center justify-center"><span className="font-serif text-5xl text-[#82000D]/30">P</span></div>
+                      )}
                       <div className="card-border-reveal" />
                     </div>
                     <div className="space-y-2">
@@ -235,7 +239,7 @@ export default function HomeClient({ data, settings, testimonials }: HomeClientP
             </Link>
           </motion.div>
 
-          {/* Right images — staggered entry */}
+          {/* Right images - staggered entry */}
           <motion.div
             className="grid grid-cols-2 gap-4 h-[480px] lg:h-[540px]"
             {...mp({

@@ -5,7 +5,7 @@ import InsightsClient from "./InsightsClient";
 export const metadata = {
   title: "Insights | Pavani Realty Co",
   description:
-    "Market insights, neighbourhood guides and stories from Pavani Realty Co — Nairobi's authority in luxury real estate.",
+    "Market insights, neighbourhood guides and stories from Pavani Realty Co - Nairobi's authority in luxury real estate.",
 };
 
 export default async function InsightsPage() {

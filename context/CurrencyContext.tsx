@@ -12,7 +12,8 @@ interface CurrencyContextType {
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
 
-const EXCHANGE_RATES: Record<Currency, number> = {
+/* Static fallback rates relative to USD (used until live rates load, or if the API fails). */
+const FALLBACK_RATES: Record<Currency, number> = {
   USD: 1,
   KSH: 130,
   EUR: 0.92,
@@ -26,14 +27,43 @@ const SYMBOLS: Record<Currency, string> = {
   GBP: "£",
 };
 
+/* Normalise whatever currency code is stored in Sanity to our internal codes. */
+function normaliseCode(code?: string): Currency {
+  const c = (code || "USD").trim().toUpperCase();
+  if (c === "KES" || c === "KSH" || c === "KSHS") return "KSH";
+  if (c === "EUR") return "EUR";
+  if (c === "GBP") return "GBP";
+  return "USD";
+}
+
 export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   const [currency, setCurrencyState] = useState<Currency>("USD");
+  const [rates, setRates] = useState<Record<Currency, number>>(FALLBACK_RATES);
 
   useEffect(() => {
     const savedCurrency = localStorage.getItem("pavani_currency") as Currency;
     if (savedCurrency && ["USD", "KSH", "EUR", "GBP"].includes(savedCurrency)) {
       setCurrencyState(savedCurrency);
     }
+  }, []);
+
+  // Pull live FX rates (cached server-side for 12h via /api/rates).
+  useEffect(() => {
+    let active = true;
+    fetch("/api/rates")
+      .then((r) => r.json())
+      .then((data) => {
+        if (active && data?.rates) {
+          setRates({
+            USD: 1,
+            KSH: Number(data.rates.KSH) || FALLBACK_RATES.KSH,
+            EUR: Number(data.rates.EUR) || FALLBACK_RATES.EUR,
+            GBP: Number(data.rates.GBP) || FALLBACK_RATES.GBP,
+          });
+        }
+      })
+      .catch(() => {/* keep fallback rates */});
+    return () => { active = false; };
   }, []);
 
   const setCurrency = (newCurrency: Currency) => {
@@ -49,12 +79,10 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
 
     if (isNaN(numericAmount)) return "Price on Request";
 
-    let amountInUSD = numericAmount;
-    if (baseCurrency === "KSH") amountInUSD = numericAmount / EXCHANGE_RATES.KSH;
-    if (baseCurrency === "EUR") amountInUSD = numericAmount / EXCHANGE_RATES.EUR;
-    if (baseCurrency === "GBP") amountInUSD = numericAmount / EXCHANGE_RATES.GBP;
-
-    const converted = amountInUSD * EXCHANGE_RATES[currency];
+    // Convert the listed price (in its base currency) to USD, then to the active currency.
+    const base = normaliseCode(baseCurrency);
+    const amountInUSD = numericAmount / (rates[base] || 1);
+    const converted = amountInUSD * (rates[currency] || 1);
 
     return (
       SYMBOLS[currency] +

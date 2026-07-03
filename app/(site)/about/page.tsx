@@ -5,7 +5,7 @@ import AboutClient from "./AboutClient";
 export const metadata = {
   title: "About | Pavani Realty Co",
   description:
-    "Learn about Pavani Realty Co — Nairobi's trusted authority in luxury real estate since 2009.",
+    "Learn about Pavani Realty Co - Nairobi's trusted authority in luxury real estate since 2009.",
 };
 
 export default async function AboutPage() {
