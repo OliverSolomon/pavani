@@ -192,8 +192,8 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
               {property.status ? <span className="text-[#1C1714]/40"> · {property.status}</span> : null}
             </p>
             <h1 className="text-3xl lg:text-5xl font-serif tracking-tight text-[#1C1714] capitalize leading-tight">{property.title}</h1>
-            <p className="text-[10px] tracking-[0.4em] text-[#1C1714]/40 uppercase font-bold flex items-center justify-center gap-2">
-              <MapPin size={10} className="text-[#82000D]" />
+            <p className="text-[11px] tracking-[0.28em] text-[#1C1714]/60 uppercase font-bold flex items-center justify-center gap-2">
+              <MapPin size={12} className="text-[#82000D]" />
               {property.buildingName && `${property.buildingName}, `}{property.street && `${property.street}, `}{property.district?.name}, {property.county}
             </p>
           </div>
@@ -219,28 +219,28 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
               { label: "BATHROOMS", value: property.details?.split("|")[1]?.trim() || "-" },
               { label: "APPROX. SIZE", value: property.size || "On Request" }
             ].map((stat, i) => (
-              <div key={i} className="flex flex-col items-center gap-1">
-                <p className="text-xl lg:text-2xl font-serif text-[#1C1714]">{stat.value}</p>
-                <p className="text-[8px] font-bold tracking-[0.4em] text-[#1C1714]/40 uppercase">{stat.label}</p>
+              <div key={i} className="flex flex-col items-center gap-1.5">
+                <p className="text-2xl lg:text-3xl font-serif text-[#1C1714]">{stat.value}</p>
+                <p className="text-[9px] font-bold tracking-[0.3em] text-[#1C1714]/55 uppercase">{stat.label}</p>
               </div>
             ))}
           </div>
         </motion.section>
 
         {/* Main Content + Sidebar */}
-        <section className="py-12 lg:py-20 px-6 lg:px-16 max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+        <section className="py-12 lg:py-20 px-6 lg:px-16 max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           {/* Content */}
-          <div className="lg:col-span-8 space-y-16">
+          <div className="lg:col-span-8 space-y-14">
             {/* Description */}
             <div className="space-y-6">
               <div className="flex items-center gap-4">
                 <div className="h-px w-10 bg-[#82000D]" />
-                <h2 className="text-[10px] font-bold tracking-[0.5em] uppercase text-[#82000D]">The Property</h2>
+                <h2 className="text-[11px] font-bold tracking-[0.42em] uppercase text-[#82000D]">The Property</h2>
               </div>
-              <p className="text-xl lg:text-2xl font-normal font-serif italic text-[#82000D] leading-relaxed">
+              <p className="text-xl lg:text-[1.7rem] font-normal font-serif italic text-[#82000D] leading-[1.5]">
                 {property.shortDescription || "A residence of unparalleled distinction and architectural purity."}
               </p>
-              <div className="prose prose-lg max-w-none text-[#1C1714]/88 font-normal leading-relaxed">
+              <div className="body-rich text-[16px] lg:text-[17px] text-[#1C1714]/90 font-normal leading-[1.85]">
                 {property.longDescription ? <PortableText value={property.longDescription} /> : (
                   <p>Detailed architectural specifications and floor plans are available upon request. Contact our advisors for a private presentation.</p>
                 )}
@@ -252,13 +252,13 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
                   <div className="h-px w-10 bg-[#82000D]" />
-                  <h2 className="text-[10px] font-bold tracking-[0.5em] uppercase text-[#82000D]">Features & Amenities</h2>
+                  <h2 className="text-[11px] font-bold tracking-[0.42em] uppercase text-[#82000D]">Features & Amenities</h2>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6">
                   {property.amenities.map((amenity: string, i: number) => (
-                    <div key={i} className="flex items-center gap-3 py-3 border-b border-[#82000D]/8">
-                      <div className="w-1 h-1 bg-[#82000D] shrink-0" />
-                      <span className="text-[10px] font-bold tracking-widest uppercase text-[#1C1714]/70">{amenity}</span>
+                    <div key={i} className="flex items-center gap-3 py-3.5 border-b border-[#82000D]/10">
+                      <span className="w-1.5 h-1.5 bg-[#82000D] shrink-0" />
+                      <span className="text-[13px] font-medium tracking-wide text-[#1C1714]/85 capitalize">{amenity}</span>
                     </div>
                   ))}
                 </div>
@@ -269,15 +269,15 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
             {property.verificationDocuments?.length > 0 && (
               <div className="bg-[#FFFFFF] p-8 lg:p-12 space-y-8 border border-[#82000D]/10">
                 <div>
-                  <h3 className="text-xl font-serif uppercase tracking-tight mb-1">Compliance & Verification</h3>
-                  <p className="text-[10px] font-bold tracking-widest text-[#1C1714]/40 uppercase">Verified Asset Dossier</p>
+                  <h3 className="text-xl font-serif tracking-tight mb-1.5">Compliance &amp; Verification</h3>
+                  <p className="text-[10px] font-bold tracking-[0.25em] text-[#1C1714]/45 uppercase">Verified Asset Dossier</p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#82000D]/15 border border-[#82000D]/15">
                   {property.verificationDocuments.map((doc: any, i: number) => (
                     <div key={i} className="bg-[#F3EFE9] p-6 flex items-center justify-between group hover:bg-[#FFFFFF] transition-all cursor-pointer">
                       <div className="flex items-center gap-4">
                         <FileText className="text-[#82000D]" size={20} />
-                        <span className="text-[9px] font-bold tracking-widest uppercase">{doc.originalFilename}</span>
+                        <span className="text-[11px] font-semibold tracking-wide text-[#1C1714]/80">{doc.originalFilename}</span>
                       </div>
                       <Download size={16} className="text-[#1C1714]/40 group-hover:text-[#82000D] transition-all" />
                     </div>
@@ -291,7 +291,7 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
                   <div className="h-px w-10 bg-[#82000D]" />
-                  <h2 className="text-[10px] font-bold tracking-[0.5em] uppercase text-[#82000D] flex items-center gap-2.5">
+                  <h2 className="text-[11px] font-bold tracking-[0.42em] uppercase text-[#82000D] flex items-center gap-2.5">
                     <FaYoutube size={15} className="text-[#82000D]" /> Property Video Tour
                   </h2>
                 </div>
@@ -299,49 +299,49 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
               </div>
             )}
 
+            {/* Mortgage Calculator - lives in the content column so the page stays
+                balanced even when a listing carries little other detail */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="h-px w-10 bg-[#82000D]" />
+                <h2 className="text-[11px] font-bold tracking-[0.42em] uppercase text-[#82000D]">Mortgage Calculator</h2>
+              </div>
+              <p className="text-[15px] lg:text-[16px] text-[#1C1714]/80 font-normal leading-[1.8] max-w-xl">
+                Estimate your monthly payments. Adjust the home price, down payment and interest rate to see how they shape your costs.
+              </p>
+              <div className="bg-[#FFFFFF] border border-[#82000D]/10">
+                <MortgageCalculator propertyPrice={priceAmount ? Number(priceAmount) : undefined} baseCurrency={priceCurrency} className="border-none shadow-none" />
+              </div>
+            </div>
           </div>
 
-          {/* Sidebar */}
-          <div className="lg:col-span-4 h-fit space-y-6">
+          {/* Sidebar - sticky, so the enquiry stays in view alongside the content */}
+          <div className="lg:col-span-4 lg:sticky lg:top-24 self-start space-y-6">
 
             {/* Inquiry form - replaces the listing-agent card */}
             <div id="enquire-section" className="bg-[#FFFFFF] border border-[#82000D]/10 p-7 lg:p-8 scroll-mt-28">
               <div className="mb-8 text-center">
-                <p className="text-[10px] font-bold tracking-[0.4em] text-[#82000D] uppercase mb-3">Interested in this property?</p>
-                <h3 className="text-2xl font-serif text-[#1C1714]">Send an Enquiry</h3>
+                <p className="text-[10px] font-bold tracking-[0.35em] text-[#82000D] uppercase mb-3">Interested in this property?</p>
+                <h3 className="text-2xl lg:text-[1.75rem] font-serif text-[#1C1714]">Send an Enquiry</h3>
               </div>
               <ContactForm
-                initialInquiryType="Buying a Property"
+                initialInquiryType="Schedule Viewing"
                 prefilledMessage={`Hello, I would like more information about the property "${property.title}".`}
+                whatsappNumber={property.siteSettings?.socials?.whatsapp || property.siteSettings?.contact?.phone}
               />
             </div>
 
             {/* Quick Actions */}
-            <div className="flex justify-center gap-10 text-[#1C1714]/60 border border-[#82000D]/10 py-6 bg-[#FFFFFF] shadow-sm">
+            <div className="flex justify-center gap-12 text-[#1C1714]/65 border border-[#82000D]/10 py-6 bg-[#FFFFFF]">
               <button onClick={handleShare} className="flex flex-col items-center gap-2 hover:text-[#82000D] transition-colors">
-                <Share2 size={18} /><span className="text-[8px] font-bold uppercase tracking-widest">Share</span>
+                <Share2 size={18} /><span className="text-[9px] font-bold uppercase tracking-[0.2em]">Share</span>
               </button>
               <button onClick={() => window.print()} className="flex flex-col items-center gap-2 hover:text-[#82000D] transition-colors">
-                <Printer size={18} /><span className="text-[8px] font-bold uppercase tracking-widest">Print</span>
+                <Printer size={18} /><span className="text-[9px] font-bold uppercase tracking-[0.2em]">Print</span>
               </button>
               <button onClick={toggleLike} className={cn("flex flex-col items-center gap-2 transition-colors", isLiked ? "text-[#82000D]" : "hover:text-[#82000D]")}>
-                <Heart size={18} fill={isLiked ? "currentColor" : "none"} /><span className="text-[8px] font-bold uppercase tracking-widest">{isLiked ? "Saved" : "Save"}</span>
+                <Heart size={18} fill={isLiked ? "currentColor" : "none"} /><span className="text-[9px] font-bold uppercase tracking-[0.2em]">{isLiked ? "Saved" : "Save"}</span>
               </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Mortgage Section */}
-        <section className="py-20 lg:py-28 px-6 lg:px-16 max-w-[1100px] mx-auto border-t border-[#82000D]/10">
-          <div className="max-w-2xl">
-            <div className="mb-8">
-              <h3 className="text-3xl font-serif text-[#1C1714] mb-4">Mortgage <em className="italic text-[#82000D]">Calculator</em></h3>
-              <p className="text-[0.95rem] font-normal text-[#1C1714]/70 leading-relaxed">
-                Estimate your monthly payments. Adjust the home price, down payment, and interest rate to see how they impact your costs.
-              </p>
-            </div>
-            <div className="bg-[#FFFFFF] shadow-[0_10px_40px_rgba(28,23,20,0.03)] border border-[#82000D]/5 p-2">
-              <MortgageCalculator propertyPrice={priceAmount ? Number(priceAmount) : undefined} className="border-none shadow-none" />
             </div>
           </div>
         </section>
@@ -480,7 +480,10 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
 
       <style jsx global>{`
         * { border-radius: 0 !important; }
-        .prose p { margin-bottom: 1.5em; }
+        .body-rich p { margin-bottom: 1.35em; }
+        .body-rich p:last-child { margin-bottom: 0; }
+        .body-rich strong { font-weight: 600; color: #1c1714; }
+        .body-rich a { color: #82000d; text-decoration: underline; text-underline-offset: 3px; }
       `}</style>
     </main>
   );

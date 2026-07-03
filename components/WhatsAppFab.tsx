@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { FaWhatsapp } from "react-icons/fa";
 
 /* Pavani Realty WhatsApp line */
@@ -9,12 +10,18 @@ const PREFILL = "Hello Pavani Realty, I'd like to enquire about a property.";
 
 export default function WhatsAppFab() {
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
 
   // Delay the entrance so it settles after the hero, not against it.
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 900);
     return () => clearTimeout(t);
   }, []);
+
+  // Individual property pages already have a "WhatsApp Us" button in the
+  // enquiry form, so the floating button would be redundant there.
+  const isPropertyDetail = /^\/properties\/[^/]+/.test(pathname || "");
+  if (isPropertyDetail) return null;
 
   const href = `https://wa.me/${PHONE}?text=${encodeURIComponent(PREFILL)}`;
 
