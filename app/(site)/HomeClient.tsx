@@ -160,13 +160,17 @@ export default function HomeClient({ data, settings, testimonials }: HomeClientP
                   <Link href={`/properties/${slug}`} className="group block">
                     {/* Image with card-border-reveal (Emil clip-path technique) */}
                     <div className="relative aspect-[4/3] overflow-hidden mb-5">
-                      <Image
-                        src={p.imageUrl}
-                        alt={p.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        className="object-cover transition-transform duration-[2.2s] ease-out group-hover:scale-105"
-                      />
+                      {p.imageUrl ? (
+                        <Image
+                          src={p.imageUrl}
+                          alt={p.title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                          className="object-cover transition-transform duration-[2.2s] ease-out group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-[#ECE6DD] flex items-center justify-center"><span className="font-serif text-5xl text-[#82000D]/30">P</span></div>
+                      )}
                       <div className="card-border-reveal" />
                     </div>
                     <div className="space-y-2">

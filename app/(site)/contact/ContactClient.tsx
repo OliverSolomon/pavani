@@ -56,8 +56,8 @@ export default function ContactClient({ settings }: ContactClientProps) {
       <section className="py-12 lg:py-20 px-6 lg:px-16 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
 
-          {/* ── LEFT: Contact Information ── */}
-          <motion.div {...fadeUp(0.08)} className="space-y-12 lg:sticky lg:top-32">
+          {/* ── Contact Information (now on the right) ── */}
+          <motion.div {...fadeUp(0.08)} className="space-y-12 lg:sticky lg:top-32 order-1 lg:order-2">
             <div>
               <h2 className="text-3xl lg:text-4xl font-serif font-normal text-[#1C1714] leading-tight mb-6">
                 Connect With Our <em className="italic text-[#82000D]">Advisors</em>
@@ -102,8 +102,8 @@ export default function ContactClient({ settings }: ContactClientProps) {
             </div>
           </motion.div>
 
-          {/* ── RIGHT: Premium Form ── */}
-          <motion.div {...fadeUp(0.16)} className="bg-[#FFFFFF] p-8 lg:p-12 shadow-[0_10px_40px_rgba(28,23,20,0.03)] border border-[#82000D]/5">
+          {/* ── Premium Form (now on the left) ── */}
+          <motion.div {...fadeUp(0.16)} className="bg-[#FFFFFF] p-8 lg:p-12 shadow-[0_10px_40px_rgba(28,23,20,0.03)] border border-[#82000D]/5 order-2 lg:order-1">
             <div className="mb-10 text-center">
               <p className="text-[10px] font-bold tracking-[0.4em] text-[#82000D] uppercase mb-3">Enquiry Form</p>
               <h3 className="text-2xl font-serif text-[#1C1714]">Send a Message</h3>

@@ -174,19 +174,20 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
         >
           <div className="space-y-3 mb-8">
             <p className="text-[9px] font-bold tracking-[0.5em] text-[#82000D] uppercase">
-              {property.propertyType?.[0] || "EXCLUSIVE LISTING"}
+              <span className="capitalize">{property.propertyType?.[0] || "Exclusive Listing"}</span>
+              {property.status ? <span className="text-[#1C1714]/40"> · {property.status}</span> : null}
             </p>
-            <h1 className="text-3xl lg:text-5xl font-serif tracking-tight text-[#1C1714] uppercase leading-tight">{property.title}</h1>
+            <h1 className="text-3xl lg:text-5xl font-serif tracking-tight text-[#1C1714] capitalize leading-tight">{property.title}</h1>
             <p className="text-[10px] tracking-[0.4em] text-[#1C1714]/40 uppercase font-bold flex items-center justify-center gap-2">
               <MapPin size={10} className="text-[#82000D]" />
-              {property.buildingName && `${property.buildingName}, `}{property.district?.name}, {property.county}
+              {property.buildingName && `${property.buildingName}, `}{property.street && `${property.street}, `}{property.district?.name}, {property.county}
             </p>
           </div>
 
           <div className="h-px w-8 bg-[#82000D] mx-auto mb-8" />
 
           <div className="mb-10">
-            <p className="text-[9px] font-bold tracking-[0.5em] text-[#1C1714]/40 uppercase mb-3">OFFERED AT</p>
+            <p className="text-[9px] font-bold tracking-[0.5em] text-[#1C1714]/40 uppercase mb-3">Starting From</p>
             {priceAmount ? (
               <CurrencyBadge
                 amount={priceAmount}
@@ -367,8 +368,12 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
               {property.similarProperties.map((p: any) => (
                 <Link key={p._id} href={`/properties/${p.slug}`} className="group bg-[#F3EFE9] border border-[#82000D]/10 block">
                   <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image src={p.imageUrl} alt={p.title} fill className="object-cover group-hover:scale-105 transition-transform duration-1000" />
-                    <div className="absolute top-0 left-0 bg-[#FAF8F4] text-white px-3 py-1.5 text-[8px] font-bold tracking-widest uppercase">EXCLUSIVE</div>
+                    {p.imageUrl ? (
+                      <Image src={p.imageUrl} alt={p.title} fill className="object-cover group-hover:scale-105 transition-transform duration-1000" />
+                    ) : (
+                      <div className="w-full h-full bg-[#ECE6DD] flex items-center justify-center"><span className="font-serif text-4xl text-[#82000D]/30">P</span></div>
+                    )}
+                    <div className="absolute top-0 left-0 bg-[#82000D] text-[#FBF5F2] px-3 py-1.5 text-[8px] font-bold tracking-widest uppercase">EXCLUSIVE</div>
                   </div>
                   <div className="p-6 space-y-4">
                     <div>

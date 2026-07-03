@@ -75,8 +75,10 @@ export const PROPERTIES_QUERY = defineQuery(`*[_type == "property"] | order(_cre
     name,
     boundary
   },
+  "street": street->name,
   details,
   propertyType,
+  status,
   shortDescription,
   googleMapsUrl,
   amenities,
@@ -113,8 +115,10 @@ export const PROPERTY_DETAIL_QUERY = defineQuery(`*[_type == "property" && slug.
     description,
     "photos": photos[].asset->url
   },
+  "street": street->name,
   details,
   propertyType,
+  status,
   shortDescription,
   longDescription,
   googleMapsUrl,

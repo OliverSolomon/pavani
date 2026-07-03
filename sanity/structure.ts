@@ -56,6 +56,7 @@ export const structure: StructureResolver = (S) =>
             .title('Neighbourhoods')
             .items([
               S.documentTypeListItem('district').title('Districts').icon(PinIcon),
+              S.documentTypeListItem('street').title('Streets').icon(PinIcon),
               S.documentTypeListItem('county').title('Counties').icon(EarthAmericasIcon),
             ])
         ),
@@ -118,7 +119,7 @@ export const structure: StructureResolver = (S) =>
       ...S.documentTypeListItems().filter(
         (listItem) =>
           ![
-            'post', 'property', 'event', 'district', 'county', 'testimonial', 'comment',
+            'post', 'property', 'event', 'district', 'street', 'county', 'testimonial', 'comment',
             'generalSettings', 'brandSettings', 'contactSettings', 'socialSettings',
             'siteSettings', 'homePage',
             'heroSection', 'secondarySection', 'propertiesSection',

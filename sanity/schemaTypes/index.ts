@@ -5,6 +5,7 @@ import { property } from './property'
 import { event } from './event'
 import { county } from './county'
 import { district } from './district'
+import { street } from './street'
 import { testimonial } from './testimonial'
 import { comment } from './comment'
 import { socialSettings } from './settings/socialSettings'
@@ -25,6 +26,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     event,
     county,
     district,
+    street,
     testimonial,
     comment,
     socialSettings,

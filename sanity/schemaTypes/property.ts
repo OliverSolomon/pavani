@@ -61,6 +61,40 @@ export const property = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'street',
+      title: 'Street',
+      description: 'Optional. Select the street. Only streets within the selected district are shown.',
+      type: 'reference',
+      to: [{ type: 'street' }],
+      options: {
+        filter: ({ document }) => {
+          if (!document.district) {
+            return { filter: '' }
+          }
+          return {
+            filter: 'district._ref == $districtId',
+            params: {
+              districtId: (document.district as any)?._ref,
+            },
+          }
+        },
+      },
+    }),
+    defineField({
+      name: 'status',
+      title: 'Project Status',
+      description: 'Shown as a badge on the listing (e.g. Off-Plan, On-Going, Ready).',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Off-Plan', value: 'Off-Plan' },
+          { title: 'On-Going', value: 'On-Going' },
+          { title: 'Ready', value: 'Ready' },
+        ],
+        layout: 'radio',
+      },
+    }),
+    defineField({
       name: 'shortDescription',
       title: 'Short Description',
       description: 'A brief summary of the property for quick viewing',

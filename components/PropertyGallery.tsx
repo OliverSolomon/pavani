@@ -36,7 +36,7 @@ function MediaThumb({
     );
   }
 
-  if (errored) {
+  if (errored || !item.url) {
     return (
       <div className="w-full h-full bg-[#F3EFE9] flex flex-col items-center justify-center gap-2 text-[#82000D]/55">
         <ImageOff size={big ? 26 : 18} strokeWidth={1.5} />
