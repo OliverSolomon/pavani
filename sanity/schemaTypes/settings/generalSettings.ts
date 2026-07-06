@@ -13,9 +13,27 @@ export const generalSettings = defineType({
     defineField({
       name: 'description',
       title: 'Site Description',
-      description: 'Used for SEO and meta tags',
+      description: 'Default SEO meta description, used on pages that don\'t set their own.',
       type: 'text',
       rows: 4,
+    }),
+    defineField({
+      name: 'keywords',
+      title: 'Default Focus Keywords',
+      description: 'Site-wide search phrases (e.g. "luxury properties in Kenya"). Individual pages can add their own.',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: { layout: 'tags' },
+    }),
+    defineField({
+      name: 'ogImage',
+      title: 'Default Social Share Image',
+      description: 'Shown when the site is shared on WhatsApp, X, LinkedIn. Ideal size 1200×630.',
+      type: 'image',
+      options: { hotspot: true },
+      fields: [
+        { name: 'externalUrl', title: 'OR paste an image URL', type: 'url', description: 'Use instead of uploading.' },
+      ],
     }),
     defineField({
       name: 'footerText',

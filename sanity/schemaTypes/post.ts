@@ -90,6 +90,11 @@ export const post = defineType({
       type: 'array',
       of: [{ type: 'block' }],
     }),
+    defineField({
+      name: 'seo',
+      title: 'SEO & Social Sharing',
+      type: 'seo',
+    }),
   ],
   preview: {
     select: { title: 'title', subtitle: 'category', media: 'coverImage' },

@@ -112,7 +112,7 @@ export default function AboutClient({ settings, testimonials, about }: AboutClie
 
       {/* ── LEADERSHIP ── */}
       <section className="py-16 lg:py-24 px-6 lg:px-16 bg-[#F3EFE9]">
-        <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+        <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-8 lg:gap-10 items-center">
           <motion.div {...fadeLeft(0)} className="relative aspect-[3/4] max-h-[580px] overflow-hidden">
             <Image src={leaderImage} alt={leaderName} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover object-top" />
           </motion.div>

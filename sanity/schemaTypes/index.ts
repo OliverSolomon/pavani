@@ -8,6 +8,7 @@ import { district } from './district'
 import { street } from './street'
 import { testimonial } from './testimonial'
 import { comment } from './comment'
+import { seo } from './objects/seo'
 import { aboutPage } from './pages/aboutPage'
 import { contactPage } from './pages/contactPage'
 import { insightsPage } from './pages/insightsPage'
@@ -32,6 +33,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     street,
     testimonial,
     comment,
+    seo,
     aboutPage,
     contactPage,
     insightsPage,

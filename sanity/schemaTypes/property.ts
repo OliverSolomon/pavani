@@ -290,6 +290,11 @@ export const property = defineType({
       description: 'e.g., 2025 or Under Construction',
       type: 'string',
     }),
+    defineField({
+      name: 'seo',
+      title: 'SEO & Social Sharing',
+      type: 'seo',
+    }),
   ],
   preview: {
     select: {

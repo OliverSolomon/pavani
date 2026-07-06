@@ -2,10 +2,14 @@ import { PROPERTIES_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
 import { sanityFetch } from "@/sanity/lib/live";
 import PropertiesClient from "./PropertiesClient";
 import { Suspense } from "react";
+import JsonLd from "@/components/JsonLd";
+import { graph, breadcrumbSchema, itemListSchema, faqPageSchema, PROPERTY_FAQS } from "@/lib/seo";
 
 export const metadata = {
-  title: "Properties | Pavani Realty Co",
-  description: "Browse luxury properties across Nairobi and beyond. Find your next home with Pavani Realty Co.",
+  title: "Luxury Properties for Sale in Nairobi & Kenya",
+  description:
+    "Browse Pavani Realty Co's collection of luxury properties for sale in Kenya — premium apartments, villas and off-plan homes across Nairobi's most prestigious neighbourhoods.",
+  alternates: { canonical: "/properties" },
 };
 
 export default async function PropertiesPage() {
@@ -14,10 +18,21 @@ export default async function PropertiesPage() {
       sanityFetch({ query: PROPERTIES_QUERY }),
       sanityFetch({ query: SITE_SETTINGS_QUERY })
     ]);
+    const jsonLd = graph(
+      breadcrumbSchema([
+        { name: "Home", path: "/" },
+        { name: "Properties", path: "/properties" },
+      ]),
+      itemListSchema(properties ?? []),
+      faqPageSchema(PROPERTY_FAQS.map((f) => ({ q: f.q, a: f.a }))),
+    );
     return (
-      <Suspense fallback={<div className="min-h-screen bg-[#FAF8F4]" />}>
-        <PropertiesClient initialProperties={properties ?? []} settings={siteSettings} />
-      </Suspense>
+      <>
+        <JsonLd data={jsonLd} />
+        <Suspense fallback={<div className="min-h-screen bg-[#FAF8F4]" />}>
+          <PropertiesClient initialProperties={properties ?? []} settings={siteSettings} />
+        </Suspense>
+      </>
     );
   } catch (err) {
     console.error("[Properties] Sanity fetch failed:", err);

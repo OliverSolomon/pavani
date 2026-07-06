@@ -2,8 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Kept unoptimized so editors can paste arbitrary external image URLs (externalUrl fields)
+    // without every host needing to be allow-listed.
     unoptimized: true,
-    domains: ["cdn.sanity.io", "images.unsplash.com", "res.cloudinary.com"],
     remotePatterns: [
       {
         protocol: "https",

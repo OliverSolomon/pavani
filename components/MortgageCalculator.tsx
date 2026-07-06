@@ -46,7 +46,7 @@ export default function MortgageCalculator({ propertyPrice = 0, baseCurrency = "
         >
           <div className="flex items-center gap-3">
             <Calculator size={16} className="text-[#82000D]" />
-            <span className="text-[10px] font-bold tracking-[0.35em] uppercase text-[#1C1714]">Mortgage Calculator</span>
+            <span className="text-[10px] font-bold tracking-[0.35em] uppercase text-[#1C1714]">Estimate Monthly Repayment</span>
           </div>
           <ChevronDown size={14} className={cn("text-[#1C1714]/30 transition-transform duration-300", isOpen && "rotate-180")} />
         </button>

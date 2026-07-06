@@ -10,13 +10,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   try {
     const { data: neighborhood } = await sanityFetch({ query: NEIGHBORHOOD_QUERY, params: { slug } });
     const name = neighborhood?.name || guide?.name;
-    if (!name) return { title: "Neighborhood Not Found" };
+    if (!name) return { title: "Neighbourhood Not Found" };
     return {
-      title: `${name} Neighborhood Guide | Pavani Realty Co`,
-      description: guide?.summary || `Explore ${name} with our comprehensive neighborhood guide.`,
+      title: `${name} — Luxury Property & Neighbourhood Guide`,
+      description: guide?.summary || `Explore luxury homes and living in ${name}, Nairobi, with Pavani Realty Co's neighbourhood guide.`,
+      alternates: { canonical: `/neighborhoods/${slug}` },
     };
   } catch {
-    return { title: guide ? `${guide.name} Neighborhood Guide | Pavani Realty Co` : "Neighborhood | Pavani Realty Co" };
+    return { title: guide ? `${guide.name} — Neighbourhood Guide` : "Neighbourhood Guide" };
   }
 }
 

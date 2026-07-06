@@ -1,12 +1,22 @@
 import { SITE_SETTINGS_QUERY, INSIGHTS_QUERY, INSIGHTS_PAGE_QUERY } from "@/sanity/lib/queries";
 import { sanityFetch } from "@/sanity/lib/live";
 import InsightsClient from "./InsightsClient";
+import { resolveMeta } from "@/lib/seo";
 
-export const metadata = {
-  title: "Insights | Pavani Realty Co",
-  description:
-    "Market insights, neighbourhood guides and stories from Pavani Realty Co - Nairobi's authority in luxury real estate.",
-};
+export async function generateMetadata() {
+  let seo: any = null;
+  try {
+    const { data } = await sanityFetch({ query: INSIGHTS_PAGE_QUERY });
+    seo = data?.seo ?? null;
+  } catch {}
+  return resolveMeta({
+    seo,
+    title: "Insights — Kenya Luxury Real Estate Market Journal",
+    description:
+      "Market commentary, neighbourhood guides and buyer's insights on Kenya's luxury real estate, from Pavani Realty Co.",
+    path: "/insights",
+  });
+}
 
 export default async function InsightsPage() {
   try {

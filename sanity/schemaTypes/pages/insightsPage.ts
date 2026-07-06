@@ -9,6 +9,7 @@ export const insightsPage = defineType({
     { name: 'hero', title: 'Hero' },
     { name: 'grid', title: 'Article Grid' },
     { name: 'cta', title: 'LinkedIn CTA' },
+    { name: 'seo', title: 'SEO' },
   ],
   fields: [
     // Hero
@@ -21,6 +22,7 @@ export const insightsPage = defineType({
     // CTA
     defineField({ name: 'ctaTitle', title: 'CTA — Heading', type: 'string', group: 'cta', initialValue: 'Every insight, first on LinkedIn' }),
     defineField({ name: 'ctaText', title: 'CTA — Text', type: 'text', rows: 2, group: 'cta' }),
+    defineField({ name: 'seo', title: 'SEO & Social Sharing', type: 'seo', group: 'seo' }),
   ],
   preview: { prepare: () => ({ title: 'Insights Page' }) },
 })

@@ -28,6 +28,7 @@ export const aboutPage = defineType({
     { name: 'values', title: 'Core Values' },
     { name: 'why', title: 'Why Choose Us' },
     { name: 'cta', title: 'Closing CTA' },
+    { name: 'seo', title: 'SEO' },
   ],
   fields: [
     // Hero
@@ -56,6 +57,7 @@ export const aboutPage = defineType({
     defineField({ name: 'ctaText', title: 'CTA — Text', type: 'text', rows: 2, group: 'cta' }),
     defineField({ name: 'ctaButtonLabel', title: 'CTA — Button Label', type: 'string', group: 'cta' }),
     defineField({ name: 'ctaImage', title: 'CTA — Background Image', type: 'image', group: 'cta', ...imageWithUrl }),
+    defineField({ name: 'seo', title: 'SEO & Social Sharing', type: 'seo', group: 'seo' }),
   ],
   preview: { prepare: () => ({ title: 'About Page' }) },
 })
