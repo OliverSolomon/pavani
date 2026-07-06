@@ -3,9 +3,10 @@ import { sanityFetch } from "@/sanity/lib/live";
 import InsightsClient from "./InsightsClient";
 
 export const metadata = {
-  title: "Insights | Pavani Realty Co",
+  title: "Insights — Kenya Luxury Real Estate Market Journal",
   description:
-    "Market insights, neighbourhood guides and stories from Pavani Realty Co - Nairobi's authority in luxury real estate.",
+    "Market commentary, neighbourhood guides and buyer's insights on Kenya's luxury real estate, from Pavani Realty Co.",
+  alternates: { canonical: "/insights" },
 };
 
 export default async function InsightsPage() {

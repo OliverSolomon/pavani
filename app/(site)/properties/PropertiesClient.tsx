@@ -12,6 +12,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { cn } from "@/lib/utils";
 import { useCurrency } from "@/context/CurrencyContext";
+import { PROPERTY_FAQS } from "@/lib/seo";
 
 const ease = [0.23, 1, 0.32, 1] as const;
 
@@ -291,6 +292,27 @@ export default function PropertiesClient({ initialProperties, settings, initialS
           </motion.div>
         )}
       </div>
+
+      {/* ── FAQ (matches FAQPage schema; targets "luxury properties in Kenya" intent) ── */}
+      <section className="px-6 lg:px-16 py-16 lg:py-24 border-t border-[#82000D]/10">
+        <div className="max-w-3xl mx-auto">
+          <p className="eyebrow mb-3">Buyer&rsquo;s Guide</p>
+          <h2 className="text-2xl lg:text-4xl font-serif font-normal text-[#1C1714] mb-10">
+            Luxury Property in Kenya — Your Questions
+          </h2>
+          <div className="divide-y divide-[#82000D]/10 border-y border-[#82000D]/10">
+            {PROPERTY_FAQS.map(({ q, a }) => (
+              <details key={q} className="group py-5">
+                <summary className="flex items-center justify-between gap-4 cursor-pointer list-none">
+                  <h3 className="text-[15px] lg:text-[17px] font-serif text-[#1C1714]">{q}</h3>
+                  <span className="text-[#82000D] text-xl leading-none transition-transform duration-200 group-open:rotate-45">+</span>
+                </summary>
+                <p className="mt-4 text-[14px] lg:text-[15px] text-[#1C1714]/80 leading-[1.8]">{a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <Footer settings={settings} />
 

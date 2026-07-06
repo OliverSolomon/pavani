@@ -3,8 +3,9 @@ import { sanityFetch } from "@/sanity/lib/live";
 import ContactClient from "./ContactClient";
 
 export const metadata = {
-  title: "Contact | Pavani Premium Real Estate",
-  description: "Connect with Pavani's expert advisors. Schedule a private consultation or inquire about our exclusive listings.",
+  title: "Contact Us",
+  description: "Speak with Pavani Realty Co's luxury property advisors. Book a private viewing or enquire about exclusive homes for sale across Nairobi and Kenya.",
+  alternates: { canonical: "/contact" },
 };
 
 export default async function ContactPage() {

@@ -3,9 +3,10 @@ import { sanityFetch } from "@/sanity/lib/live";
 import GalleryClient from "./GalleryClient";
 
 export const metadata = {
-  title: "Gallery | Pavani Realty Co",
+  title: "Gallery — Luxury Property Tours & Photography",
   description:
-    "Explore Pavani's visual showcase - video tours, property photography, and insights across Nairobi's finest addresses.",
+    "Explore video tours and photography of Pavani Realty Co's luxury properties across Nairobi's finest neighbourhoods.",
+  alternates: { canonical: "/gallery" },
 };
 
 export default async function GalleryPage() {

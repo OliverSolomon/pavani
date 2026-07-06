@@ -3,9 +3,10 @@ import { sanityFetch } from "@/sanity/lib/live";
 import AboutClient from "./AboutClient";
 
 export const metadata = {
-  title: "About | Pavani Realty Co",
+  title: "About Us — Kenya's Luxury Real Estate Authority",
   description:
-    "Learn about Pavani Realty Co - Nairobi's trusted authority in luxury real estate since 2009.",
+    "Since 2009, Pavani Realty Co has been Kenya's trusted authority in luxury real estate, curating exclusive homes and investments across Nairobi's most prestigious neighbourhoods.",
+  alternates: { canonical: "/about" },
 };
 
 export default async function AboutPage() {
