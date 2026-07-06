@@ -299,8 +299,7 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
               </div>
             )}
 
-            {/* Mortgage Calculator - lives in the content column so the page stays
-                balanced even when a listing carries little other detail */}
+            {/* Mortgage Calculator - collapsible accordion, closed by default */}
             <div className="space-y-6">
               <div className="flex items-center gap-4">
                 <div className="h-px w-10 bg-[#82000D]" />
@@ -309,9 +308,7 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
               <p className="text-[15px] lg:text-[16px] text-[#1C1714]/80 font-normal leading-[1.8] max-w-xl">
                 Estimate your monthly payments. Adjust the home price, down payment and interest rate to see how they shape your costs.
               </p>
-              <div className="bg-[#FFFFFF] border border-[#82000D]/10">
-                <MortgageCalculator propertyPrice={priceAmount ? Number(priceAmount) : undefined} baseCurrency={priceCurrency} className="border-none shadow-none" />
-              </div>
+              <MortgageCalculator propertyPrice={priceAmount ? Number(priceAmount) : undefined} baseCurrency={priceCurrency} />
             </div>
           </div>
 

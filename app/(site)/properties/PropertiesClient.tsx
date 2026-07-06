@@ -39,6 +39,8 @@ interface Property {
 interface PropertiesClientProps {
   initialProperties: Property[];
   settings?: { general?: any; brand?: any; contact?: any; socials?: any };
+  /** Status slug when the page is reached via a status route (/properties/status/<slug>). */
+  initialStatus?: string;
 }
 
 /* Property image with a branded fallback when no image is set (avoids empty <Image src>). */
@@ -150,7 +152,7 @@ function FilterPill({ label }: { label: string }) {
 /* Turn a status into a URL-friendly slug ("Off-Plan" → "off-plan"). */
 const statusToSlug = (s?: string) => (s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
-/* SEO-friendly status filters — each links to /properties?status=<slug> */
+/* SEO-friendly status filters — each links to its own route (/properties/<slug>) */
 const STATUS_FILTERS = [
   { label: "All", slug: "" },
   { label: "Off-Plan", slug: "off-plan" },
@@ -158,11 +160,12 @@ const STATUS_FILTERS = [
   { label: "Ready", slug: "ready" },
 ];
 
-export default function PropertiesClient({ initialProperties, settings }: PropertiesClientProps) {
+export default function PropertiesClient({ initialProperties, settings, initialStatus }: PropertiesClientProps) {
   const { formatPrice } = useCurrency();
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
-  const statusParam = searchParams.get("status") || "";
+  // Prefer the route status (/properties/status/<slug>); keep ?status= for backwards compatibility.
+  const statusParam = (initialStatus || searchParams.get("status") || "").toLowerCase();
   const [isCompareEnabled, setIsCompareEnabled] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState<Property[]>([]);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
@@ -195,11 +198,11 @@ export default function PropertiesClient({ initialProperties, settings }: Proper
           Available <em className="italic text-[#82000D]">Residences</em>
         </h1>
 
-        {/* Status filters — real links for SEO (/properties?status=off-plan …) */}
+        {/* Status filters — real links for SEO (/properties/off-plan …) */}
         <div className="flex flex-wrap items-center gap-2 mt-7">
           {STATUS_FILTERS.map(({ label, slug }) => {
             const active = statusParam === slug;
-            const href = slug ? `/properties?status=${slug}` : "/properties";
+            const href = slug ? `/properties/${slug}` : "/properties";
             return (
               <Link
                 key={label}
