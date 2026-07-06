@@ -4,6 +4,7 @@
  * Set NEXT_PUBLIC_SITE_URL to the live production domain in Vercel so canonical
  * URLs, Open Graph tags and structured data all point at the right origin.
  */
+import type { Metadata } from "next";
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://pavani.re").replace(/\/+$/, "");
 export const SITE_NAME = "Pavani Realty Co";
@@ -237,4 +238,54 @@ export function graph(...nodes: object[]) {
     "@context": "https://schema.org",
     "@graph": nodes,
   };
+}
+
+/* ─────────────────────────── CMS-aware page metadata ─────────────────────────── */
+
+interface SeoInput {
+  metaTitle?: string;
+  metaDescription?: string;
+  keywords?: string[];
+  ogImage?: string;
+  noIndex?: boolean;
+}
+
+/**
+ * Builds a Next.js Metadata object, preferring editor-supplied Sanity `seo`
+ * fields and falling back to the code-computed title/description/image.
+ * When `metaTitle` is set the brand suffix is NOT appended (editor has full control).
+ */
+export function resolveMeta(opts: {
+  seo?: SeoInput | null;
+  title: string;
+  description: string;
+  path: string;
+  image?: string;
+  type?: "website" | "article";
+  publishedTime?: string;
+}): Metadata {
+  const { seo, title, description, path, image, type = "website", publishedTime } = opts;
+  const finalTitle = seo?.metaTitle || title;
+  const finalDesc = seo?.metaDescription || description;
+  const ogImg = seo?.ogImage || image || OG_IMAGE;
+
+  const og: Record<string, unknown> = {
+    title: seo?.metaTitle ? finalTitle : `${finalTitle} | ${SITE_NAME}`,
+    description: finalDesc,
+    url: absoluteUrl(path),
+    type,
+    images: [{ url: ogImg }],
+  };
+  if (publishedTime) og.publishedTime = publishedTime;
+
+  const meta: Metadata = {
+    title: seo?.metaTitle ? { absolute: seo.metaTitle } : title,
+    description: finalDesc,
+    alternates: { canonical: path },
+    openGraph: og as Metadata["openGraph"],
+    twitter: { card: "summary_large_image", title: finalTitle, description: finalDesc, images: [ogImg] },
+  };
+  if (seo?.keywords?.length) meta.keywords = seo.keywords;
+  if (seo?.noIndex) meta.robots = { index: false, follow: true };
+  return meta;
 }

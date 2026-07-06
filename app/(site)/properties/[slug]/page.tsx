@@ -6,8 +6,8 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import JsonLd from "@/components/JsonLd";
 import {
-  absoluteUrl, graph, breadcrumbSchema, propertyListingSchema, videoSchema,
-  itemListSchema, faqPageSchema, PROPERTY_FAQS,
+  graph, breadcrumbSchema, propertyListingSchema, videoSchema,
+  itemListSchema, faqPageSchema, PROPERTY_FAQS, resolveMeta,
 } from "@/lib/seo";
 
 /* Status keywords are served as clean routes (/properties/off-plan …) rather than
@@ -45,25 +45,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const description =
       property.shortDescription ||
       `${property.title} — luxury property for sale in ${districtName || "Nairobi"}, Kenya. Book a private viewing with Pavani Realty Co.`;
-    const canonical = `/properties/${slug}`;
-    return {
+    return resolveMeta({
+      seo: property.seo,
       title: property.title,
       description,
-      alternates: { canonical },
-      openGraph: {
-        title: `${property.title} | Pavani Realty Co`,
-        description,
-        url: absoluteUrl(canonical),
-        type: "website",
-        ...(property.imageUrl ? { images: [{ url: property.imageUrl, alt: property.title }] } : {}),
-      },
-      twitter: {
-        card: "summary_large_image",
-        title: `${property.title} | Pavani Realty Co`,
-        description,
-        ...(property.imageUrl ? { images: [property.imageUrl] } : {}),
-      },
-    };
+      path: `/properties/${slug}`,
+      image: property.imageUrl,
+    });
   } catch {
     return { title: "Property" };
   }

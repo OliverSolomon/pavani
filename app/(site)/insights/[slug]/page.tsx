@@ -7,27 +7,21 @@ import {
 import { sanityFetch } from "@/sanity/lib/live";
 import ArticleClient from "./ArticleClient";
 import JsonLd from "@/components/JsonLd";
-import { absoluteUrl, graph, breadcrumbSchema, articleSchema } from "@/lib/seo";
+import { graph, breadcrumbSchema, articleSchema, resolveMeta } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const { data: post } = await sanityFetch({ query: POST_BY_SLUG_QUERY, params: { slug } });
   if (!post) return { title: "Insights" };
-  const canonical = `/insights/${slug}`;
-  const description = post.excerpt || `${post.title} — market insight from Pavani Realty Co.`;
-  return {
+  return resolveMeta({
+    seo: post.seo,
     title: post.title,
-    description,
-    alternates: { canonical },
-    openGraph: {
-      title: `${post.title} | Pavani Realty Co`,
-      description,
-      url: absoluteUrl(canonical),
-      type: "article",
-      publishedTime: post.publishedAt,
-      ...(post.coverImage ? { images: [{ url: post.coverImage, alt: post.title }] } : {}),
-    },
-  };
+    description: post.excerpt || `${post.title} — market insight from Pavani Realty Co.`,
+    path: `/insights/${slug}`,
+    image: post.coverImage,
+    type: "article",
+    publishedTime: post.publishedAt,
+  });
 }
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {

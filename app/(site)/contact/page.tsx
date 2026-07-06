@@ -1,12 +1,21 @@
 import { SITE_SETTINGS_QUERY, CONTACT_PAGE_QUERY } from "@/sanity/lib/queries";
 import { sanityFetch } from "@/sanity/lib/live";
 import ContactClient from "./ContactClient";
+import { resolveMeta } from "@/lib/seo";
 
-export const metadata = {
-  title: "Contact Us",
-  description: "Speak with Pavani Realty Co's luxury property advisors. Book a private viewing or enquire about exclusive homes for sale across Nairobi and Kenya.",
-  alternates: { canonical: "/contact" },
-};
+export async function generateMetadata() {
+  let seo: any = null;
+  try {
+    const { data } = await sanityFetch({ query: CONTACT_PAGE_QUERY });
+    seo = data?.seo ?? null;
+  } catch {}
+  return resolveMeta({
+    seo,
+    title: "Contact Us",
+    description: "Speak with Pavani Realty Co's luxury property advisors. Book a private viewing or enquire about exclusive homes for sale across Nairobi and Kenya.",
+    path: "/contact",
+  });
+}
 
 export default async function ContactPage() {
   try {

@@ -9,6 +9,7 @@ export const contactPage = defineType({
     { name: 'hero', title: 'Hero' },
     { name: 'offices', title: 'Offices' },
     { name: 'form', title: 'Form' },
+    { name: 'seo', title: 'SEO' },
   ],
   fields: [
     // Hero
@@ -20,6 +21,7 @@ export const contactPage = defineType({
     // Form
     defineField({ name: 'formEyebrow', title: 'Form — Small Label', type: 'string', group: 'form', initialValue: 'Enquiry Form' }),
     defineField({ name: 'formTitle', title: 'Form — Heading', type: 'string', group: 'form', initialValue: 'Tell Us About Your Requirements' }),
+    defineField({ name: 'seo', title: 'SEO & Social Sharing', type: 'seo', group: 'seo' }),
   ],
   preview: { prepare: () => ({ title: 'Contact Page' }) },
 })

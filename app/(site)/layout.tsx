@@ -30,13 +30,24 @@ const montserrat = Montserrat({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  // Site-wide defaults are editable in Studio → Settings → General.
+  let general: any = {};
+  try {
+    const { data } = await sanityFetch({ query: SITE_SETTINGS_QUERY });
+    general = data?.general || {};
+  } catch {}
+  const description = general.description || DEFAULT_DESCRIPTION;
+  const keywords = general.keywords?.length ? general.keywords : DEFAULT_KEYWORDS;
+  const ogImage = general.ogImage || OG_IMAGE;
+
+  return {
   title: {
     default: "Luxury Properties in Kenya | Pavani Realty Co",
     template: "%s | Pavani Realty Co",
   },
-  description: DEFAULT_DESCRIPTION,
-  keywords: DEFAULT_KEYWORDS,
+  description,
+  keywords,
   applicationName: SITE_NAME,
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
@@ -48,13 +59,13 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Luxury Properties in Kenya | Pavani Realty Co",
-    description: DEFAULT_DESCRIPTION,
+    description,
     url: SITE_URL,
     siteName: SITE_NAME,
     images: [
       {
-        url: OG_IMAGE,
-        secureUrl: OG_IMAGE,
+        url: ogImage,
+        secureUrl: ogImage,
         width: 1200,
         height: 630,
         alt: "Pavani Realty Co — Luxury Real Estate in Kenya",
@@ -67,10 +78,10 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: "Luxury Properties in Kenya | Pavani Realty Co",
-    description: DEFAULT_DESCRIPTION,
+    description,
     site: TWITTER_HANDLE,
     creator: TWITTER_HANDLE,
-    images: [OG_IMAGE],
+    images: [ogImage],
   },
   robots: {
     index: true,
@@ -83,7 +94,8 @@ export const metadata: Metadata = {
       'max-video-preview': -1,
     },
   },
-};
+  };
+}
 
 export default async function RootLayout({
   children,

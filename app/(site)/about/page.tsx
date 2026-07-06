@@ -1,13 +1,22 @@
 import { SITE_SETTINGS_QUERY, TESTIMONIALS_QUERY, ABOUT_PAGE_QUERY } from "@/sanity/lib/queries";
 import { sanityFetch } from "@/sanity/lib/live";
 import AboutClient from "./AboutClient";
+import { resolveMeta } from "@/lib/seo";
 
-export const metadata = {
-  title: "About Us — Kenya's Luxury Real Estate Authority",
-  description:
-    "Since 2009, Pavani Realty Co has been Kenya's trusted authority in luxury real estate, curating exclusive homes and investments across Nairobi's most prestigious neighbourhoods.",
-  alternates: { canonical: "/about" },
-};
+export async function generateMetadata() {
+  let seo: any = null;
+  try {
+    const { data } = await sanityFetch({ query: ABOUT_PAGE_QUERY });
+    seo = data?.seo ?? null;
+  } catch {}
+  return resolveMeta({
+    seo,
+    title: "About Us — Kenya's Luxury Real Estate Authority",
+    description:
+      "Since 2009, Pavani Realty Co has been Kenya's trusted authority in luxury real estate, curating exclusive homes and investments across Nairobi's most prestigious neighbourhoods.",
+    path: "/about",
+  });
+}
 
 export default async function AboutPage() {
   try {
