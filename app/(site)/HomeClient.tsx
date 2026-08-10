@@ -68,13 +68,10 @@ export default function HomeClient({ data, settings, testimonials }: HomeClientP
   };
   const vHero = getVideoSrc(data?.heroVideo, "/videos/amethyst.mp4");
 
-  const properties = data?.propertiesSection?.featuredProperties?.length
-    ? data.propertiesSection.featuredProperties
-    : [
-        { _id: "1", title: "Amethyst Residences", district: "Kilimani",  price: { amount: "7000000",  currency: "KSH" }, imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", details: "2b · 2ba · 88m²",  slug: { current: "#" } },
-        { _id: "2", title: "Muthaiga Sky Penthouse", district: "Muthaiga", price: { amount: "1450000", currency: "USD" }, imageUrl: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80", details: "4b · 5ba · 539m²", slug: { current: "#" } },
-        { _id: "3", title: "Villa Serene, Runda", district: "Runda",     price: { amount: "1950000",  currency: "USD" }, imageUrl: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80", details: "5b · 6ba · 688m²", slug: { current: "#" } },
-      ];
+  // Fully CMS-driven: whatever is selected in Studio → Pages → Home Page →
+  // "2 · Featured Properties". Capped at 6 so the grid stays two clean rows.
+  // No hardcoded fallback — if nothing is selected the section simply hides.
+  const properties: any[] = (data?.propertiesSection?.featuredProperties ?? []).slice(0, 6);
 
   const mp = <T extends object>(props: T) => (reduce ? {} : props);
 
@@ -135,22 +132,22 @@ export default function HomeClient({ data, settings, testimonials }: HomeClientP
         </div>
       </section>
 
-      {/* ── FEATURED PROPERTIES ── */}
+      {/* ── FEATURED PROPERTIES (2 rows × 3, fully CMS-driven) ── */}
+      {properties.length > 0 && (
       <section className="py-24 lg:py-32 px-6 lg:px-16">
         <div className="max-w-[1400px] mx-auto">
           <motion.div
             className="mb-14"
             {...mp(fadeUp(0))}
           >
-            <p className="eyebrow mb-4">Featured</p>
+            <p className="eyebrow mb-4">{data?.propertiesSection?.subtitle || "Featured"}</p>
             <h2 className="text-4xl lg:text-6xl font-serif font-normal text-[#1C1714] leading-tight">
-              Exceptional<br />
-              <em className="italic text-[#82000D]">Residences</em>
+              {data?.propertiesSection?.title || "Exceptional Residences"}
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
-            {properties.slice(0, 3).map((p: any, i: number) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+            {properties.map((p: any, i: number) => {
               const amt  = typeof p.price === "object" ? p.price.amount    : p.price;
               const cur  = typeof p.price === "object" ? p.price.currency  : "USD";
               const slug = p.slug?.current || p.slug || "#";
@@ -208,6 +205,7 @@ export default function HomeClient({ data, settings, testimonials }: HomeClientP
           </motion.div>
         </div>
       </section>
+      )}
 
       {/* ── ABOUT / STATEMENT ── */}
       <section className="py-20 lg:py-28 px-6 lg:px-16 bg-[#F3EFE9]">

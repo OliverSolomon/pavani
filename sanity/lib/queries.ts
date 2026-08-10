@@ -11,14 +11,14 @@ export const HOME_PAGE_QUERY = defineQuery(`{
   },
   "propertiesSection": *[_type == "propertiesSection"][0]{
     ...,
-    featuredProperties[]-> {
+    "featuredProperties": featuredProperties[0...6]-> {
       _id,
       title,
       "slug": slug.current,
       buildingName,
       price,
       "imageUrl": coalesce(
-        image.asset->url, 
+        image.asset->url,
         image.externalUrl,
         media[_type == "image"][0].asset->url,
         media[_type == "externalImage"][0].url
@@ -162,6 +162,49 @@ export const PROPERTY_DETAIL_QUERY = defineQuery(`*[_type == "property" && slug.
     details,
     propertyType
   }
+}`)
+
+/**
+ * Gallery page.
+ * - `featured` mirrors the exact same six properties chosen for the Home page
+ *   "Featured Properties" section, so the two pages can never drift apart.
+ * - `videos` is assembled from real property content: the `videoTour` field on
+ *   a property, plus any `externalVideo` entries in its media gallery.
+ *   Nothing is hardcoded — if no property has a video, the section is hidden.
+ */
+export const GALLERY_QUERY = defineQuery(`{
+  "featured": *[_type == "propertiesSection"][0].featuredProperties[0...6]-> {
+    _id,
+    title,
+    "slug": slug.current,
+    buildingName,
+    price,
+    "imageUrl": coalesce(
+      image.asset->url,
+      image.externalUrl,
+      media[_type == "image"][0].asset->url,
+      media[_type == "externalImage"][0].url
+    ),
+    "county": county->name,
+    "district": district->name,
+    details,
+    propertyType,
+    status
+  },
+  "videos": *[_type == "property" && (defined(videoTour) || count(media[_type == "externalVideo"]) > 0)]
+    | order(_createdAt desc) {
+      _id,
+      title,
+      "slug": slug.current,
+      "district": district->name,
+      "thumbUrl": coalesce(
+        image.asset->url,
+        image.externalUrl,
+        media[_type == "image"][0].asset->url,
+        media[_type == "externalImage"][0].url
+      ),
+      "videos": array::compact([videoTour]) + media[_type == "externalVideo"].url
+    }
 }`)
 
 export const NEIGHBORHOOD_QUERY = defineQuery(`*[_type == "district" && slug.current == $slug][0] {
