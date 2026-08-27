@@ -5,64 +5,85 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Play, ArrowRight, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useCurrency } from "@/context/CurrencyContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+/**
+ * Gallery page — 100% Sanity-driven, no hardcoded media.
+ *
+ *  · "Video Tours"       ← the `videoTour` URL and any `externalVideo` media
+ *                          entries on Property documents.
+ *  · "Property Showcase" ← the exact same six properties selected in
+ *                          Studio → Pages → Home Page → Featured Properties.
+ *
+ * Any section with no content simply does not render.
+ */
+
+interface GalleryVideo {
+  _id: string;
+  title?: string;
+  slug?: string;
+  district?: string;
+  thumbUrl?: string;
+  videos?: (string | null)[];
+}
+
+interface FeaturedProperty {
+  _id: string;
+  title?: string;
+  slug?: string;
+  buildingName?: string;
+  price?: { amount?: string; currency?: string } | string;
+  imageUrl?: string;
+  county?: string;
+  district?: string;
+  details?: string;
+  propertyType?: string[];
+  status?: string;
+}
+
+export interface SiteSettings {
+  general?: Record<string, unknown>;
+  brand?: Record<string, unknown>;
+  contact?: Record<string, unknown>;
+  socials?: Record<string, string | undefined>;
+}
+
 interface GalleryClientProps {
-  settings?: any;
+  settings?: SiteSettings;
+  featured?: FeaturedProperty[];
+  videos?: GalleryVideo[];
 }
 
 const ease = [0.23, 1, 0.32, 1] as const;
 
-/* ── Video data ── */
-const VIDEOS = [
-  { id: "v1", title: "Karen Estate Luxury Tour",          thumb: "photo-1568605114967-8130f3a36994", ytId: "" },
-  { id: "v2", title: "Muthaiga Penthouse Showcase",       thumb: "photo-1600585154340-be6161a56a0c", ytId: "" },
-  { id: "v3", title: "Investment Guide 2024",             thumb: "photo-1582407947304-fd86f028f716", ytId: "" },
-  { id: "v4", title: "Runda Estate Community Tour",       thumb: "photo-1613490493576-7fde63acd811", ytId: "" },
-  { id: "v5", title: "Westlands Luxury Living",           thumb: "photo-1512917774080-9991f1c4c750", ytId: "" },
-  { id: "v6", title: "Lavington Family Homes",            thumb: "photo-1564013799919-ab600027ffc6", ytId: "" },
-  { id: "v7", title: "Gigiri Diplomatic Villas",          thumb: "photo-1613977257363-707ba9348227", ytId: "" },
-  { id: "v8", title: "Nairobi Real Estate Market Trends", thumb: "photo-1486406146926-c627a92ad1ab", ytId: "" },
-];
+/** Flatten one entry per video URL, carrying its parent property's details. */
+function flattenVideos(videos: GalleryVideo[]) {
+  return videos.flatMap((p) =>
+    (p.videos ?? [])
+      .filter((url): url is string => Boolean(url))
+      .map((url, i) => ({
+        key: `${p._id}-${i}`,
+        url,
+        title: p.title ?? "",
+        district: p.district ?? "",
+        thumbUrl: p.thumbUrl,
+      }))
+  );
+}
 
-type Category = "all" | "villa" | "apartment" | "interior" | "exterior" | "amenities" | "penthouse";
-
-/* ── Property photo showcase ── */
-const PHOTOS: { id: string; category: Category; name: string; thumb: string }[] = [
-  { id: "p1",  category: "villa",     name: "Villa Serene, Runda",       thumb: "photo-1568605114967-8130f3a36994" },
-  { id: "p2",  category: "villa",     name: "Karen Grand Estate",         thumb: "photo-1613490493576-7fde63acd811" },
-  { id: "p3",  category: "interior",  name: "Luxury Living Room",         thumb: "photo-1600585154340-be6161a56a0c" },
-  { id: "p4",  category: "apartment", name: "Westlands Penthouse Suite",  thumb: "photo-1512917774080-9991f1c4c750" },
-  { id: "p5",  category: "exterior",  name: "Muthaiga Estate Exterior",   thumb: "photo-1564013799919-ab600027ffc6" },
-  { id: "p6",  category: "penthouse", name: "Sky Residence, Upperhill",   thumb: "photo-1582407947304-fd86f028f716" },
-  { id: "p7",  category: "amenities", name: "Infinity Pool, Karen",       thumb: "photo-1613977257363-707ba9348227" },
-  { id: "p8",  category: "interior",  name: "Master Suite Design",        thumb: "photo-1486406146926-c627a92ad1ab" },
-  { id: "p9",  category: "villa",     name: "Runda Villa Gardens",        thumb: "photo-1613490493576-7fde63acd811" },
-  { id: "p10", category: "apartment", name: "Kilimani Residence",         thumb: "photo-1568605114967-8130f3a36994" },
-  { id: "p11", category: "amenities", name: "Rooftop Terrace, Parklands", thumb: "photo-1512917774080-9991f1c4c750" },
-  { id: "p12", category: "exterior",  name: "Lavington Garden Estate",    thumb: "photo-1600585154340-be6161a56a0c" },
-];
-
-const FILTER_TABS: { label: string; value: Category }[] = [
-  { label: "All",        value: "all" },
-  { label: "Villa",      value: "villa" },
-  { label: "Apartment",  value: "apartment" },
-  { label: "Interior",   value: "interior" },
-  { label: "Exterior",   value: "exterior" },
-  { label: "Amenities",  value: "amenities" },
-  { label: "Penthouse",  value: "penthouse" },
-];
-
-export default function GalleryClient({ settings }: GalleryClientProps) {
+export default function GalleryClient({
+  settings,
+  featured = [],
+  videos = [],
+}: GalleryClientProps) {
   const reduce = useReducedMotion();
-  const [activeFilter, setActiveFilter] = useState<Category>("all");
-  const [lightboxIdx, setLightboxIdx]   = useState<number | null>(null);
-  const youtube = settings?.socials?.youtube || "https://www.youtube.com";
+  const { formatPrice } = useCurrency();
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const youtube = settings?.socials?.youtube;
 
-  const filteredPhotos =
-    activeFilter === "all" ? PHOTOS : PHOTOS.filter(p => p.category === activeFilter);
+  const videoItems = flattenVideos(videos);
 
   const fadeUp = (delay = 0) =>
     reduce
@@ -74,12 +95,14 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
           transition: { duration: 0.68, ease, delay },
         };
 
-  /* Lightbox keyboard nav */
+  /* Lightbox navigation over the featured properties */
   const closeLightbox = () => setLightboxIdx(null);
   const prevPhoto = () =>
-    setLightboxIdx(i => (i === null ? null : (i - 1 + filteredPhotos.length) % filteredPhotos.length));
+    setLightboxIdx((i) => (i === null ? null : (i - 1 + featured.length) % featured.length));
   const nextPhoto = () =>
-    setLightboxIdx(i => (i === null ? null : (i + 1) % filteredPhotos.length));
+    setLightboxIdx((i) => (i === null ? null : (i + 1) % featured.length));
+
+  const active = lightboxIdx !== null ? featured[lightboxIdx] : null;
 
   return (
     <main className="min-h-screen bg-[#FAF8F4] text-[#1C1714]">
@@ -103,168 +126,186 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
         </div>
       </section>
 
-      {/* ── VIDEO TOURS ── */}
-      <section className="py-14 lg:py-20 px-6 lg:px-16 border-t border-[#82000D]/10">
-        <div className="max-w-[1400px] mx-auto">
-          <motion.div {...fadeUp(0)} className="mb-10">
-            <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#82000D]/70 mb-3">Featured Videos</p>
-            <h2 className="text-2xl lg:text-3xl font-serif font-normal text-[#1C1714]">
-              Video Tours &amp; Insights
-            </h2>
-          </motion.div>
+      {/* ── VIDEO TOURS (from property video tours) ── */}
+      {videoItems.length > 0 && (
+        <section className="py-14 lg:py-20 px-6 lg:px-16 border-t border-[#82000D]/10">
+          <div className="max-w-[1400px] mx-auto">
+            <motion.div {...fadeUp(0)} className="mb-10">
+              <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#82000D]/70 mb-3">
+                Featured Videos
+              </p>
+              <h2 className="text-2xl lg:text-3xl font-serif font-normal text-[#1C1714]">
+                Video Tours &amp; Insights
+              </h2>
+            </motion.div>
 
-          {/* 4 × 2 video grid */}
-          <motion.div
-            className="grid grid-cols-2 lg:grid-cols-4 gap-3"
-            variants={reduce ? {} : {
-              hidden: {},
-              show: { transition: { staggerChildren: 0.07 } },
-            }}
-            initial={reduce ? false : "hidden"}
-            whileInView="show"
-            viewport={{ once: true, amount: 0.05 }}
-          >
-            {VIDEOS.map(({ id, title, thumb }) => (
-              <motion.div
-                key={id}
-                variants={reduce ? {} : {
-                  hidden: { opacity: 0, y: 18 },
-                  show:   { opacity: 1, y: 0, transition: { duration: 0.6, ease } },
-                }}
-              >
-                {/* Video thumbnail card → opens our YouTube channel */}
+            <motion.div
+              className="grid grid-cols-2 lg:grid-cols-4 gap-3"
+              variants={reduce ? {} : { hidden: {}, show: { transition: { staggerChildren: 0.07 } } }}
+              initial={reduce ? false : "hidden"}
+              whileInView="show"
+              viewport={{ once: true, amount: 0.05 }}
+            >
+              {videoItems.map((v) => (
+                <motion.div
+                  key={v.key}
+                  variants={reduce ? {} : {
+                    hidden: { opacity: 0, y: 18 },
+                    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease } },
+                  }}
+                >
+                  <a
+                    href={v.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative aspect-video w-full overflow-hidden block text-left"
+                    aria-label={`Watch video tour: ${v.title}`}
+                  >
+                    {v.thumbUrl ? (
+                      <Image
+                        src={v.thumbUrl}
+                        alt={v.title}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        className="object-cover transition-transform duration-[2s] ease-out group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-[#ECE6DD] flex items-center justify-center">
+                        <span className="font-serif text-4xl text-[#82000D]/30">P</span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-[#210A0B]/40 group-hover:bg-[#210A0B]/25 transition-colors duration-300" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-full border-2 border-[#FBF5F2]/70 bg-[#FBF5F2]/15 backdrop-blur-sm flex items-center justify-center group-hover:bg-[#82000D] group-hover:border-[#82000D] transition-all duration-300">
+                        <Play size={16} className="text-[#FBF5F2] transition-colors ml-0.5" fill="currentColor" />
+                      </div>
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-[#210A0B]/90 to-transparent">
+                      <p className="text-[8px] font-bold tracking-[0.25em] uppercase text-[#FBF5F2]/90 leading-tight line-clamp-2">
+                        {v.title}
+                      </p>
+                    </div>
+                  </a>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {youtube && (
+              <motion.div {...fadeUp(0.2)} className="mt-12 flex justify-center">
                 <a
                   href={youtube}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative aspect-video w-full overflow-hidden block text-left"
-                  aria-label={`Watch on YouTube: ${title}`}
+                  className="cta-link inline-flex items-center gap-3 border border-[#82000D]/35 px-10 py-4 text-[10px] font-bold tracking-[0.45em] uppercase text-[#82000D] hover:bg-[#82000D] hover:text-[#FAF8F4] transition-all duration-300"
                 >
-                  <Image
-                    src={`https://images.unsplash.com/${thumb}?auto=format&fit=crop&w=600&q=75`}
-                    alt={title}
-                    fill
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                    className="object-cover transition-transform duration-[2s] ease-out group-hover:scale-105"
-                  />
-                  {/* Maroon scrim */}
-                  <div className="absolute inset-0 bg-[#210A0B]/40 group-hover:bg-[#210A0B]/25 transition-colors duration-300" />
-                  {/* Play button */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-12 h-12 rounded-full border-2 border-[#FBF5F2]/70 bg-[#FBF5F2]/15 backdrop-blur-sm flex items-center justify-center group-hover:bg-[#82000D] group-hover:border-[#82000D] transition-all duration-300">
-                      <Play size={16} className="text-[#FBF5F2] transition-colors ml-0.5" fill="currentColor" />
-                    </div>
-                  </div>
-                  {/* Title overlay at bottom */}
-                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-[#210A0B]/90 to-transparent">
-                    <p className="text-[8px] font-bold tracking-[0.25em] uppercase text-[#FBF5F2]/90 leading-tight">
-                      {title}
-                    </p>
-                  </div>
+                  SUBSCRIBE ON YOUTUBE <ArrowRight size={12} />
                 </a>
               </motion.div>
-            ))}
-          </motion.div>
+            )}
+          </div>
+        </section>
+      )}
 
-          {/* YouTube CTA */}
-          <motion.div {...fadeUp(0.2)} className="mt-12 flex justify-center">
-            <a
-              href={youtube}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="cta-link inline-flex items-center gap-3 border border-[#82000D]/35 px-10 py-4 text-[10px] font-bold tracking-[0.45em] uppercase text-[#82000D] hover:bg-[#82000D] hover:text-[#FAF8F4] transition-all duration-300"
-            >
-              SUBSCRIBE ON YOUTUBE <ArrowRight size={12} />
-            </a>
-          </motion.div>
-        </div>
-      </section>
+      {/* ── PROPERTY SHOWCASE (same six as the Home page) ── */}
+      {featured.length > 0 && (
+        <section className="py-14 lg:py-20 px-6 lg:px-16 bg-[#F3EFE9]">
+          <div className="max-w-[1400px] mx-auto">
+            <motion.div {...fadeUp(0)} className="mb-10">
+              <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#82000D]/70 mb-3">
+                Property Showcase
+              </p>
+              <h2 className="text-2xl lg:text-3xl font-serif font-normal text-[#1C1714]">
+                Featured Properties
+              </h2>
+            </motion.div>
 
-      {/* ── PROPERTY SHOWCASE ── */}
-      <section className="py-14 lg:py-20 px-6 lg:px-16 bg-[#F3EFE9]">
-        <div className="max-w-[1400px] mx-auto">
-          <motion.div {...fadeUp(0)} className="mb-10">
-            <p className="text-[9px] font-bold tracking-[0.5em] uppercase text-[#82000D]/70 mb-3">Property Showcase</p>
-            <h2 className="text-2xl lg:text-3xl font-serif font-normal text-[#1C1714]">
-              Featured Properties
-            </h2>
-          </motion.div>
-
-          {/* Filter tabs */}
-          <motion.div {...fadeUp(0.06)} className="flex flex-wrap gap-2 mb-8">
-            {FILTER_TABS.map(({ label, value }) => (
-              <button
-                key={value}
-                onClick={() => setActiveFilter(value)}
-                className={cn(
-                  "px-4 py-2 text-[9px] font-bold tracking-[0.3em] uppercase border transition-all duration-200",
-                  activeFilter === value
-                    ? "bg-[#82000D] text-[#FAF8F4] border-[#82000D]"
-                    : "border-[#82000D]/20 text-[#1C1714]/74 hover:border-[#82000D]/40 hover:text-[#1C1714]/90"
-                )}
-              >
-                {label}
-              </button>
-            ))}
-          </motion.div>
-
-          {/* Photo grid with AnimatePresence for filter transitions */}
-          <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
-            layout
-          >
-            <AnimatePresence mode="popLayout">
-              {filteredPhotos.map((photo, i) => (
-                <motion.div
-                  key={photo.id}
-                  layout
-                  initial={reduce ? false : { opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={reduce ? {} : { opacity: 0, scale: 0.96 }}
-                  transition={{ duration: 0.4, ease, delay: reduce ? 0 : i * 0.04 }}
-                >
-                  <button
-                    className="group relative aspect-[4/3] w-full overflow-hidden block"
-                    onClick={() => setLightboxIdx(i)}
-                    aria-label={`View ${photo.name}`}
+            <motion.div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" layout>
+              {featured.map((p, i) => {
+                const amount = typeof p.price === "object" ? p.price?.amount : p.price;
+                const currency = typeof p.price === "object" ? p.price?.currency : "KSh";
+                const label = p.district || p.county || p.propertyType?.[0] || "";
+                return (
+                  <motion.div
+                    key={p._id}
+                    layout
+                    initial={reduce ? false : { opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4, ease, delay: reduce ? 0 : i * 0.04 }}
                   >
-                    <Image
-                      src={`https://images.unsplash.com/${photo.thumb}?auto=format&fit=crop&w=700&q=75`}
-                      alt={photo.name}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-[2.5s] ease-out group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#210A0B]/85 via-[#210A0B]/15 to-transparent opacity-90 group-hover:opacity-75 transition-opacity duration-300" />
-                    <div className="absolute top-3 left-3">
-                      <span className="text-[7px] font-bold tracking-[0.4em] uppercase bg-[#82000D] text-[#FBF5F2] px-2.5 py-1.5">
-                        {photo.category}
-                      </span>
-                    </div>
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <p className="text-[13px] font-serif text-[#FBF5F2] leading-snug">{photo.name}</p>
-                    </div>
-                  </button>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+                    <button
+                      className="group relative aspect-[4/3] w-full overflow-hidden block"
+                      onClick={() => setLightboxIdx(i)}
+                      aria-label={`View ${p.title}`}
+                    >
+                      {p.imageUrl ? (
+                        <Image
+                          src={p.imageUrl}
+                          alt={p.title ?? "Featured property"}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          className="object-cover transition-transform duration-[2.5s] ease-out group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-[#ECE6DD] flex items-center justify-center">
+                          <span className="font-serif text-5xl text-[#82000D]/30">P</span>
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#210A0B]/85 via-[#210A0B]/15 to-transparent opacity-90 group-hover:opacity-75 transition-opacity duration-300" />
+                      {label && (
+                        <div className="absolute top-3 left-3">
+                          <span className="text-[7px] font-bold tracking-[0.4em] uppercase bg-[#82000D] text-[#FBF5F2] px-2.5 py-1.5">
+                            {label}
+                          </span>
+                        </div>
+                      )}
+                      <div className="absolute bottom-4 left-4 right-4 text-left">
+                        <p className="text-[13px] font-serif text-[#FBF5F2] leading-snug line-clamp-2">
+                          {p.title}
+                        </p>
+                        {amount && (
+                          <p className="mt-1 text-[10px] tracking-widest text-[#E8DCBF]">
+                            {formatPrice(amount, currency)}
+                          </p>
+                        )}
+                      </div>
+                    </button>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
 
-          {/* View all properties link */}
-          <motion.div {...fadeUp(0.15)} className="mt-12 flex justify-center">
+            <motion.div {...fadeUp(0.15)} className="mt-12 flex justify-center">
+              <Link
+                href="/properties"
+                className="cta-link inline-flex items-center gap-3 border border-[#82000D]/35 px-10 py-4 text-[10px] font-bold tracking-[0.45em] uppercase text-[#82000D] hover:bg-[#82000D] hover:text-[#FAF8F4] transition-all duration-300"
+              >
+                VIEW ALL PROPERTIES <ArrowRight size={12} />
+              </Link>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
+      {/* ── EMPTY STATE (nothing published yet) ── */}
+      {featured.length === 0 && videoItems.length === 0 && (
+        <section className="py-24 px-6 lg:px-16 border-t border-[#82000D]/10">
+          <div className="max-w-[1400px] mx-auto text-center">
+            <p className="font-serif text-xl text-[#1C1714]/70 mb-6">
+              Our gallery is being updated. Please check back shortly.
+            </p>
             <Link
               href="/properties"
               className="cta-link inline-flex items-center gap-3 border border-[#82000D]/35 px-10 py-4 text-[10px] font-bold tracking-[0.45em] uppercase text-[#82000D] hover:bg-[#82000D] hover:text-[#FAF8F4] transition-all duration-300"
             >
-              VIEW ALL PROPERTIES <ArrowRight size={12} />
+              BROWSE PROPERTIES <ArrowRight size={12} />
             </Link>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       {/* ── LIGHTBOX ── */}
       <AnimatePresence>
-        {lightboxIdx !== null && (
+        {active && (
           <motion.div
             className="fixed inset-0 z-[9000] bg-[#210A0B]/95 flex items-center justify-center p-4"
             initial={{ opacity: 0 }}
@@ -279,49 +320,61 @@ export default function GalleryClient({ settings }: GalleryClientProps) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.93, opacity: 0 }}
               transition={{ duration: 0.3, ease }}
-              onClick={e => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
             >
-              <Image
-                src={`https://images.unsplash.com/${filteredPhotos[lightboxIdx].thumb}?auto=format&fit=crop&w=1200&q=85`}
-                alt={filteredPhotos[lightboxIdx].name}
-                fill
-                className="object-cover"
-                sizes="100vw"
-              />
-              {/* Title bar */}
+              {active.imageUrl && (
+                <Image
+                  src={active.imageUrl}
+                  alt={active.title ?? "Featured property"}
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                />
+              )}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#210A0B]/95 to-transparent p-6">
-                <p className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#E8DCBF] mb-1">
-                  {filteredPhotos[lightboxIdx].category}
-                </p>
-                <p className="font-serif text-lg text-[#FBF5F2]">
-                  {filteredPhotos[lightboxIdx].name}
-                </p>
+                {(active.district || active.county) && (
+                  <p className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#E8DCBF] mb-1">
+                    {active.district || active.county}
+                  </p>
+                )}
+                <p className="font-serif text-lg text-[#FBF5F2] mb-3">{active.title}</p>
+                {active.slug && (
+                  <Link
+                    href={`/properties/${active.slug}`}
+                    className="inline-flex items-center gap-2 text-[9px] font-bold tracking-[0.35em] uppercase text-[#E8DCBF] hover:text-[#FBF5F2] transition-colors"
+                  >
+                    VIEW LISTING <ArrowRight size={11} />
+                  </Link>
+                )}
               </div>
-              {/* Close */}
               <button
                 className="absolute top-4 right-4 w-10 h-10 bg-[#FBF5F2]/90 flex items-center justify-center text-[#82000D] hover:bg-[#FBF5F2] transition-colors"
                 onClick={closeLightbox}
+                aria-label="Close"
               >
                 <X size={18} />
               </button>
-              {/* Prev */}
-              <button
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#FBF5F2]/90 flex items-center justify-center text-[#82000D] hover:bg-[#FBF5F2] transition-colors text-lg"
-                onClick={prevPhoto}
-              >
-                &#8592;
-              </button>
-              {/* Next */}
-              <button
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#FBF5F2]/90 flex items-center justify-center text-[#82000D] hover:bg-[#FBF5F2] transition-colors text-lg"
-                onClick={nextPhoto}
-              >
-                &#8594;
-              </button>
+              {featured.length > 1 && (
+                <>
+                  <button
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#FBF5F2]/90 flex items-center justify-center text-[#82000D] hover:bg-[#FBF5F2] transition-colors text-lg"
+                    onClick={prevPhoto}
+                    aria-label="Previous"
+                  >
+                    &#8592;
+                  </button>
+                  <button
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#FBF5F2]/90 flex items-center justify-center text-[#82000D] hover:bg-[#FBF5F2] transition-colors text-lg"
+                    onClick={nextPhoto}
+                    aria-label="Next"
+                  >
+                    &#8594;
+                  </button>
+                </>
+              )}
             </motion.div>
-            {/* Counter */}
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-bold tracking-[0.3em] uppercase text-[#FBF5F2]/55">
-              {lightboxIdx + 1} / {filteredPhotos.length}
+              {(lightboxIdx ?? 0) + 1} / {featured.length}
             </div>
           </motion.div>
         )}
