@@ -6,9 +6,19 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, Star, Check, Send } from "lucide-react";
 import { FaLinkedinIn } from "react-icons/fa";
-import { PortableText } from "@portabletext/react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ArticleBody from "@/components/article/ArticleBody";
+import ArticleSummary from "@/components/article/ArticleSummary";
+import TableOfContents from "@/components/article/TableOfContents";
+import ReadingProgress from "@/components/article/ReadingProgress";
+import Sources from "@/components/article/Sources";
+import {
+  collectCitations,
+  estimateReadingMinutes,
+  extractHeadings,
+  type PortableBlock,
+} from "@/lib/article";
 import { cn } from "@/lib/utils";
 
 const ease = [0.23, 1, 0.32, 1] as const;
@@ -24,6 +34,13 @@ const fmtDate = (d?: string) =>
 
 export default function ArticleClient({ post, comments, settings }: ArticleClientProps) {
   const reduce = useReducedMotion();
+
+  // Derived from the body itself, so an editor never maintains these by hand.
+  const content = (post?.content ?? null) as PortableBlock[] | null;
+  const headings = extractHeadings(content);
+  const { citations } = collectCitations(content);
+  const readingMinutes = estimateReadingMinutes(content, post?.excerpt ?? "");
+  const hasBody = Array.isArray(content) && content.length > 0;
 
   const [form, setForm] = useState({ name: "", email: "", message: "", rating: 0 });
   const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error">("idle");
@@ -61,6 +78,7 @@ export default function ArticleClient({ post, comments, settings }: ArticleClien
 
   return (
     <main className="min-h-screen bg-[#FAF8F4] text-[#1C1714]">
+      {hasBody && <ReadingProgress targetId="article-body" />}
       <Navbar settings={settings} />
 
       {/* ── Hero ── */}
@@ -82,39 +100,70 @@ export default function ArticleClient({ post, comments, settings }: ArticleClien
             <span className="text-[9px] font-bold tracking-[0.4em] uppercase text-[#E8DCBF]">{post.category || "Insight"}</span>
             <span className="w-1 h-1 rounded-full bg-[#E8DCBF]/50" />
             <span className="text-[9px] font-bold tracking-[0.3em] uppercase text-[#FBF5F2]/60">{fmtDate(post.publishedAt)}</span>
+            {hasBody && (
+              <>
+                <span className="w-1 h-1 rounded-full bg-[#E8DCBF]/50" />
+                <span className="text-[9px] font-bold tracking-[0.3em] uppercase text-[#FBF5F2]/60">
+                  {readingMinutes} min read
+                </span>
+              </>
+            )}
           </div>
           <h1 className="text-3xl lg:text-5xl font-serif font-light text-[#FBF5F2] leading-tight">{post.title}</h1>
         </div>
       </section>
 
-      {/* ── Body ── */}
-      <article className="max-w-3xl mx-auto px-6 lg:px-8 py-14 lg:py-20">
-        {post.excerpt && (
-          <p className="text-xl lg:text-2xl font-serif font-light italic text-[#82000D] leading-relaxed mb-10">
-            {post.excerpt}
-          </p>
-        )}
-        {post.content ? (
-          <div className="prose max-w-none text-[#1C1714]/85 font-normal leading-[1.85]">
-            <PortableText value={post.content} />
-          </div>
-        ) : (
-          <p className="text-[1rem] font-normal text-[#1C1714]/80 leading-[1.85]">
-            The full piece is published on LinkedIn. Read it there, then share your thoughts below.
-          </p>
-        )}
+      {/* ── Body ──
+          Two columns on large screens so the contents list can sit alongside
+          the text; on smaller screens it collapses to a panel above the body. */}
+      <div className="mx-auto max-w-[1180px] px-6 lg:px-8 py-14 lg:py-20">
+        <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-14">
+          <article>
+            {post.excerpt && (
+              <p className="text-xl lg:text-2xl font-serif font-light italic text-[#82000D] leading-relaxed mb-10">
+                {post.excerpt}
+              </p>
+            )}
 
-        {post.externalUrl && (
-          <a
-            href={post.externalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-crimson inline-flex items-center gap-3 px-8 py-4 text-[10px] font-bold tracking-[0.35em] uppercase mt-10"
-          >
-            <FaLinkedinIn size={14} /> Read the full article <ArrowUpRight size={14} />
-          </a>
-        )}
-      </article>
+            <ArticleSummary tldr={post.tldr} keyTakeaways={post.keyTakeaways} />
+
+            {headings.length >= 2 && (
+              <div className="lg:hidden">
+                <TableOfContents headings={headings} variant="inline" />
+              </div>
+            )}
+
+            {hasBody ? (
+              <div id="article-body">
+                <ArticleBody value={content} />
+              </div>
+            ) : (
+              <p className="text-[1rem] font-normal text-[#1C1714]/80 leading-[1.85]">
+                The full piece is published on LinkedIn. Read it there, then share your thoughts below.
+              </p>
+            )}
+
+            <Sources citations={citations} furtherReading={post.furtherReading} />
+
+            {post.externalUrl && (
+              <a
+                href={post.externalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-crimson inline-flex items-center gap-3 px-8 py-4 text-[10px] font-bold tracking-[0.35em] uppercase mt-10"
+              >
+                <FaLinkedinIn size={14} /> Read the full article <ArrowUpRight size={14} />
+              </a>
+            )}
+          </article>
+
+          {headings.length >= 2 && (
+            <aside className="hidden lg:block">
+              <TableOfContents headings={headings} />
+            </aside>
+          )}
+        </div>
+      </div>
 
       {/* ── Opinions / Comments ── */}
       <section className="border-t border-[#82000D]/12 bg-[#F3EFE9]">

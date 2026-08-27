@@ -9,6 +9,7 @@ import { street } from './street'
 import { testimonial } from './testimonial'
 import { comment } from './comment'
 import { seo } from './objects/seo'
+import { blockContent } from './objects/blockContent'
 import { aboutPage } from './pages/aboutPage'
 import { contactPage } from './pages/contactPage'
 import { insightsPage } from './pages/insightsPage'
@@ -34,6 +35,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     testimonial,
     comment,
     seo,
+    blockContent,
     aboutPage,
     contactPage,
     insightsPage,

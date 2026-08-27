@@ -1,3 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any --
+ * The schema.org builders below consume Sanity documents whose shape is
+ * defined by GROQ projections rather than by TypeScript. Typing each builder
+ * against a generated document type would couple this file to every query and
+ * break whenever a projection changes, for no runtime benefit — these
+ * functions only ever read optional fields and omit what is missing.
+ */
 /**
  * Central SEO configuration + JSON-LD (schema.org) builders.
  *
@@ -6,7 +13,20 @@
  */
 import type { Metadata } from "next";
 
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://pavani.re").replace(/\/+$/, "");
+/**
+ * The canonical origin for the whole site.
+ *
+ * This value ends up in every canonical tag, sitemap entry, Open Graph image
+ * URL and JSON-LD @id. If it does not match the domain actually being served,
+ * search engines treat the real pages as duplicates of a domain that does not
+ * exist, and the site can drop out of the index entirely — so the fallback is
+ * the live production domain, never a placeholder.
+ *
+ * Still set NEXT_PUBLIC_SITE_URL in Vercel; the fallback is a safety net.
+ */
+export const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL || "https://pavanirealtyco.com"
+).replace(/\/+$/, "");
 export const SITE_NAME = "Pavani Realty Co";
 export const SITE_TAGLINE = "Luxury Real Estate in Kenya";
 export const OG_IMAGE = `${SITE_URL}/og-image.png`;
@@ -159,6 +179,148 @@ export function propertyListingSchema(property: any) {
   };
 }
 
+/**
+ * RealEstateListing — the type search engines and AI assistants actually
+ * associate with property. Emitted alongside the Product node above: Product
+ * carries the price into shopping/rich results, RealEstateListing carries the
+ * meaning ("this is a home for sale in Kilimani, Nairobi, Kenya").
+ *
+ * The address block is the part that wins location queries. Without an explicit
+ * addressLocality / addressRegion / addressCountry, a page about a Karen villa
+ * is just a page with the word "Karen" on it.
+ */
+export function realEstateListingSchema(property: any) {
+  const url = absoluteUrl(`/properties/${property.slug}`);
+  const districtName =
+    typeof property.district === "object" ? property.district?.name : property.district;
+  const amount = typeof property.price === "object" ? property.price?.amount : property.price;
+  const currency = typeof property.price === "object" ? property.price?.currency : "KES";
+  const beds = property.details?.split("|")[0]?.trim();
+  const baths = property.details?.split("|")[1]?.trim();
+
+  // Coordinates come from the pasted Google Maps link where one exists.
+  const coords = extractLatLng(property.googleMapsUrl);
+
+  const amenityFeature = [
+    ...(property.amenities ?? []),
+    ...(property.otherAmenities ?? []),
+  ]
+    .slice(0, 30)
+    .map((value: string) => ({
+      "@type": "LocationFeatureSpecification",
+      name: amenityDisplayName(value),
+      value: true,
+    }));
+
+  return {
+    "@type": "RealEstateListing",
+    name: property.title,
+    url,
+    description:
+      property.shortDescription ||
+      `${property.title} — luxury property for sale in ${districtName || "Nairobi"}, Kenya.`,
+    ...(property.imageUrl ? { image: [property.imageUrl] } : {}),
+    datePosted: property._createdAt || undefined,
+    ...(amount
+      ? {
+          offers: {
+            "@type": "Offer",
+            price: String(amount).replace(/[^0-9.]/g, "") || undefined,
+            priceCurrency: (currency || "KES").toUpperCase(),
+            availability: "https://schema.org/InStock",
+            url,
+            seller: { "@id": ORG_ID },
+          },
+        }
+      : {}),
+    about: {
+      "@type": "SingleFamilyResidence",
+      name: property.title,
+      ...(beds ? { numberOfBedrooms: parseInt(beds, 10) || undefined } : {}),
+      ...(baths ? { numberOfBathroomsTotal: parseInt(baths, 10) || undefined } : {}),
+      ...(property.size ? { floorSize: { "@type": "QuantitativeValue", name: property.size } } : {}),
+      address: {
+        "@type": "PostalAddress",
+        ...(property.street ? { streetAddress: property.street } : {}),
+        addressLocality: districtName || "Nairobi",
+        addressRegion: property.county || "Nairobi County",
+        addressCountry: "KE",
+      },
+      ...(coords
+        ? { geo: { "@type": "GeoCoordinates", latitude: coords.lat, longitude: coords.lng } }
+        : {}),
+      ...(amenityFeature.length ? { amenityFeature } : {}),
+    },
+  };
+}
+
+/** Pulls @lat,lng out of a pasted Google Maps URL, if present. */
+function extractLatLng(mapsUrl?: string): { lat: number; lng: number } | null {
+  if (!mapsUrl) return null;
+  const at = mapsUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if (at) return { lat: parseFloat(at[1]), lng: parseFloat(at[2]) };
+  const q = mapsUrl.match(/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if (q) return { lat: parseFloat(q[1]), lng: parseFloat(q[2]) };
+  return null;
+}
+
+/** Amenity slug → readable name, kept local to avoid a schema-layer import cycle. */
+function amenityDisplayName(value: string): string {
+  return value
+    .replace(/^(security|utility|access|leisure|community|interior|outdoor|service)-/, "")
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+/**
+ * RealEstateAgent — the local-business entity.
+ *
+ * This is what ties the brand to a place. Queries like "luxury property agents
+ * in Nairobi" or "premium real estate Westlands" are local-intent queries, and
+ * without a LocalBusiness node with an address and service area the site is not
+ * a candidate for them at all.
+ */
+export function realEstateAgentSchema(settings?: any) {
+  const contact = settings?.contact ?? {};
+  return {
+    "@type": "RealEstateAgent",
+    "@id": `${SITE_URL}/#agent`,
+    name: SITE_NAME,
+    url: SITE_URL,
+    image: OG_IMAGE,
+    description: DEFAULT_DESCRIPTION,
+    ...(contact.phone ? { telephone: contact.phone } : {}),
+    ...(contact.email ? { email: contact.email } : {}),
+    priceRange: "KES 15,000,000 – KES 500,000,000",
+    currenciesAccepted: "KES, USD",
+    address: {
+      "@type": "PostalAddress",
+      ...(contact.address ? { streetAddress: contact.address } : {}),
+      addressLocality: "Nairobi",
+      addressRegion: "Nairobi County",
+      addressCountry: "KE",
+    },
+    areaServed: [
+      { "@type": "City", name: "Nairobi" },
+      { "@type": "Country", name: "Kenya" },
+      ...[
+        "Westlands",
+        "Kilimani",
+        "Karen",
+        "Muthaiga",
+        "Runda",
+        "Lavington",
+        "Riverside",
+        "Gigiri",
+        "Parklands",
+        "Spring Valley",
+      ].map((name) => ({ "@type": "Place", name })),
+    ],
+    knowsAbout: DEFAULT_KEYWORDS,
+    parentOrganization: { "@id": ORG_ID },
+  };
+}
+
 /** VideoObject for a property's YouTube tour → eligible for video rich results. */
 export function videoSchema(property: any, youTubeId: string) {
   return {
@@ -172,12 +334,35 @@ export function videoSchema(property: any, youTubeId: string) {
   };
 }
 
-export function articleSchema(post: any) {
+/**
+ * BlogPosting for an insight article.
+ *
+ * Beyond basic indexing this is tuned for answer engines. Three things move the
+ * needle on being cited by ChatGPT, Perplexity and AI Overviews:
+ *  · `abstract` / `description` carrying the TL;DR — roughly 44% of LLM
+ *    citations come from the opening portion of a page, so the summary is the
+ *    passage most likely to be quoted
+ *  · `citation` listing the sources the piece draws on, which is a direct
+ *    verifiability signal
+ *  · `speakable` marking which parts are safe to read aloud or extract
+ *
+ * @param opts.citations sources collected from inline citation marks
+ * @param opts.wordCount computed from the body
+ */
+export function articleSchema(
+  post: any,
+  opts?: { citations?: { title: string; url?: string; publisher?: string }[]; wordCount?: number }
+) {
   const url = absoluteUrl(`/insights/${post.slug}`);
+  const takeaways = (post.keyTakeaways ?? []).filter(Boolean);
+  const citations = (opts?.citations ?? []).filter((c) => c?.title);
+
   return {
     "@type": "BlogPosting",
+    "@id": `${url}#article`,
     headline: post.title,
-    description: post.excerpt || post.title,
+    description: post.tldr || post.excerpt || post.title,
+    ...(post.tldr ? { abstract: post.tldr } : {}),
     ...(post.coverImage ? { image: [post.coverImage] } : {}),
     datePublished: post.publishedAt,
     dateModified: post._updatedAt || post.publishedAt,
@@ -185,7 +370,26 @@ export function articleSchema(post: any) {
     publisher: { "@id": ORG_ID },
     mainEntityOfPage: url,
     url,
+    inLanguage: "en-KE",
+    isAccessibleForFree: true,
     ...(post.category ? { articleSection: post.category } : {}),
+    ...(opts?.wordCount ? { wordCount: opts.wordCount } : {}),
+    ...(takeaways.length ? { keywords: takeaways.join(", ") } : {}),
+    ...(citations.length
+      ? {
+          citation: citations.map((c) => ({
+            "@type": "CreativeWork",
+            name: c.title,
+            ...(c.url ? { url: c.url } : {}),
+            ...(c.publisher ? { publisher: { "@type": "Organization", name: c.publisher } } : {}),
+          })),
+        }
+      : {}),
+    // Tells assistants which parts of the page are the summary.
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: [".summary-tldr-text", ".summary-takeaway-list", ".article-standfirst"],
+    },
   };
 }
 

@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import JsonLd from "@/components/JsonLd";
 import {
-  graph, breadcrumbSchema, propertyListingSchema, videoSchema,
+  graph, breadcrumbSchema, propertyListingSchema, realEstateListingSchema, videoSchema,
   itemListSchema, faqPageSchema, PROPERTY_FAQS, resolveMeta,
 } from "@/lib/seo";
 
@@ -115,6 +115,7 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
         { name: property.title, path: `/properties/${slug}` },
       ]),
       propertyListingSchema(property),
+      realEstateListingSchema(property),
       ...(vid ? [videoSchema(property, vid)] : []),
     );
 

@@ -8,6 +8,7 @@ import { sanityFetch } from "@/sanity/lib/live";
 import ArticleClient from "./ArticleClient";
 import JsonLd from "@/components/JsonLd";
 import { graph, breadcrumbSchema, articleSchema, resolveMeta } from "@/lib/seo";
+import { collectCitations, countWords, type PortableBlock } from "@/lib/article";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -39,13 +40,19 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     params: { postId: post._id },
   });
 
+  // Citations and length are read straight from the body so the structured
+  // data always matches what is actually on the page.
+  const blocks = (post.content ?? null) as PortableBlock[] | null;
+  const { citations } = collectCitations(blocks);
+  const wordCount = countWords(blocks);
+
   const jsonLd = graph(
     breadcrumbSchema([
       { name: "Home", path: "/" },
       { name: "Insights", path: "/insights" },
       { name: post.title, path: `/insights/${slug}` },
     ]),
-    articleSchema(post),
+    articleSchema(post, { citations, wordCount }),
   );
 
   return (

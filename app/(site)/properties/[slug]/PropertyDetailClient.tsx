@@ -26,6 +26,7 @@ import PropertyGallery from "@/components/PropertyGallery";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import CurrencyBadge from "@/components/CurrencyBadge";
 import ContactForm from "@/components/ContactForm";
+import AmenityList from "@/components/AmenityList";
 
 interface PropertyDetailClientProps {
   property: any;
@@ -248,20 +249,16 @@ export default function PropertyDetailClient({ property }: PropertyDetailClientP
             </div>
 
             {/* Property Features */}
-            {property.amenities && property.amenities.length > 0 && (
+            {(property.amenities?.length > 0 || property.otherAmenities?.length > 0) && (
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
                   <div className="h-px w-10 bg-[#82000D]" />
                   <h2 className="text-[11px] font-bold tracking-[0.42em] uppercase text-[#82000D]">Features & Amenities</h2>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6">
-                  {property.amenities.map((amenity: string, i: number) => (
-                    <div key={i} className="flex items-center gap-3 py-3.5 border-b border-[#82000D]/10">
-                      <span className="w-1.5 h-1.5 bg-[#82000D] shrink-0" />
-                      <span className="text-[13px] font-medium tracking-wide text-[#1C1714]/85 capitalize">{amenity}</span>
-                    </div>
-                  ))}
-                </div>
+                <AmenityList
+                  amenities={property.amenities}
+                  otherAmenities={property.otherAmenities}
+                />
               </div>
             )}
 

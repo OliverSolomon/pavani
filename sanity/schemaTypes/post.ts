@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineArrayMember, defineField, defineType } from 'sanity'
 
 /**
  * Insight / Journal article. Shown on the "Insights" page.
@@ -84,11 +84,59 @@ export const post = defineType({
       initialValue: false,
     }),
     defineField({
+      name: 'tldr',
+      title: 'TL;DR',
+      description:
+        'The whole article in two or three sentences, for readers who want the answer before deciding to read on. Shown in a highlighted box directly under the headline.',
+      type: 'text',
+      rows: 3,
+      validation: (Rule) => Rule.max(400),
+    }),
+    defineField({
+      name: 'keyTakeaways',
+      title: 'Key Takeaways',
+      description:
+        'Three to five scannable bullet points. These appear in a summary panel above the article and are what most readers will actually absorb.',
+      type: 'array',
+      of: [{ type: 'string' }],
+      validation: (Rule) => Rule.max(6),
+    }),
+    defineField({
       name: 'content',
       title: 'Full Article Body (optional)',
-      description: 'Only needed if you host the full article on this site instead of linking out.',
+      description:
+        'Only needed if you host the full article on this site instead of linking out. Use "Section heading (H2)" for each major section — the website builds the table of contents from these automatically.',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'furtherReading',
+      title: 'Further Reading',
+      description:
+        'Extra sources listed at the foot of the article. Anything you cited inline while writing is added to Sources automatically — this is only for material you did not cite directly.',
       type: 'array',
-      of: [{ type: 'block' }],
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'source',
+          fields: [
+            defineField({
+              name: 'title',
+              title: 'Title',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({ name: 'publisher', title: 'Publisher / Author', type: 'string' }),
+            defineField({
+              name: 'url',
+              title: 'Link',
+              type: 'url',
+              validation: (Rule) => Rule.uri({ scheme: ['http', 'https'] }),
+            }),
+            defineField({ name: 'year', title: 'Year / Date', type: 'string' }),
+          ],
+          preview: { select: { title: 'title', subtitle: 'publisher' } },
+        }),
+      ],
     }),
     defineField({
       name: 'seo',

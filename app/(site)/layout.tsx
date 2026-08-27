@@ -15,7 +15,7 @@ import { sanityFetch } from "@/sanity/lib/live";
 import JsonLd from "@/components/JsonLd";
 import {
   SITE_URL, SITE_NAME, DEFAULT_DESCRIPTION, DEFAULT_KEYWORDS, OG_IMAGE, TWITTER_HANDLE,
-  organizationSchema, websiteSchema, graph,
+  organizationSchema, websiteSchema, realEstateAgentSchema, graph,
 } from "@/lib/seo";
 
 const cormorant = Cormorant_Garamond({
@@ -113,7 +113,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body className={`${cormorant.variable} ${montserrat.variable} font-sans bg-[#FAF8F4] text-[#1C1714] antialiased`} suppressHydrationWarning>
-        <JsonLd data={graph(organizationSchema(siteSettings), websiteSchema())} />
+        <JsonLd data={graph(organizationSchema(siteSettings), websiteSchema(), realEstateAgentSchema(siteSettings))} />
         <SmoothScroll />
         <ServiceWorkerRegistration />
         <CurrencyProvider>
