@@ -8,14 +8,8 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useCurrency } from "@/context/CurrencyContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { resolveVideo, type VideoSource } from "@/lib/video";
 
-interface VideoSource {
-  title?: string;
-  subtitle?: string;
-  type?: "file" | "url";
-  videoUrl?: string;
-  fileUrl?: string;
-}
 
 interface HomeClientProps {
   data: {
@@ -62,11 +56,8 @@ export default function HomeClient({ data, settings, testimonials }: HomeClientP
     ? testimonials.map((t: any) => ({ stars: t.rating || 5, quote: t.quote, name: t.authorName, role: t.authorRole }))
     : TESTIMONIALS;
 
-  const getVideoSrc = (s?: VideoSource, fallback?: string) => {
-    if (!s) return fallback;
-    return s.type === "url" ? s.videoUrl || fallback : s.fileUrl || fallback;
-  };
-  const vHero = getVideoSrc(data?.heroVideo, "/videos/amethyst.mp4");
+  // resolveVideo serves Cloudinary at best quality and sets the right MIME type.
+  const vHero = resolveVideo(data?.heroVideo, "/videos/amethyst.mp4");
 
   // Fully CMS-driven: whatever is selected in Studio → Pages → Home Page →
   // "2 · Featured Properties". Capped at 6 so the grid stays two clean rows.
@@ -82,11 +73,13 @@ export default function HomeClient({ data, settings, testimonials }: HomeClientP
       {/* ── HERO ── */}
       <section className="relative min-h-[100dvh] w-full overflow-hidden flex items-center justify-center">
         <video
+          key={vHero.src}
           ref={videoRef}
+          preload="auto"
           autoPlay loop muted playsInline
           className="absolute inset-0 w-full h-full object-cover"
         >
-          <source src={vHero} type="video/mp4" />
+          <source src={vHero.src} type={vHero.type} />
         </video>
         {/* Soft scrim for legibility of the centred glass panel */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#210A0B]/35 via-[#210A0B]/15 to-[#210A0B]/45" />

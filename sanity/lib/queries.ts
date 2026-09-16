@@ -3,11 +3,13 @@ import { defineQuery } from 'next-sanity'
 export const HOME_PAGE_QUERY = defineQuery(`{
   "heroVideo": *[_type == "heroSection"][0]{
     ...,
-    "fileUrl": videoFile.asset->url
+    "fileUrl": videoFile.asset->url,
+    "fileMime": videoFile.asset->mimeType
   },
   "secondaryVideo": *[_type == "secondarySection"][0]{
     ...,
-    "fileUrl": videoFile.asset->url
+    "fileUrl": videoFile.asset->url,
+    "fileMime": videoFile.asset->mimeType
   },
   "propertiesSection": *[_type == "propertiesSection"][0]{
     ...,
@@ -31,7 +33,8 @@ export const HOME_PAGE_QUERY = defineQuery(`{
   },
   "experienceVideo": *[_type == "experienceSection"][0]{
     ...,
-    "fileUrl": videoFile.asset->url
+    "fileUrl": videoFile.asset->url,
+    "fileMime": videoFile.asset->mimeType
   },
   "spotlightSection": *[_type == "spotlightSection"][0]{
     ...,
@@ -54,7 +57,8 @@ export const HOME_PAGE_QUERY = defineQuery(`{
   },
   "closingVideo": *[_type == "closingSection"][0]{
     ...,
-    "fileUrl": videoFile.asset->url
+    "fileUrl": videoFile.asset->url,
+    "fileMime": videoFile.asset->mimeType
   }
 }`)
 
