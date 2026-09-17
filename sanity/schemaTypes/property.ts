@@ -1,5 +1,6 @@
 import { defineArrayMember, defineField, defineType } from 'sanity'
 import { AMENITY_OPTIONS } from './objects/amenityOptions'
+import { AmenitiesInput } from './objects/AmenitiesInput'
 
 export const property = defineType({
   name: 'property',
@@ -260,19 +261,16 @@ export const property = defineType({
     defineField({
       name: 'amenities',
       title: 'Amenities',
-      description:
-        'Tick everything the property offers. Grouped by category — Security, Power & Water, Parking, Leisure, Community, Interior, Grounds and Services. Anything not on this list goes in the field below.',
+      description: 'Tick everything the property offers. Use the filter to find an item quickly.',
       type: 'array',
       of: [{ type: 'string' }],
-      options: {
-        list: AMENITY_OPTIONS,
-      },
+      options: { list: AMENITY_OPTIONS },
+      components: { input: AmenitiesInput },
     }),
     defineField({
       name: 'otherAmenities',
       title: 'Other Amenities',
-      description:
-        'Anything not covered by the checklist above — write it exactly as it should appear on the website (e.g. "Helipad", "Private Borehole Water Bottling", "Direct Nairobi River Frontage"). Press Enter after each one.',
+      description: 'Anything not in the list above, written as it should appear. Press Enter after each.',
       type: 'array',
       of: [{ type: 'string' }],
       options: { layout: 'tags' },

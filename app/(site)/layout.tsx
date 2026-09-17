@@ -5,6 +5,7 @@ import { VisualEditing } from "next-sanity/visual-editing";
 import { draftMode } from "next/headers";
 import "./globals.css";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
+import StylesheetGuard from "@/components/StylesheetGuard";
 import WhatsAppFab from "@/components/WhatsAppFab";
 import SocialRail from "@/components/SocialRail";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -115,6 +116,7 @@ export default async function RootLayout({
       <body className={`${cormorant.variable} ${montserrat.variable} font-sans bg-[#FAF8F4] text-[#1C1714] antialiased`} suppressHydrationWarning>
         <JsonLd data={graph(organizationSchema(siteSettings), websiteSchema(), realEstateAgentSchema(siteSettings))} />
         <SmoothScroll />
+        <StylesheetGuard />
         <ServiceWorkerRegistration />
         <CurrencyProvider>
           <LanguageProvider>
