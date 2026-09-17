@@ -66,20 +66,17 @@ export default function AmenityList({ amenities, otherAmenities, className }: Am
     ...(buckets.has(OTHER_AMENITY_GROUP) ? [OTHER_AMENITY_GROUP] : []),
   ];
 
+  // One wrapping run of tiles, ordered by category, so amenities read across
+  // the page instead of stacking one short group under another.
+  const entries = orderedGroups.flatMap((group) => buckets.get(group) ?? []);
+
   return (
     <div className={className}>
-      <div className="amenity-groups">
-        {orderedGroups.map((group) => (
-          <div key={group} className="amenity-group">
-            <p className="amenity-group-label">{group}</p>
-            <div className="amenity-grid">
-              {(buckets.get(group) ?? []).map(({ label, Icon }, i) => (
-                <div key={`${group}-${i}`} className="amenity-item">
-                  <Icon className="amenity-icon" aria-hidden="true" />
-                  <span className="amenity-label">{label}</span>
-                </div>
-              ))}
-            </div>
+      <div className="amenity-grid">
+        {entries.map(({ label, Icon }, i) => (
+          <div key={`${label}-${i}`} className="amenity-item">
+            <Icon className="amenity-icon" aria-hidden="true" />
+            <span className="amenity-label">{label}</span>
           </div>
         ))}
       </div>
