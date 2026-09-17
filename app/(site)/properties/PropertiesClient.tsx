@@ -13,6 +13,13 @@ import Footer from "@/components/Footer";
 import { cn } from "@/lib/utils";
 import { useCurrency } from "@/context/CurrencyContext";
 import { PROPERTY_FAQS } from "@/lib/seo";
+import { amenityLabel, canonicalAmenity } from "@/sanity/schemaTypes/objects/amenityOptions";
+
+/** First three amenities as readable names, e.g. "Swimming Pool, Gym, Borehole". */
+function amenitySummary(values?: string[]): string {
+  const unique = Array.from(new Set((values ?? []).filter(Boolean).map(canonicalAmenity)));
+  return unique.slice(0, 3).map(amenityLabel).join(", ") || "On request";
+}
 
 const ease = [0.23, 1, 0.32, 1] as const;
 
@@ -405,7 +412,7 @@ export default function PropertiesClient({ initialProperties, settings, initialS
                       <Row label="District" value={typeof p.district === "object" ? p.district.name : p.district} />
                       <Row label="Type" value={p.propertyType?.slice(0, 2).join(" / ") || "Residential"} />
                       <Row label="Space" value={`${p.details || "-"}${p.size ? ` · ${p.size}` : ""}`} />
-                      <Row label="Amenities" value={p.amenities?.slice(0, 3).join(", ") || "On request"} />
+                      <Row label="Amenities" value={amenitySummary(p.amenities)} />
                       <Row label="Completion" value={p.yearBuilt || "Ready"} />
                       <Row label="Status" value="Available" gold />
                     </div>
