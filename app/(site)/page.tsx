@@ -7,7 +7,7 @@ import { graph, itemListSchema } from "@/lib/seo";
 export const metadata = {
   title: { absolute: "Luxury Properties in Kenya | Pavani Realty Co" },
   description:
-    "Discover Kenya's finest luxury real estate with Pavani Realty Co — exclusive apartments, villas and off-plan homes for sale across Nairobi's most prestigious neighbourhoods.",
+    "Luxury apartments, villas and off-plan homes for sale in Nairobi's most prestigious neighbourhoods. Kenya's finest real estate, by Pavani Realty Co.",
   alternates: { canonical: "/" },
 };
 

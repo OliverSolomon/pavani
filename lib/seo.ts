@@ -29,11 +29,49 @@ export const SITE_URL = (
 ).replace(/\/+$/, "");
 export const SITE_NAME = "Pavani Realty Co";
 export const SITE_TAGLINE = "Luxury Real Estate in Kenya";
-export const OG_IMAGE = `${SITE_URL}/og-image.png`;
+/**
+ * Default social share image. Kept at exactly 1200x630 and as a compressed JPEG
+ * (well under 300 KB) because WhatsApp silently drops link previews whose image
+ * is over roughly 500 KB, and the declared og:image:width/height must match the
+ * real file or some scrapers reject it.
+ */
+export const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
+export const OG_IMAGE_WIDTH = 1200;
+export const OG_IMAGE_HEIGHT = 630;
+export const OG_IMAGE_ALT = "Pavani Realty Co, luxury real estate in Kenya";
 export const TWITTER_HANDLE = "@pavanirealty";
 
+/** Brand crimson, used for the mobile browser toolbar and the web app manifest. */
+export const THEME_COLOR = "#82000d";
+export const BACKGROUND_COLOR = "#faf8f4";
+
+/** Kept under ~155 characters so Google does not truncate it in results. */
 export const DEFAULT_DESCRIPTION =
-  "Pavani Realty Co is Kenya's authority in luxury real estate — exclusive apartments, villas and off-plan homes for sale across Nairobi's most prestigious neighbourhoods. Browse premium listings and book a private viewing.";
+  "Pavani Realty Co is Kenya's luxury real estate authority: exclusive apartments, villas and off-plan homes across Nairobi's most prestigious neighbourhoods.";
+
+/**
+ * Makes any share image safe for WhatsApp, Facebook, LinkedIn and X.
+ *
+ * Images uploaded in Sanity are served at their original size (often several
+ * megabytes), which is too heavy for WhatsApp previews. Sanity's image CDN can
+ * resize on the fly, so those URLs are rewritten to a 1200x630 JPEG crop.
+ * External URLs are passed through untouched; with no URL the default is used.
+ */
+export function ogImageUrl(url?: string | null): string {
+  if (!url) return OG_IMAGE;
+  if (!url.includes("cdn.sanity.io/images/")) return url;
+  try {
+    const u = new URL(url);
+    u.searchParams.set("w", String(OG_IMAGE_WIDTH));
+    u.searchParams.set("h", String(OG_IMAGE_HEIGHT));
+    u.searchParams.set("fit", "crop");
+    u.searchParams.set("fm", "jpg");
+    u.searchParams.set("q", "80");
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
 
 /** Primary keyword cluster targeting "luxury properties in Kenya" and its variants. */
 export const DEFAULT_KEYWORDS = [
@@ -471,14 +509,14 @@ export function resolveMeta(opts: {
   const { seo, title, description, path, image, type = "website", publishedTime } = opts;
   const finalTitle = seo?.metaTitle || title;
   const finalDesc = seo?.metaDescription || description;
-  const ogImg = seo?.ogImage || image || OG_IMAGE;
+  const ogImg = ogImageUrl(seo?.ogImage || image);
 
   const og: Record<string, unknown> = {
     title: seo?.metaTitle ? finalTitle : `${finalTitle} | ${SITE_NAME}`,
     description: finalDesc,
     url: absoluteUrl(path),
     type,
-    images: [{ url: ogImg }],
+    images: [{ url: ogImg, width: OG_IMAGE_WIDTH, height: OG_IMAGE_HEIGHT, alt: finalTitle }],
   };
   if (publishedTime) og.publishedTime = publishedTime;
 

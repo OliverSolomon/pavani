@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Montserrat } from "next/font/google";
 import { SanityLive } from "@/sanity/lib/live";
 import { VisualEditing } from "next-sanity/visual-editing";
@@ -15,7 +15,8 @@ import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
 import { sanityFetch } from "@/sanity/lib/live";
 import JsonLd from "@/components/JsonLd";
 import {
-  SITE_URL, SITE_NAME, DEFAULT_DESCRIPTION, DEFAULT_KEYWORDS, OG_IMAGE, TWITTER_HANDLE,
+  SITE_URL, SITE_NAME, DEFAULT_DESCRIPTION, DEFAULT_KEYWORDS, TWITTER_HANDLE,
+  OG_IMAGE_WIDTH, OG_IMAGE_HEIGHT, OG_IMAGE_ALT, THEME_COLOR, ogImageUrl,
   organizationSchema, websiteSchema, realEstateAgentSchema, graph,
 } from "@/lib/seo";
 
@@ -31,6 +32,14 @@ const montserrat = Montserrat({
   subsets: ["latin"],
 });
 
+// Colours the browser toolbar on Android Chrome and Samsung Internet, and the
+// status bar area on iOS Safari, in the brand crimson.
+export const viewport: Viewport = {
+  themeColor: THEME_COLOR,
+  width: "device-width",
+  initialScale: 1,
+};
+
 export async function generateMetadata(): Promise<Metadata> {
   // Site-wide defaults are editable in Studio → Settings → General.
   let general: any = {};
@@ -40,7 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
   } catch {}
   const description = general.description || DEFAULT_DESCRIPTION;
   const keywords = general.keywords?.length ? general.keywords : DEFAULT_KEYWORDS;
-  const ogImage = general.ogImage || OG_IMAGE;
+  const ogImage = ogImageUrl(general.ogImage);
 
   return {
   title: {
@@ -67,10 +76,10 @@ export async function generateMetadata(): Promise<Metadata> {
       {
         url: ogImage,
         secureUrl: ogImage,
-        width: 1200,
-        height: 630,
-        alt: "Pavani Realty Co — Luxury Real Estate in Kenya",
-        type: 'image/png',
+        width: OG_IMAGE_WIDTH,
+        height: OG_IMAGE_HEIGHT,
+        alt: OG_IMAGE_ALT,
+        type: 'image/jpeg',
       },
     ],
     locale: 'en_KE',
@@ -82,8 +91,11 @@ export async function generateMetadata(): Promise<Metadata> {
     description,
     site: TWITTER_HANDLE,
     creator: TWITTER_HANDLE,
-    images: [ogImage],
+    images: [{ url: ogImage, alt: OG_IMAGE_ALT }],
   },
+  // Icons (favicon.ico, icon1.png, icon2.svg, apple-icon.png) and the web app
+  // manifest come from the metadata file conventions in the top-level app/
+  // folder, so Next.js emits their <link> tags automatically.
   robots: {
     index: true,
     follow: true,
