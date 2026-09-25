@@ -16,6 +16,11 @@
 export interface VideoSource {
   title?: string;
   subtitle?: string;
+  eyebrow?: string;
+  primaryButtonLabel?: string;
+  primaryButtonLink?: string;
+  secondaryButtonLabel?: string;
+  secondaryButtonLink?: string;
   type?: "file" | "url";
   videoUrl?: string;
   fileUrl?: string;

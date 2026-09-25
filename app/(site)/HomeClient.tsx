@@ -59,6 +59,25 @@ export default function HomeClient({ data, settings, testimonials }: HomeClientP
   // resolveVideo serves Cloudinary at best quality and sets the right MIME type.
   const vHero = resolveVideo(data?.heroVideo, "/videos/amethyst.mp4");
 
+  // Hero copy is edited in Studio → Pages → Home Page → "1 · Hero Video".
+  // The last word of the title drops to its own italic line, matching the
+  // original two-line layout ("Property With" / "Perspective").
+  const hero = data?.heroVideo;
+  const heroTitleWords = (hero?.title?.trim() || "Property With Perspective").split(/\s+/);
+  const heroTitleLast = heroTitleWords.length > 1 ? heroTitleWords.pop()! : "";
+  const heroTitleLead = heroTitleWords.join(" ");
+  const heroEyebrow = hero?.eyebrow?.trim() || "Pavani Realty Co";
+  const heroSubtitle =
+    hero?.subtitle?.trim() || "Exceptional apartments and villas across Kenya's most prestigious neighbourhoods.";
+  const heroPrimary = {
+    label: hero?.primaryButtonLabel?.trim() || "Browse Properties",
+    href: hero?.primaryButtonLink?.trim() || "/properties",
+  };
+  const heroSecondary = {
+    label: hero?.secondaryButtonLabel?.trim() || "Contact Us",
+    href: hero?.secondaryButtonLink?.trim() || "/contact",
+  };
+
   // Fully CMS-driven: whatever is selected in Studio → Pages → Home Page →
   // "2 · Featured Properties". Capped at 6 so the grid stays two clean rows.
   // No hardcoded fallback — if nothing is selected the section simply hides.
@@ -85,35 +104,37 @@ export default function HomeClient({ data, settings, testimonials }: HomeClientP
         <div className="absolute inset-0 bg-gradient-to-b from-[#210A0B]/35 via-[#210A0B]/15 to-[#210A0B]/45" />
 
         {/* Hero text - centred glass panel, two-line headline (enlarged ~35%) */}
-        <div className="relative z-20 w-full max-w-4xl mx-auto px-6 text-center">
-          <div className="glass-dark px-10 py-16 lg:px-[4.75rem] lg:py-[5.5rem]">
-            <p className="hero-line hero-line-1 text-[11px] font-bold tracking-[0.5em] uppercase text-[#E8DCBF] mb-8">
-              Pavani Realty Co
+        <div className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 text-center">
+          <div className="glass-dark px-6 py-12 sm:px-10 sm:py-16 lg:px-[4.75rem] lg:py-[5.5rem]">
+            <p className="hero-line hero-line-1 text-[10px] sm:text-[11px] font-bold tracking-[0.35em] sm:tracking-[0.5em] uppercase text-[#E8DCBF] mb-6 sm:mb-8">
+              {heroEyebrow}
             </p>
-            <h1 className="text-5xl sm:text-[4rem] lg:text-[6rem] leading-[1.02] tracking-tight mb-9">
+            <h1 className="text-[clamp(2.25rem,11vw,3rem)] sm:text-[4rem] lg:text-[6rem] leading-[1.02] tracking-tight mb-7 sm:mb-9 [overflow-wrap:anywhere]">
               <span className="hero-line hero-line-2 block font-serif font-normal text-[#FBF5F2]">
-                Nairobi's <em className="italic text-[#E8DCBF]">Finest</em>
+                {heroTitleLead}
               </span>
-              <span className="hero-line hero-line-3 block font-serif italic font-normal text-[#FBF5F2]">
-                Addresses
-              </span>
+              {heroTitleLast && (
+                <span className="hero-line hero-line-3 block font-serif italic font-normal text-[#E8DCBF]">
+                  {heroTitleLast}
+                </span>
+              )}
             </h1>
-            <div className="hero-line hero-sub w-16 h-px bg-[#E8DCBF]/70 mb-9 mx-auto gold-line-animate" />
-            <p className="hero-line hero-sub text-[1.0625rem] font-normal text-[#FBF5F2]/85 max-w-lg mx-auto leading-[1.75] tracking-wide mb-12">
-              Exceptional apartments and villas across Kenya's most prestigious neighbourhoods.
+            <div className="hero-line hero-sub w-16 h-px bg-[#E8DCBF]/70 mb-7 sm:mb-9 mx-auto gold-line-animate" />
+            <p className="hero-line hero-sub text-[0.975rem] sm:text-[1.0625rem] font-normal text-[#FBF5F2]/85 max-w-lg mx-auto leading-[1.75] tracking-wide mb-10 sm:mb-12">
+              {heroSubtitle}
             </p>
-            <div className="hero-line hero-cta flex flex-wrap items-center justify-center gap-5">
+            <div className="hero-line hero-cta flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-center gap-4 sm:gap-5">
               <Link
-                href="/properties"
-                className="btn-crimson inline-flex items-center gap-3 px-10 py-5 text-[10px] font-bold tracking-[0.4em] uppercase"
+                href={heroPrimary.href}
+                className="btn-crimson inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-5 text-[10px] font-bold tracking-[0.4em] uppercase"
               >
-                BROWSE PROPERTIES
+                {heroPrimary.label}
               </Link>
               <Link
-                href="/contact"
-                className="cta-link inline-flex items-center gap-3 border border-[#FBF5F2]/45 px-10 py-5 text-[10px] font-bold tracking-[0.4em] uppercase text-[#FBF5F2]/90 hover:border-[#E8DCBF] hover:text-[#E8DCBF] transition-all duration-300"
+                href={heroSecondary.href}
+                className="cta-link inline-flex items-center justify-center gap-3 border border-[#FBF5F2]/45 px-8 sm:px-10 py-5 text-[10px] font-bold tracking-[0.4em] uppercase text-[#FBF5F2]/90 hover:border-[#E8DCBF] hover:text-[#E8DCBF] transition-all duration-300"
               >
-                CONTACT US
+                {heroSecondary.label}
               </Link>
             </div>
           </div>
